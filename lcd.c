@@ -11,6 +11,8 @@
 #include "44blib.h"
 #include "lcd.h"
 #include "Bmp.h"
+#include "celda.h"
+#include "sudoku_2025.h"
 
 /*--- definici�n de macros ---*/
 #define DMA_Byte  (0)
@@ -582,6 +584,112 @@ void Sudoku_Pantalla_Inicial(void)
 	Lcd_DspAscII8x16(60, 198, BLACK, "Pulse un boton para jugar");
 	
 	/* Transferir a pantalla */
+	Lcd_Dma_Trans();
+}
+
+/*********************************************************************************************
+* name:		Sudoku_Dibujar_Numero_En_Celda()
+* func:		Dibuja un número en una celda del tablero
+* para:		fila, col - posición en el tablero (0-8)
+*           numero - valor a dibujar (1-9)
+*           es_pista - 1 si es pista original, 0 si es valor del usuario
+*           tiene_error - 1 si la celda tiene error
+* ret:		none
+* modify:
+* comment:	Las pistas se dibujan en DARKGRAY, los valores del usuario en BLACK
+*           Las celdas con error se resaltan con borde grueso
+*********************************************************************************************/
+void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U es_pista, INT8U tiene_error)
+{
+	#define MARGEN_IZQ 20
+	#define MARGEN_SUP 10
+	#define TAM_CELDA 23
+	
+	INT16U tablero_inicio_x = MARGEN_IZQ + 10;
+	INT16U tablero_inicio_y = MARGEN_SUP + 10;
+	
+	/* Calcular posición de la celda en píxeles */
+	INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
+	INT16U celda_y = tablero_inicio_y + fila * TAM_CELDA;
+	
+	/* Limpiar el interior de la celda (dejar márgenes para las líneas) */
+	LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
+	
+	/* Si tiene error, dibujar borde grueso */
+	if (tiene_error)
+	{
+		Lcd_Draw_Box(celda_x + 1, celda_y + 1, celda_x + TAM_CELDA - 1, celda_y + TAM_CELDA - 1, BLACK);
+	}
+	
+	/* Si hay un número, dibujarlo */
+	if (numero >= 1 && numero <= 9)
+	{
+		INT8U num_str[2];
+		num_str[0] = '0' + numero;
+		num_str[1] = '\0';
+		
+		/* Color según si es pista o valor del usuario */
+		INT8U color = es_pista ? DARKGRAY : BLACK;
+		
+		/* Centrar el número en la celda */
+		/* La fuente 8x16 ocupa 8 píxeles de ancho */
+		INT16U texto_x = celda_x + (TAM_CELDA - 8) / 2;
+		INT16U texto_y = celda_y + (TAM_CELDA - 16) / 2;
+		
+		Lcd_DspAscII8x16(texto_x, texto_y, color, num_str);
+	}
+}
+
+/*********************************************************************************************
+* name:		Sudoku_Actualizar_Tablero_Completo()
+* func:		Actualiza todo el tablero mostrando valores y candidatos
+* para:		cuadricula - puntero a la cuadrícula del juego
+* ret:		none
+* modify:
+* comment:	Recorre toda la cuadrícula y dibuja cada celda según su contenido
+*********************************************************************************************/
+void Sudoku_Actualizar_Tablero_Completo(void* cuadricula_ptr)
+{
+	CELDA (*cuadricula)[NUM_COLUMNAS] = (CELDA (*)[NUM_COLUMNAS])cuadricula_ptr;
+	INT16U fila, col;
+	
+	/* Recorrer todas las celdas del tablero */
+	for (fila = 0; fila < NUM_FILAS; fila++)
+	{
+		for (col = 0; col < NUM_FILAS; col++)
+		{
+			CELDA celda_actual = cuadricula[fila][col];
+			INT8U valor = celda_leer_valor(celda_actual);
+			INT8U es_pista = celda_es_pista(celda_actual);
+			INT8U tiene_error = (celda_actual & (1 << BIT_ERROR)) != 0;
+			
+			if (valor != 0)
+			{
+				/* Hay un valor: dibujarlo */
+				Sudoku_Dibujar_Numero_En_Celda(fila, col, valor, es_pista, tiene_error);
+			}
+			else
+			{
+				/* Celda vacía: por ahora solo limpiarla */
+				/* En el siguiente paso dibujaremos los candidatos */
+				#define MARGEN_IZQ 20
+				#define MARGEN_SUP 10
+				#define TAM_CELDA 23
+				
+				INT16U tablero_inicio_x = MARGEN_IZQ + 10;
+				INT16U tablero_inicio_y = MARGEN_SUP + 10;
+				INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
+				INT16U celda_y = tablero_inicio_y + fila * TAM_CELDA;
+				
+				/* Limpiar la celda */
+				LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
+				
+				/* TODO: Dibujar candidatos aquí en el paso 4 */
+			}
+		}
+	}
+	
+	/* Transferir todo a la pantalla */
 	Lcd_Dma_Trans();
 }
 /*********************************************************************************************

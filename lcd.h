@@ -145,9 +145,10 @@ INT8U LCD_GetPixel(INT16U usX, INT16U usY);
 
 /*--- Funciones Sudoku ---*/
 void Sudoku_Pantalla_Inicial(void);
-void Sudoku_Dibujar_Numero(INT16U x, INT16U y, INT8U numero, INT8U color);
-void Sudoku_Dibujar_Candidatos(INT16U x, INT16U y, INT16U candidatos);
 void Sudoku_Dibujar_Tablero(void);
+void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U es_pista, INT8U tiene_error);
+void Sudoku_Dibujar_Candidatos_En_Celda(INT16U fila, INT16U col, INT16U candidatos);
+void Sudoku_Actualizar_Tablero_Completo(void* cuadricula);
 
 #ifdef __cplusplus
 }

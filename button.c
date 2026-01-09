@@ -46,6 +46,9 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                         /* Dibujar el tablero del juego */
                         Sudoku_Dibujar_Tablero();
                         
+                        /* Actualizar con los valores de la cuadrícula */
+                        Sudoku_Actualizar_Tablero_Completo(cuadricula);
+                        
                         /* Pasar a introducir fila */
                         estado_juego = INTRODUCIR_FILA;
                         int_count = 0;
@@ -147,6 +150,9 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                 /* Al borrar un valor, hay que recalcular todos los candidatos */
                                 celdas_vacias = candidatos_actualizar_all(cuadricula);
                                 
+                                /* Actualizar la visualización del tablero */
+                                Sudoku_Actualizar_Tablero_Completo(cuadricula);
+                                
                                 /* Volver a introducir fila */
                                 estado_juego = INTRODUCIR_FILA;
                                 int_count = 0;
@@ -174,6 +180,9 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                                 candidatos_propagar_arm(cuadricula, fila, columna);
                                         }
                                         
+                                        /* Actualizar la visualización del tablero */
+                                        Sudoku_Actualizar_Tablero_Completo(cuadricula);
+                                        
                                         /* Volver a introducir fila */
                                         estado_juego = INTRODUCIR_FILA;
                                         int_count = 0;
@@ -183,6 +192,10 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                 {
                                         /* No es candidato: marcar error y mostrar 'E' */
                                         celda_marcar_error(&cuadricula[fila][columna]);
+                                        
+                                        /* Actualizar la visualización del tablero */
+                                        Sudoku_Actualizar_Tablero_Completo(cuadricula);
+                                        
                                         D8Led_symbol(14);  /* Mostrar 'E' de Error */
                                         
                                         /* Volver a introducir fila */
