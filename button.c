@@ -33,6 +33,58 @@ static volatile uint32_t tiempo_final = 0;  /* Tiempo final al terminar la parti
 extern CELDA (*cuadricula)[NUM_COLUMNAS];
 extern int celdas_vacias;
 
+/* Función auxiliar para marcar todas las celdas en conflicto con un valor */
+static void marcar_celdas_en_conflicto(uint8_t fila_error, uint8_t col_error, uint8_t valor_error)
+{
+	uint8_t i, f, c;
+	uint8_t region_fila_inicio, region_col_inicio;
+	
+	/* Primero limpiar todos los errores previos */
+	for (f = 0; f < NUM_FILAS; f++)
+	{
+		for (c = 0; c < NUM_COLUMNAS; c++)
+		{
+			celda_limpiar_error(&cuadricula[f][c]);
+		}
+	}
+	
+	/* Marcar la celda donde intentamos poner el valor */
+	celda_marcar_error(&cuadricula[fila_error][col_error]);
+	
+	/* Buscar y marcar todas las celdas con el mismo valor en la misma fila */
+	for (i = 0; i < NUM_COLUMNAS; i++)
+	{
+		if (i != col_error && celda_leer_valor(cuadricula[fila_error][i]) == valor_error)
+		{
+			celda_marcar_error(&cuadricula[fila_error][i]);
+		}
+	}
+	
+	/* Buscar y marcar todas las celdas con el mismo valor en la misma columna */
+	for (i = 0; i < NUM_FILAS; i++)
+	{
+		if (i != fila_error && celda_leer_valor(cuadricula[i][col_error]) == valor_error)
+		{
+			celda_marcar_error(&cuadricula[i][col_error]);
+		}
+	}
+	
+	/* Buscar y marcar todas las celdas con el mismo valor en la misma región 3x3 */
+	region_fila_inicio = (fila_error / 3) * 3;
+	region_col_inicio = (col_error / 3) * 3;
+	
+	for (f = region_fila_inicio; f < region_fila_inicio + 3; f++)
+	{
+		for (c = region_col_inicio; c < region_col_inicio + 3; c++)
+		{
+			if ((f != fila_error || c != col_error) && celda_leer_valor(cuadricula[f][c]) == valor_error)
+			{
+				celda_marcar_error(&cuadricula[f][c]);
+			}
+		}
+	}
+}
+
 /* Callback para recibir la confirmación de pulsaciones filtradas por el timer3 */
 static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR Y PROPAGAR SEGUN LA VERSIÓN A PROBAR
 {
@@ -159,9 +211,19 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                         
                         if (valor == 0)
                         {
+                                uint8_t f, c;
+                                
                                 /* Valor 0 = borrar -> pasar a BORRAR_VALOR */
+                                /* Limpiar todos los errores previos */
+                                for (f = 0; f < NUM_FILAS; f++)
+                                {
+                                        for (c = 0; c < NUM_COLUMNAS; c++)
+                                        {
+                                                celda_limpiar_error(&cuadricula[f][c]);
+                                        }
+                                }
+                                
                                 /* Borrar el valor de la celda */
-                                celda_limpiar_error(&cuadricula[fila][columna]);
                                 celda_poner_valor(&cuadricula[fila][columna], 0);
                                 
                                 /* Al borrar un valor, hay que recalcular todos los candidatos */
@@ -181,8 +243,18 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                 /* Verificar si el valor es candidato */
                                 if (celda_es_candidato(cuadricula[fila][columna], valor))
                                 {
+                                        uint8_t f, c;
+                                        
                                         /* Es candidato: escribir el valor en la celda */
-                                        celda_limpiar_error(&cuadricula[fila][columna]);
+                                        /* Primero limpiar todos los errores previos */
+                                        for (f = 0; f < NUM_FILAS; f++)
+                                        {
+                                                for (c = 0; c < NUM_COLUMNAS; c++)
+                                                {
+                                                        celda_limpiar_error(&cuadricula[f][c]);
+                                                }
+                                        }
+                                        
                                         celda_poner_valor(&cuadricula[fila][columna], valor);
                                         
                                         /* Decidir si propagar o actualizar según el caso */
@@ -207,8 +279,24 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                 }
                                 else
                                 {
-                                        /* No es candidato: marcar error y mostrar 'E' */
-                                        celda_marcar_error(&cuadricula[fila][columna]);
+                                        /* No es candidato: es un error */
+                                        /* Poner el valor incorrecto en la celda para visualizarlo */
+                                        celda_poner_valor(&cuadricula[fila][columna], valor);
+                                        
+                                        /* Actualizar candidatos para reflejar el cambio */
+                                        if (valor_previo != 0)
+                                        {
+                                                /* Se modificó un valor previo -> recalcular todo */
+                                                celdas_vacias = candidatos_actualizar_all(cuadricula);
+                                        }
+                                        else
+                                        {
+                                                /* Celda vacía -> propagar el nuevo valor */
+                                                candidatos_propagar_arm(cuadricula, fila, columna);
+                                        }
+                                        
+                                        /* Marcar TODAS las celdas involucradas en el conflicto */
+                                        marcar_celdas_en_conflicto(fila, columna, valor);
                                         
                                         /* Actualizar la visualización del tablero */
                                         Sudoku_Actualizar_Tablero_Completo(cuadricula);

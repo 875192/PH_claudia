@@ -612,13 +612,16 @@ void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U
 	INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
 	INT16U celda_y = tablero_inicio_y + fila * TAM_CELDA;
 	
-	/* Limpiar el interior de la celda (dejar márgenes para las líneas) */
-	LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
-	
-	/* Si tiene error, dibujar borde grueso */
+	/* Si tiene error, rellenar la celda con negro */
 	if (tiene_error)
 	{
-		Lcd_Draw_Box(celda_x + 1, celda_y + 1, celda_x + TAM_CELDA - 1, celda_y + TAM_CELDA - 1, BLACK);
+		/* Rellenar interior de la celda con negro */
+		LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, BLACK);
+	}
+	else
+	{
+		/* Limpiar el interior de la celda (dejar márgenes para las líneas) */
+		LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
 	}
 	
 	/* Si hay un número, dibujarlo */
@@ -628,8 +631,23 @@ void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U
 		num_str[0] = '0' + numero;
 		num_str[1] = '\0';
 		
-		/* Color según si es pista o valor del usuario */
-		INT8U color = es_pista ? DARKGRAY : BLACK;
+		/* Color del número */
+		INT8U color;
+		if (tiene_error)
+		{
+			/* Si hay error, número en blanco sobre fondo negro */
+			color = WHITE;
+		}
+		else if (es_pista)
+		{
+			/* Pista: gris oscuro */
+			color = DARKGRAY;
+		}
+		else
+		{
+			/* Valor del usuario: negro */
+			color = BLACK;
+		}
 		
 		/* Centrar el número en la celda */
 		/* La fuente 8x16 ocupa 8 píxeles de ancho */

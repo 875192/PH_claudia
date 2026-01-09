@@ -654,6 +654,159 @@ La función `Sudoku_Pantalla_Final()` (ya existente en lcd.c) muestra:
 
 ---
 
+## PASO 8: PERMITIR REINICIAR EL JUEGO DESPUÉS DE TERMINAR ✅
+
+### Archivos modificados:
+- `button.c` - Modificado estado PARTIDA_TERMINADA para permitir reinicio, agregadas variables y funciones para manejo de tiempo relativo
+- `button.h` - Agregada declaración de `Sudoku_Juego_En_Progreso()`
+- `main.c` - Actualizado bucle principal para actualizar tiempo solo cuando juego está en progreso
+- `lcd.c` - Actualizada función `Sudoku_Pantalla_Final()` para mostrar mensaje de reinicio
+
+### Funcionalidad implementada:
+
+#### 1. Sistema de tiempo relativo:
+```c
+/* En button.c - nuevas variables */
+static volatile uint32_t tiempo_inicio = 0;  /* Tiempo de inicio de la partida actual */
+static volatile uint32_t tiempo_final = 0;   /* Tiempo final al terminar la partida */
+```
+
+**Comportamiento:**
+- Al iniciar partida (ESPERANDO_INICIO): `tiempo_inicio = timer2_count()`
+- Durante el juego: Se muestra `tiempo_actual - tiempo_inicio`
+- Al terminar: `tiempo_final = timer2_count() - tiempo_inicio`
+- Cada partida tiene su propio cronómetro independiente desde 00:00
+
+#### 2. Función auxiliar para estado del juego:
+```c
+/* En button.c */
+int Sudoku_Juego_En_Progreso(void)
+{
+    return (estado_juego != ESPERANDO_INICIO && estado_juego != PARTIDA_TERMINADA);
+}
+
+unsigned int Sudoku_Obtener_Tiempo_Inicio(void)
+{
+    return tiempo_inicio;
+}
+```
+
+**Propósito:**
+- `Sudoku_Juego_En_Progreso()`: Verifica si el juego está activo (no en pantalla inicial ni terminado)
+- `Sudoku_Obtener_Tiempo_Inicio()`: Permite calcular tiempo transcurrido desde inicio de partida
+
+#### 3. Modificación del estado PARTIDA_TERMINADA:
+```c
+case PARTIDA_TERMINADA:
+    /* Mostrar pantalla de despedida solo una vez */
+    if (!pantalla_mostrada)
+    {
+        /* Usar la función existente de lcd.c */
+        Sudoku_Pantalla_Final(tiempo_final);
+        
+        pantalla_mostrada = 1;
+    }
+    else
+    {
+        /* Cualquier botón después de mostrar pantalla final reinicia el juego */
+        /* Mostrar pantalla inicial */
+        Sudoku_Pantalla_Inicial();
+        
+        /* Volver al estado inicial */
+        estado_juego = ESPERANDO_INICIO;
+        int_count = 0;
+        pantalla_mostrada = 0;
+    }
+    break;
+```
+
+**Comportamiento:**
+1. Primera pulsación tras terminar: Muestra pantalla final con tiempo
+2. Segunda pulsación: Muestra pantalla inicial y reinicia el juego
+3. Se resetean todas las variables de estado
+4. El usuario puede comenzar una nueva partida
+
+#### 4. Actualización del bucle principal en main.c:
+```c
+/* Actualizar cada 1 segundo (1000000 microsegundos) */
+if ((tiempo_actual - tiempo_anterior) >= 1000000)
+{
+    /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) */
+    if (Sudoku_Juego_En_Progreso())
+    {
+        /* Calcular tiempo transcurrido desde el inicio de la partida */
+        unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
+        Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+    }
+    tiempo_anterior = tiempo_actual;
+}
+```
+
+**Efecto:**
+- Tiempo NO se actualiza en pantalla inicial (ESPERANDO_INICIO)
+- Tiempo SÍ se actualiza durante el juego (INTRODUCIR_FILA, COLUMNA, VALOR, etc.)
+- Tiempo NO se actualiza en pantalla final (PARTIDA_TERMINADA)
+- Cada partida comienza desde 00:00
+
+#### 5. Actualización de pantalla final en lcd.c:
+```c
+/* Mensaje para reiniciar */
+Lcd_Draw_Box(20, 150, 300, 180, BLACK);
+Lcd_DspAscII8x16(30, 158, BLACK, "Pulse un boton para reiniciar");
+```
+
+**Elementos visuales actualizados:**
+- Rectángulo ajustado para encajar el texto completo (20-300 píxeles de ancho)
+- Mensaje actualizado: "Pulse un boton para reiniciar"
+- Posicionamiento del texto optimizado (X=30 para dejar margen interno)
+
+### Flujo completo de finalización y reinicio:
+
+1. **Usuario selecciona Fila 0 y confirma**
+   - Estado: INTRODUCIR_FILA → PARTIDA_TERMINADA
+   - Se captura: `tiempo_final = timer2_count() - tiempo_inicio` (tiempo de esta partida)
+
+2. **Primera pulsación de cualquier botón**
+   - Entra a `case PARTIDA_TERMINADA`
+   - `pantalla_mostrada == 0` → Dibuja pantalla final con tiempo
+   - `pantalla_mostrada = 1`
+
+3. **Segunda pulsación de cualquier botón**
+   - Entra a `case PARTIDA_TERMINADA`
+   - `pantalla_mostrada == 1` → Ejecuta reinicio
+   - Llama a `Sudoku_Pantalla_Inicial()`
+   - Estado: PARTIDA_TERMINADA → ESPERANDO_INICIO
+   - Resetea `int_count = 0`, `pantalla_mostrada = 0`
+
+4. **Usuario pulsa botón para comenzar nueva partida**
+   - Entra a `case ESPERANDO_INICIO`
+   - Guarda nuevo `tiempo_inicio = timer2_count()`
+   - Calcula candidatos, dibuja tablero
+   - Estado: ESPERANDO_INICIO → INTRODUCIR_FILA
+   - Nueva partida comienza con tiempo 00:00
+
+### Ubicación en el código:
+- **Estado PARTIDA_TERMINADA**: `button.c`, líneas ~231-247
+- **Variables de tiempo**: `button.c`, líneas ~28-29
+- **Funciones getter**: `button.c`, líneas ~268-281
+- **Declaraciones**: `button.h`, líneas ~13-15
+- **Bucle principal**: `main.c`, líneas ~112-122
+- **Inicio de partida**: `button.c`, líneas ~43-46
+- **Captura tiempo final**: `button.c`, líneas ~79-81
+- **Pantalla final**: `lcd.c`, líneas ~835-840
+
+### Características implementadas:
+✅ Reinicio del juego tras finalizar (pulsando botón)  
+✅ Sistema de tiempo relativo (cada partida independiente)  
+✅ Tiempo comienza en 00:00 para cada partida nueva  
+✅ Tiempo no se muestra en pantalla inicial  
+✅ Tiempo final muestra duración exacta de la partida terminada  
+✅ Pantalla inicial se muestra correctamente al reiniciar  
+✅ Variables de estado se resetean completamente  
+✅ Mensaje claro: "Pulse un boton para reiniciar"  
+
+---
+
 ## ESTADO ACTUAL DEL PROYECTO
 
 ### Funcionalidades completadas:
@@ -667,17 +820,223 @@ La función `Sudoku_Pantalla_Final()` (ya existente en lcd.c) muestra:
 ✅ Permitir Fila 0 para terminar partida (con captura de tiempo)  
 ✅ Pantalla final con tiempo congelado  
 ✅ Detención del temporizador al finalizar  
+✅ **Reinicio del juego con tiempo reseteado**  
+✅ **Sistema de tiempo relativo por partida**  
+✅ Estructura de máquina de estados del juego (ya existía en button.c)  
+✅ Sistema de antirrebotes para botones (ya existía en timer3)  
+✅ Sistema de medición de tiempo (ya existía en timer2)  
+
+### Funcionalidades pendientes:
+⏳ **Punto 7 del enunciado**: Resaltar TODAS las celdas involucradas en un error (no solo la errónea)
+
+### PARTE A - CASI COMPLETA (falta solo punto 7)
+
+---
+
+## PASO 9: RESALTAR TODAS LAS CELDAS INVOLUCRADAS EN ERRORES ✅
+
+### Archivos modificados:
+- `button.c` - Agregada función `marcar_celdas_en_conflicto()`, modificado manejo de errores en VERIFICAR_VALOR
+- `lcd.c` - Actualizada función `Sudoku_Dibujar_Numero_En_Celda()` para invertir colores en celdas con error
+
+### Funcionalidad implementada:
+
+#### 1. Función auxiliar para marcar celdas en conflicto:
+```c
+/* En button.c */
+static void marcar_celdas_en_conflicto(uint8_t fila_error, uint8_t col_error, uint8_t valor_error)
+{
+    /* Limpiar todos los errores previos */
+    for (f = 0; f < NUM_FILAS; f++)
+    {
+        for (c = 0; c < NUM_COLUMNAS; c++)
+        {
+            celda_limpiar_error(&cuadricula[f][c]);
+        }
+    }
+    
+    /* Marcar la celda donde intentamos poner el valor */
+    celda_marcar_error(&cuadricula[fila_error][col_error]);
+    
+    /* Buscar y marcar todas las celdas con el mismo valor en la misma fila */
+    /* Buscar y marcar todas las celdas con el mismo valor en la misma columna */
+    /* Buscar y marcar todas las celdas con el mismo valor en la misma región 3x3 */
+}
+```
+
+**Comportamiento:**
+- Limpia primero todos los errores previos del tablero
+- Marca la celda donde se intenta introducir el valor
+- Busca y marca todas las celdas con el mismo valor en:
+  - La misma **fila** (0-8)
+  - La misma **columna** (0-8)
+  - La misma **región 3x3** (calculando región_inicio)
+
+#### 2. Modificación del manejo de errores en VERIFICAR_VALOR:
+```c
+else
+{
+    /* No es candidato: es un error */
+    /* Poner el valor incorrecto en la celda para visualizarlo */
+    celda_poner_valor(&cuadricula[fila][columna], valor);
+    
+    /* Actualizar candidatos para reflejar el cambio */
+    if (valor_previo != 0)
+    {
+        /* Se modificó un valor previo -> recalcular todo */
+        celdas_vacias = candidatos_actualizar_all(cuadricula);
+    }
+    else
+    {
+        /* Celda vacía -> propagar el nuevo valor */
+        candidatos_propagar_arm(cuadricula, fila, columna);
+    }
+    
+    /* Marcar TODAS las celdas involucradas en el conflicto */
+    marcar_celdas_en_conflicto(fila, columna, valor);
+    
+    /* Actualizar la visualización del tablero */
+    Sudoku_Actualizar_Tablero_Completo(cuadricula);
+}
+```
+
+**Secuencia de operaciones:**
+1. **Coloca el valor erróneo** en la celda (para que sea visible)
+2. **Actualiza candidatos** (propaga o recalcula según corresponda)
+3. **Marca todas las celdas en conflicto** usando la función auxiliar
+4. **Actualiza la visualización** del tablero completo
+
+#### 3. Limpieza de errores al introducir valores válidos:
+```c
+if (celda_es_candidato(cuadricula[fila][columna], valor))
+{
+    /* Limpiar todos los errores previos */
+    for (f = 0; f < NUM_FILAS; f++)
+    {
+        for (c = 0; c < NUM_COLUMNAS; c++)
+        {
+            celda_limpiar_error(&cuadricula[f][c]);
+        }
+    }
+    
+    celda_poner_valor(&cuadricula[fila][columna], valor);
+    // ...
+}
+```
+
+**Comportamiento:**
+- Al introducir un valor válido, limpia **todos** los errores del tablero
+- Al borrar un valor (valor == 0), también limpia **todos** los errores
+- Evita que queden marcas de error obsoletas
+
+#### 4. Mejora visual - Inversión de colores en celdas con error:
+```c
+/* En lcd.c - Sudoku_Dibujar_Numero_En_Celda() */
+
+/* Si tiene error, rellenar la celda con negro */
+if (tiene_error)
+{
+    /* Rellenar interior de la celda con negro */
+    LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, BLACK);
+}
+else
+{
+    /* Limpiar el interior de la celda con blanco */
+    LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
+}
+
+/* Color del número */
+if (tiene_error)
+{
+    /* Si hay error, número en blanco sobre fondo negro */
+    color = WHITE;
+}
+else if (es_pista)
+{
+    color = DARKGRAY;
+}
+else
+{
+    color = BLACK;
+}
+```
+
+**Visualización:**
+- **Celdas normales**: Fondo blanco, número negro (pistas en gris)
+- **Celdas con error**: Fondo negro, número blanco (contraste máximo)
+- Extremadamente visible y fácil de identificar
+
+### Ejemplo de funcionamiento:
+
+**Escenario**: Usuario intenta poner un 6 en celda [3][5] pero ya hay otro 6 en la fila 3
+
+**Resultado visual:**
+1. **Celda [3][5]**: Fondo negro + número 6 en blanco (valor introducido erróneamente)
+2. **Celda [3][2]** (ejemplo): Fondo negro + número 6 en blanco (causa del conflicto en la fila)
+3. **Todas las demás celdas**: Se mantienen normales
+4. **Candidatos**: Se actualizan considerando el nuevo 6 (aunque sea erróneo)
+5. **Display**: Muestra 'E' de Error
+
+**Usuario puede ver claramente:**
+- ✅ Qué valor intentó introducir
+- ✅ En qué celda lo intentó poner
+- ✅ Qué otras celdas tienen ese mismo valor
+- ✅ Si el conflicto es en fila, columna o región 3x3
+
+### Ubicación en el código:
+- **Función auxiliar**: `button.c`, líneas ~36-84
+- **Manejo de error**: `button.c`, líneas ~282-302
+- **Limpieza de errores**: `button.c`, líneas ~234-248 (valor válido), líneas ~213-223 (borrado)
+- **Visualización mejorada**: `lcd.c`, líneas ~610-643
+
+### Características implementadas:
+✅ Detecta y marca la celda con el valor erróneo  
+✅ Busca todas las celdas con el mismo valor en la fila  
+✅ Busca todas las celdas con el mismo valor en la columna  
+✅ Busca todas las celdas con el mismo valor en la región 3x3  
+✅ Visualización con inversión de colores (negro/blanco)  
+✅ Contraste máximo para fácil identificación  
+✅ Actualiza candidatos incluso con valores erróneos  
+✅ Limpia errores al introducir valores válidos  
+✅ Limpia errores al borrar valores  
+
+---
+
+## ESTADO ACTUAL DEL PROYECTO
+
+### Funcionalidades completadas:
+✅ Pantalla inicial con instrucciones  
+✅ Tablero de Sudoku 9x9 con numeración  
+✅ Mostrar valores en celdas (pistas y valores del usuario)  
+✅ Distinguir visualmente pistas (gris) de valores del usuario (negro)  
+✅ Resaltar celdas con error (borde grueso)  
+✅ Mostrar candidatos en celdas vacías (grid 3x3 con círculos)  
+✅ Actualizar tiempo en pantalla en tiempo real (cada segundo)  
+✅ Permitir Fila 0 para terminar partida (con captura de tiempo)  
+✅ Pantalla final con tiempo congelado  
+✅ Detención del temporizador al finalizar  
+✅ **Reinicio del juego con tiempo reseteado**  
+✅ **Sistema de tiempo relativo por partida**  
+✅ **Resaltar TODAS las celdas involucradas en errores (fila, columna, región)**  
+✅ **Visualización de errores con inversión de colores (contraste máximo)**  
 ✅ Estructura de máquina de estados del juego (ya existía en button.c)  
 ✅ Sistema de antirrebotes para botones (ya existía en timer3)  
 ✅ Sistema de medición de tiempo (ya existía en timer2)  
 
 ### PARTE A - COMPLETADA AL 100% ✅
 
-Todas las funcionalidades requeridas para la Parte A de la Práctica 3 han sido implementadas y probadas exitosamente.
+Todas las funcionalidades requeridas para la Parte A de la Práctica 3 han sido implementadas y verificadas exitosamente.
 
 ---
 
 ## PRÓXIMOS PASOS (PARTE B Y C)
+
+### Paso 9: Resaltar todas las celdas involucradas en errores (Punto 7 del enunciado)
+Cuando se detecta un error, se deben resaltar todas las celdas en conflicto:
+- Si pongo un 5 donde ya hay otro 5 en la fila → resaltar ambas celdas
+- Si pongo un 3 donde ya hay otro 3 en la columna → resaltar ambas celdas  
+- Si pongo un 7 donde ya hay otro 7 en la región 3x3 → resaltar ambas celdas
+- Facilitar al usuario descubrir qué celdas están causando el conflicto
 
 ### Parte B: Plataforma autónoma
 - Programación en Flash mediante JTAG
