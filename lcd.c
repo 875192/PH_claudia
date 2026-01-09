@@ -742,6 +742,58 @@ void Sudoku_Actualizar_Tablero_Completo(void* cuadricula_ptr)
 	/* Transferir todo a la pantalla */
 	Lcd_Dma_Trans();
 }
+
+/*********************************************************************************************
+* name:		Sudoku_Actualizar_Tiempo()
+* func:		Actualiza solo el área del tiempo en pantalla sin redibujar todo el tablero
+* para:		tiempo_us - tiempo transcurrido en microsegundos
+* ret:		none
+* modify:
+* comment:	Convierte microsegundos a formato MM:SS y actualiza solo esa área
+*********************************************************************************************/
+void Sudoku_Actualizar_Tiempo(INT32U tiempo_us)
+{
+	#define MARGEN_IZQ 20
+	#define MARGEN_SUP 10
+	#define TAM_CELDA 23
+	
+	INT16U tablero_inicio_y = MARGEN_SUP + 10;
+	INT16U tablero_tam = TAM_CELDA * 9;
+	
+	/* Convertir microsegundos a segundos */
+	INT32U segundos_totales = tiempo_us / 1000000;
+	
+	/* Calcular minutos y segundos */
+	INT16U minutos = segundos_totales / 60;
+	INT16U segundos = segundos_totales % 60;
+	
+	/* Crear string en formato MM:SS */
+	INT8U tiempo_str[15];
+	tiempo_str[0] = 'T';
+	tiempo_str[1] = 'i';
+	tiempo_str[2] = 'e';
+	tiempo_str[3] = 'm';
+	tiempo_str[4] = 'p';
+	tiempo_str[5] = 'o';
+	tiempo_str[6] = ':';
+	tiempo_str[7] = ' ';
+	tiempo_str[8] = '0' + (minutos / 10);    /* Decenas de minutos */
+	tiempo_str[9] = '0' + (minutos % 10);    /* Unidades de minutos */
+	tiempo_str[10] = ':';
+	tiempo_str[11] = '0' + (segundos / 10);  /* Decenas de segundos */
+	tiempo_str[12] = '0' + (segundos % 10);  /* Unidades de segundos */
+	tiempo_str[13] = '\0';
+	
+	/* Limpiar el área del tiempo (aproximadamente 90 píxeles de ancho) */
+	LcdClrRect(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, 
+	           MARGEN_IZQ + 90, tablero_inicio_y + tablero_tam + 15, WHITE);
+	
+	/* Dibujar el nuevo tiempo */
+	Lcd_DspAscII6x8(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, BLACK, tiempo_str);
+	
+	/* Transferir solo esta actualización a pantalla */
+	Lcd_Dma_Trans();
+}
 /*********************************************************************************************
 * name:		Sudoku_Dibujar_Tablero()
 * func:		Dibuja el tablero de Sudoku 9x9 con numeración

@@ -288,6 +288,148 @@ Para una celda vacía donde los candidatos son 2, 4, 5 y 8:
 
 ---
 
+## PASO 5: ACTUALIZAR TIEMPO EN PANTALLA EN TIEMPO REAL ✅
+
+### Archivos modificados:
+- `lcd.h` - Agregada declaración de `Sudoku_Actualizar_Tiempo()`
+- `lcd.c` - Implementada función `Sudoku_Actualizar_Tiempo()`
+- `main.c` - Agregada actualización periódica del tiempo en el bucle principal
+
+### Funcionalidad implementada:
+
+#### `Sudoku_Actualizar_Tiempo()`
+```c
+void Sudoku_Actualizar_Tiempo(INT32U tiempo_us)
+```
+
+**Parámetros:**
+- `tiempo_us`: Tiempo transcurrido en microsegundos (desde `timer2_count()`)
+
+**Comportamiento:**
+1. Convierte microsegundos a segundos: `segundos_totales = tiempo_us / 1000000`
+2. Calcula minutos y segundos:
+   - `minutos = segundos_totales / 60`
+   - `segundos = segundos_totales % 60`
+3. Construye el string "Tiempo: MM:SS" carácter por carácter
+4. Limpia solo el área del tiempo (90 píxeles de ancho × 10 píxeles de alto)
+5. Dibuja el nuevo tiempo usando `Lcd_DspAscII6x8()`
+6. Transfiere solo esta actualización a la pantalla
+
+**Eficiencia:**
+- Solo actualiza el área del tiempo, no redibuja todo el tablero
+- Área actualizada: 90×10 píxeles vs 207×240 píxeles del tablero completo
+- Reduce drásticamente el tiempo de actualización
+
+**Formato del tiempo:**
+```
+Tiempo: MM:SS
+Ejemplo: Tiempo: 03:45
+```
+
+**Límites:**
+- Minutos: 00-99
+- Segundos: 00-59
+- Tiempo máximo visualizable: 99:59 (casi 100 minutos)
+
+### Integración en el bucle principal:
+
+#### En `main.c`:
+```c
+/* Variable para controlar actualización del tiempo */
+unsigned int tiempo_anterior = 0;
+unsigned int tiempo_actual = 0;
+
+/* Bucle principal */
+while (1)
+{
+    /* Actualizar el tiempo en pantalla cada segundo */
+    tiempo_actual = timer2_count();
+    
+    /* Actualizar cada 1 segundo (1000000 microsegundos) */
+    if ((tiempo_actual - tiempo_anterior) >= 1000000)
+    {
+        Sudoku_Actualizar_Tiempo(tiempo_actual);
+        tiempo_anterior = tiempo_actual;
+    }
+}
+```
+
+**Lógica de actualización:**
+1. Lee el tiempo actual del timer2 en cada iteración del bucle
+2. Compara con el tiempo anterior
+3. Si han pasado ≥ 1.000.000 microsegundos (1 segundo):
+   - Actualiza el display del tiempo
+   - Guarda el tiempo actual como nuevo tiempo_anterior
+4. Ciclo se repite continuamente
+
+**Frecuencia de actualización:**
+- Intervalo: 1 segundo
+- Precisión: Microsegundos (del timer2)
+- Deriva acumulada: Mínima debido a la resta de tiempos
+
+### Conversión de tiempo:
+
+**Fórmula completa:**
+```
+Entrada: tiempo_us (microsegundos desde timer2_start())
+
+Paso 1: segundos_totales = tiempo_us / 1.000.000
+Paso 2: minutos = segundos_totales / 60
+Paso 3: segundos = segundos_totales % 60
+
+Salida: "Tiempo: MM:SS"
+```
+
+**Ejemplo de conversión:**
+```
+tiempo_us = 225000000 (225 segundos)
+segundos_totales = 225
+minutos = 225 / 60 = 3
+segundos = 225 % 60 = 45
+Resultado: "Tiempo: 03:45"
+```
+
+### Construcción del string:
+
+**Método carácter por carácter:**
+```c
+tiempo_str[0] = 'T';
+tiempo_str[1] = 'i';
+tiempo_str[2] = 'e';
+tiempo_str[3] = 'm';
+tiempo_str[4] = 'p';
+tiempo_str[5] = 'o';
+tiempo_str[6] = ':';
+tiempo_str[7] = ' ';
+tiempo_str[8] = '0' + (minutos / 10);    /* Decenas de minutos */
+tiempo_str[9] = '0' + (minutos % 10);    /* Unidades de minutos */
+tiempo_str[10] = ':';
+tiempo_str[11] = '0' + (segundos / 10);  /* Decenas de segundos */
+tiempo_str[12] = '0' + (segundos % 10);  /* Unidades de segundos */
+tiempo_str[13] = '\0';
+```
+
+**Ventajas del método:**
+- No requiere sprintf() ni funciones de biblioteca
+- Control total sobre el formato
+- Código predecible y eficiente
+- Sin dependencias adicionales
+
+### Ubicación en el código:
+- **`Sudoku_Actualizar_Tiempo()`**: `lcd.c`, líneas ~810-860
+- **Bucle de actualización**: `main.c`, líneas ~98-110
+- **Posición en pantalla**: Y = tablero_inicio_y + tablero_tam + 5 (debajo del tablero)
+
+### Momentos de inicio del timer:
+- El timer2 se inicializa con `timer2_init()` al arrancar el programa
+- El tiempo comienza a contar desde el inicio del programa
+- Se visualiza continuamente, incluso en la pantalla inicial
+- Al iniciar el juego, el tiempo sigue contando desde el inicio del programa
+
+**Nota:** Si se desea que el tiempo comience desde 0 al pulsar el botón de inicio, se puede agregar `timer2_start()` en el estado ESPERANDO_INICIO del manejador de botones.
+
+---
+
 ## SOLUCIÓN A PROBLEMA: BLOQUEO EN TRANSFERENCIA DMA ✅
 
 ### Problema detectado:
@@ -325,12 +467,12 @@ Agregado timeout de seguridad en `Lcd_Dma_Trans()`:
 ✅ Distinguir visualmente pistas (gris) de valores del usuario (negro)  
 ✅ Resaltar celdas con error (borde grueso)  
 ✅ Mostrar candidatos en celdas vacías (grid 3x3 con círculos)  
+✅ Actualizar tiempo en pantalla en tiempo real (cada segundo)  
 ✅ Estructura de máquina de estados del juego (ya existía en button.c)  
 ✅ Sistema de antirrebotes para botones (ya existía en timer3)  
 ✅ Sistema de medición de tiempo (ya existía en timer2)  
 
 ### Pendiente de implementar:
-⏳ Actualizar tiempo en pantalla en tiempo real  
 ⏳ Pantalla final de victoria/derrota  
 ⏳ Permitir fila 0 para terminar partida  
 

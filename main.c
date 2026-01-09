@@ -97,10 +97,24 @@ void Main(void)
     /* Apuntar a la cola para poder observarla en el depurador */
     p_cola = cola_global;
     
+    /* Variable para controlar actualización del tiempo */
+    unsigned int tiempo_anterior = 0;
+    unsigned int tiempo_actual = 0;
+    
     /* Bucle principal */
     while (1)
     {
         /* El latido (LED2 parpadeando) se gestiona automáticamente por timer1 */
         /* El programa está vivo mientras el LED2 parpadee a 6 Hz */
+        
+        /* Actualizar el tiempo en pantalla cada segundo */
+        tiempo_actual = timer2_count();
+        
+        /* Actualizar cada 1 segundo (1000000 microsegundos) */
+        if ((tiempo_actual - tiempo_anterior) >= 1000000)
+        {
+            Sudoku_Actualizar_Tiempo(tiempo_actual);
+            tiempo_anterior = tiempo_actual;
+        }
     }
 }
