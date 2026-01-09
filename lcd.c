@@ -1,7 +1,7 @@
 /*********************************************************************************************
 * Fichero:	lcd.c
 * Autor:	
-* Descrip:	funciones de visualizaci—n y control LCD
+* Descrip:	funciones de visualizaciï¿½n y control LCD
 * Version:	<P6-ARM>
 *********************************************************************************************/
 
@@ -12,7 +12,7 @@
 #include "lcd.h"
 #include "Bmp.h"
 
-/*--- definici—n de macros ---*/
+/*--- definiciï¿½n de macros ---*/
 #define DMA_Byte  (0)
 #define DMA_HW    (1)
 #define DMA_Word  (2)
@@ -23,7 +23,7 @@ extern INT8U g_auc_Ascii8x16[];
 extern INT8U g_auc_Ascii6x8[];
 extern STRU_BITMAP Stru_Bitmap_gbMouse;
 
-/*--- c—digo de la funci—n ---*/
+/*--- cï¿½digo de la funciï¿½n ---*/
 void Lcd_Init(void)
 {       
 	rDITHMODE=0x1223a;
@@ -498,7 +498,14 @@ void Lcd_Dma_Trans(void)
     rZDCON0=0x1; // start!!!  
 
 	//Delay(500);
-	while(ucZdma0Done);		//wait for DMA finish
+	/* Esperar con timeout para evitar bloqueo */
+	{
+		INT32U timeout = 100000;
+		while(ucZdma0Done && timeout > 0)
+		{
+			timeout--;
+		}
+	}
 }
 
 /*********************************************************************************************
@@ -521,7 +528,7 @@ void Lcd_Test(void)
     #ifdef Eng_v // english version
 	Lcd_DspAscII8x16(10,0,DARKGRAY,"Embest S3CEV40 ");
 	#else
-//	Lcd_DspHz16(10,0,DARKGRAY,"Ó¢ÝíÌØÈýÐÇÊµÑéÆÀ¹À°å");
+//	Lcd_DspHz16(10,0,DARKGRAY,"Ó¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 	#endif
 	Lcd_DspAscII8x16(10,20,BLACK,"Codigo del puesto: ");
 	Lcd_Draw_Box(10,40,310,230,14);
@@ -542,4 +549,110 @@ void Lcd_Test(void)
 
 }
 
-
+/*********************************************************************************************
+* name:		Sudoku_Pantalla_Inicial()
+* func:		Muestra la pantalla inicial del Sudoku con instrucciones
+* para:		none
+* ret:		none
+* modify:
+* comment:		
+*********************************************************************************************/
+void Sudoku_Pantalla_Inicial(void)
+{
+	/* Limpiar pantalla */
+	Lcd_Clr();
+	
+	/* TÃ­tulo */
+	Lcd_DspAscII8x16(85, 10, BLACK, "SUDOKU 9x9");
+	
+	/* Instrucciones */
+	Lcd_DspAscII6x8(20, 40, DARKGRAY, "INSTRUCCIONES:");
+	Lcd_DspAscII6x8(10, 55, BLACK, "1. Boton Derecho: cambia valor");
+	Lcd_DspAscII6x8(10, 70, BLACK, "2. Boton Izquierdo: confirma");
+	Lcd_DspAscII6x8(10, 85, BLACK, "3. Introducir valor 0: borrar");
+	Lcd_DspAscII6x8(10, 100, BLACK, "4. Fila 0: terminar partida");
+	
+	/* Leyenda de sÃ­mbolos en pantalla */
+	Lcd_DspAscII6x8(20, 125, DARKGRAY, "LEYENDA:");
+	Lcd_DspAscII6x8(10, 140, BLACK, "F = Fila    C = Columna");
+	Lcd_DspAscII6x8(10, 155, BLACK, "E = Error detectado");
+	
+	/* Mensaje para iniciar */
+	Lcd_Draw_Box(40, 190, 280, 220, BLACK);
+	Lcd_DspAscII8x16(60, 198, BLACK, "Pulse un boton para jugar");
+	
+	/* Transferir a pantalla */
+	Lcd_Dma_Trans();
+}
+/*********************************************************************************************
+* name:		Sudoku_Dibujar_Tablero()
+* func:		Dibuja el tablero de Sudoku 9x9 con numeraciÃ³n
+* para:		none
+* ret:		none
+* modify:
+* comment:	TamaÃ±o de celda: 23x23 pÃ­xeles, tablero total: 207x207
+*********************************************************************************************/
+void Sudoku_Dibujar_Tablero(void)
+{
+	INT16U i, j;
+	INT8U fila_str[2] = "1";
+	INT8U col_str[2] = "1";
+	
+	/* Constantes del tablero */
+	#define MARGEN_IZQ 20
+	#define MARGEN_SUP 10
+	#define TAM_CELDA 23
+	#define GROSOR_FINO 1
+	#define GROSOR_GRUESO 2
+	
+	INT16U tablero_inicio_x = MARGEN_IZQ + 10;  /* Espacio para nÃºmeros de fila */
+	INT16U tablero_inicio_y = MARGEN_SUP + 10;  /* Espacio para nÃºmeros de columna */
+	INT16U tablero_tam = TAM_CELDA * 9;         /* 207 pÃ­xeles */
+	
+	/* Limpiar pantalla */
+	Lcd_Clr();
+	
+	/* Dibujar nÃºmeros de columnas (1-9) en la parte superior */
+	for (i = 0; i < 9; i++)
+	{
+		col_str[0] = '1' + i;
+		Lcd_DspAscII6x8(tablero_inicio_x + i * TAM_CELDA + TAM_CELDA/2 - 3, 
+		                MARGEN_SUP + 2, BLACK, col_str);
+	}
+	
+	/* Dibujar nÃºmeros de filas (1-9) en el lado izquierdo */
+	for (i = 0; i < 9; i++)
+	{
+		fila_str[0] = '1' + i;
+		Lcd_DspAscII6x8(MARGEN_IZQ + 2, 
+		                tablero_inicio_y + i * TAM_CELDA + TAM_CELDA/2 - 4, 
+		                BLACK, fila_str);
+	}
+	
+	/* Dibujar lÃ­neas horizontales */
+	for (i = 0; i <= 9; i++)
+	{
+		INT16U grosor = (i % 3 == 0) ? GROSOR_GRUESO : GROSOR_FINO;
+		INT16U y = tablero_inicio_y + i * TAM_CELDA;
+		Lcd_Draw_HLine(tablero_inicio_x, tablero_inicio_x + tablero_tam, y, BLACK, grosor);
+	}
+	
+	/* Dibujar lÃ­neas verticales */
+	for (i = 0; i <= 9; i++)
+	{
+		INT16U grosor = (i % 3 == 0) ? GROSOR_GRUESO : GROSOR_FINO;
+		INT16U x = tablero_inicio_x + i * TAM_CELDA;
+		Lcd_Draw_VLine(tablero_inicio_y, tablero_inicio_y + tablero_tam, x, BLACK, grosor);
+	}
+	
+	/* Mostrar tiempo en la parte inferior */
+	Lcd_DspAscII6x8(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, 
+	                BLACK, "Tiempo: 00:00");
+	
+	/* Mensaje de ayuda */
+	Lcd_DspAscII6x8(MARGEN_IZQ + 100, tablero_inicio_y + tablero_tam + 5, 
+	                DARKGRAY, "Fila 0: Salir");
+	
+	/* Transferir a pantalla */
+	Lcd_Dma_Trans();
+}

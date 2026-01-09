@@ -21,6 +21,7 @@
 #include "timer3.h"
 #include "cola.h"
 #include "sudoku_2025.h"
+#include "lcd.h"
 
 /*--- variables globales ---*/
 char yn;
@@ -85,6 +86,10 @@ void Main(void)
     cola_init();        // Inicializacion de la cola de depuracion (Paso 4)
     Eint4567_init();    // inicializamos los pulsadores. Cada vez que se pulse se verá reflejado en el 8led
     D8Led_init();       // inicializamos el 8led
+
+    /* Inicializar LCD y mostrar pantalla inicial */
+    Lcd_Init();
+    Sudoku_Pantalla_Inicial();
 
     /* Valor inicial de los leds */
     leds_off();

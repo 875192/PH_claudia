@@ -16,6 +16,7 @@
 #include "44b.h"
 #include "def.h"
 #include "sudoku_2025.h"
+#include "lcd.h"
 
 /*--- Variables del juego Sudoku ---*/
 static volatile EstadoSudoku estado_juego = ESPERANDO_INICIO;
@@ -24,6 +25,7 @@ static volatile uint8_t fila = 0;
 static volatile uint8_t columna = 0;
 static volatile uint8_t valor = 0;
 static volatile uint8_t valor_previo = 0;  /* Para detectar modificación de valor */
+static volatile uint8_t pantalla_mostrada = 0;  /* Flag para mostrar pantalla inicial solo una vez */
 
 /* Declaración externa de la cuadrícula del juego */
 extern CELDA (*cuadricula)[NUM_COLUMNAS];
@@ -40,10 +42,15 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                         /* Cualquier botón inicia el juego */
                         /* Calcular candidatos por primera vez */
                         celdas_vacias = candidatos_actualizar_all(cuadricula);
+                        
+                        /* Dibujar el tablero del juego */
+                        Sudoku_Dibujar_Tablero();
+                        
                         /* Pasar a introducir fila */
                         estado_juego = INTRODUCIR_FILA;
                         int_count = 0;
                         D8Led_symbol(15);  /* Mostrar 'F' de Fila (índice 15 en el array Symbol) */
+                        pantalla_mostrada = 0;  /* Resetear flag para próxima partida */
                         break;
                 
                 case INTRODUCIR_FILA:

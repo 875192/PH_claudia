@@ -4,7 +4,7 @@ button.d button.o: ../button.c ../button.h ../8led.h ../cola.h \
  C:\hlocal\workspace_Hardware\practica3\common/44b.h \
  C:\hlocal\workspace_Hardware\practica3\common/option.h \
  C:\hlocal\workspace_Hardware\practica3\common/def.h ../sudoku_2025.h \
- ../celda.h
+ ../celda.h ../lcd.h
 
 ../button.h:
 
@@ -29,3 +29,5 @@ C:\hlocal\workspace_Hardware\practica3\common/def.h:
 ../sudoku_2025.h:
 
 ../celda.h:
+
+../lcd.h:
