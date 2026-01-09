@@ -16,9 +16,9 @@
  2712              	TS_Test:
  2713              	.LFB0:
    1:../tp.c       **** /*********************************************************************************************
-   2:../tp.c       **** * File£º	tp.c
+   2:../tp.c       **** * Fileï¿½ï¿½	tp.c
    3:../tp.c       **** * Author:	embest	
-   4:../tp.c       **** * Desc£º	LCD touch screen control function
+   4:../tp.c       **** * Descï¿½ï¿½	LCD touch screen control function
    5:../tp.c       **** * History:	
    6:../tp.c       **** *********************************************************************************************/
    7:../tp.c       **** 
@@ -1298,26 +1298,26 @@ DEFINED SYMBOLS
                             *COM*:00000004 Ymax
                             *COM*:00000004 Xmin
                             *COM*:00000004 Ymin
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:2709   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:2712   .text:00000000 TS_Test
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3234   .text:000004dc Lcd_TC
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3047   .text:000003b0 TS_init
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3634   .text:00000988 Check_Sel
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:2746   .text:00000024 TSInt
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3517   .text:00000854 DesignREC
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3031   .text:00000388 $d
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3044   .text:000003b0 $a
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3124   .text:0000046c $d
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3139   .text:0000049c $a
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3142   .text:0000049c TS_close
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3176   .text:000004d4 $d
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3182   .rodata:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3231   .text:000004dc $a
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3494   .text:00000810 $d
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3514   .text:00000854 $a
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3620   .text:00000968 $d
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3631   .text:00000988 $a
-C:\Users\jaime\AppData\Local\Temp\ccYHoL2j.s:3724   .text:00000a6c $d
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:2709   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:2712   .text:00000000 TS_Test
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3234   .text:000004dc Lcd_TC
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3047   .text:000003b0 TS_init
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3634   .text:00000988 Check_Sel
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:2746   .text:00000024 TSInt
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3517   .text:00000854 DesignREC
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3031   .text:00000388 $d
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3044   .text:000003b0 $a
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3124   .text:0000046c $d
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3139   .text:0000049c $a
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3142   .text:0000049c TS_close
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3176   .text:000004d4 $d
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3182   .rodata:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3231   .text:000004dc $a
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3494   .text:00000810 $d
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3514   .text:00000854 $a
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3620   .text:00000968 $d
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3631   .text:00000988 $a
+C:\Users\jaime\AppData\Local\Temp\ccoPsZ5P.s:3724   .text:00000a6c $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

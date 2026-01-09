@@ -280,6 +280,9 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                 else
                                 {
                                         /* No es candidato: es un error */
+                                        celda_marcar_error(&cuadricula[fila][columna]);
+                                        D8Led_symbol(14);  /* Mostrar 'E' de Error */
+                                        
                                         /* Poner el valor incorrecto en la celda para visualizarlo */
                                         celda_poner_valor(&cuadricula[fila][columna], valor);
                                         
@@ -300,8 +303,6 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                         
                                         /* Actualizar la visualización del tablero */
                                         Sudoku_Actualizar_Tablero_Completo(cuadricula);
-                                        
-                                        D8Led_symbol(14);  /* Mostrar 'E' de Error */
                                         
                                         /* Volver a introducir fila */
                                         estado_juego = INTRODUCIR_FILA;
