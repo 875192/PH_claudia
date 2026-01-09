@@ -1355,31 +1355,31 @@
  3974              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 button.c
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:2979   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:2981   .text:00000000 celda_poner_valor
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3032   .text:00000078 celda_leer_valor
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3067   .text:000000b0 celda_es_candidato
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3108   .text:00000100 celda_es_pista
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3144   .text:0000013c celda_marcar_error
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3180   .text:00000178 celda_limpiar_error
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3215   .bss:00000000 estado_juego
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3216   .bss:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3217   .bss:00000001 int_count
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3219   .bss:00000002 fila
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3221   .bss:00000003 columna
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3223   .bss:00000004 valor
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3225   .bss:00000005 valor_previo
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3227   .bss:00000006 pantalla_mostrada
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3232   .text:000001b4 boton_confirmado
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3271   .text:0000020c $d
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3279   .text:00000224 $a
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3781   .text:00000858 $d
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3793   .text:0000087c $a
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3796   .text:0000087c Eint4567_ISR
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3873   .text:00000924 $d
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3878   .text:0000092c $a
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3881   .text:0000092c Eint4567_init
-C:\Users\jaime\AppData\Local\Temp\ccyIDJdd.s:3959   .text:000009ec $d
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:2979   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:2981   .text:00000000 celda_poner_valor
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3032   .text:00000078 celda_leer_valor
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3067   .text:000000b0 celda_es_candidato
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3108   .text:00000100 celda_es_pista
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3144   .text:0000013c celda_marcar_error
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3180   .text:00000178 celda_limpiar_error
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3215   .bss:00000000 estado_juego
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3216   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3217   .bss:00000001 int_count
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3219   .bss:00000002 fila
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3221   .bss:00000003 columna
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3223   .bss:00000004 valor
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3225   .bss:00000005 valor_previo
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3227   .bss:00000006 pantalla_mostrada
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3232   .text:000001b4 boton_confirmado
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3271   .text:0000020c $d
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3279   .text:00000224 $a
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3781   .text:00000858 $d
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3793   .text:0000087c $a
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3796   .text:0000087c Eint4567_ISR
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3873   .text:00000924 $d
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3878   .text:0000092c $a
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3881   .text:0000092c Eint4567_init
+C:\Users\jaime\AppData\Local\Temp\cceKgBZl.s:3959   .text:000009ec $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

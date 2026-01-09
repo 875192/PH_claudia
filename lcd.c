@@ -641,6 +641,69 @@ void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U
 }
 
 /*********************************************************************************************
+* name:		Sudoku_Dibujar_Candidatos_En_Celda()
+* func:		Dibuja los candidatos en una celda vacía usando un grid 3x3
+* para:		fila, col - posición en el tablero (0-8)
+*           celda - valor de la celda con los bits de candidatos
+* ret:		none
+* modify:
+* comment:	Cada número (1-9) se representa en un grid 3x3. Si es candidato, se 
+*           dibuja un círculo pequeño en esa posición.
+*           Layout del grid:
+*           1 2 3
+*           4 5 6
+*           7 8 9
+*********************************************************************************************/
+void Sudoku_Dibujar_Candidatos_En_Celda(INT16U fila, INT16U col, CELDA celda)
+{
+	#define MARGEN_IZQ 20
+	#define MARGEN_SUP 10
+	#define TAM_CELDA 23
+	
+	INT16U tablero_inicio_x = MARGEN_IZQ + 10;
+	INT16U tablero_inicio_y = MARGEN_SUP + 10;
+	
+	/* Calcular posición de la celda en píxeles */
+	INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
+	INT16U celda_y = tablero_inicio_y + fila * TAM_CELDA;
+	
+	/* Limpiar el interior de la celda */
+	LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
+	
+	/* Dibujar grid de candidatos */
+	/* Cada subcelda del grid 3x3 tiene aproximadamente 7 píxeles */
+	#define TAM_SUBCELDA 7
+	
+	INT8U numero;
+	for (numero = 1; numero <= 9; numero++)
+	{
+		/* Verificar si este número es candidato */
+		if (celda_es_candidato(celda, numero))
+		{
+			/* Calcular posición en el grid 3x3 */
+			/* Grid: 1 2 3 / 4 5 6 / 7 8 9 */
+			INT8U grid_fila = (numero - 1) / 3;  /* 0, 1, 2 */
+			INT8U grid_col = (numero - 1) % 3;   /* 0, 1, 2 */
+			
+			/* Calcular centro de la subcelda */
+			INT16U centro_x = celda_x + 3 + grid_col * TAM_SUBCELDA + TAM_SUBCELDA / 2;
+			INT16U centro_y = celda_y + 3 + grid_fila * TAM_SUBCELDA + TAM_SUBCELDA / 2;
+			
+			/* Dibujar un círculo más grande (3x3 píxeles en forma circular) */
+			LCD_PutPixel(centro_x, centro_y, BLACK);           /* Centro */
+			LCD_PutPixel(centro_x - 1, centro_y, BLACK);       /* Izquierda */
+			LCD_PutPixel(centro_x + 1, centro_y, BLACK);       /* Derecha */
+			LCD_PutPixel(centro_x, centro_y - 1, BLACK);       /* Arriba */
+			LCD_PutPixel(centro_x, centro_y + 1, BLACK);       /* Abajo */
+			LCD_PutPixel(centro_x - 1, centro_y - 1, BLACK);   /* Diagonal sup-izq */
+			LCD_PutPixel(centro_x + 1, centro_y - 1, BLACK);   /* Diagonal sup-der */
+			LCD_PutPixel(centro_x - 1, centro_y + 1, BLACK);   /* Diagonal inf-izq */
+			LCD_PutPixel(centro_x + 1, centro_y + 1, BLACK);   /* Diagonal inf-der */
+		}
+	}
+}
+
+/*********************************************************************************************
 * name:		Sudoku_Actualizar_Tablero_Completo()
 * func:		Actualiza todo el tablero mostrando valores y candidatos
 * para:		cuadricula - puntero a la cuadrícula del juego
@@ -670,21 +733,8 @@ void Sudoku_Actualizar_Tablero_Completo(void* cuadricula_ptr)
 			}
 			else
 			{
-				/* Celda vacía: por ahora solo limpiarla */
-				/* En el siguiente paso dibujaremos los candidatos */
-				#define MARGEN_IZQ 20
-				#define MARGEN_SUP 10
-				#define TAM_CELDA 23
-				
-				INT16U tablero_inicio_x = MARGEN_IZQ + 10;
-				INT16U tablero_inicio_y = MARGEN_SUP + 10;
-				INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
-				INT16U celda_y = tablero_inicio_y + fila * TAM_CELDA;
-				
-				/* Limpiar la celda */
-				LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
-				
-				/* TODO: Dibujar candidatos aquí en el paso 4 */
+				/* Celda vacía: dibujar candidatos */
+				Sudoku_Dibujar_Candidatos_En_Celda(fila, col, celda_actual);
 			}
 		}
 	}
