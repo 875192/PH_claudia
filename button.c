@@ -26,6 +26,7 @@ static volatile uint8_t columna = 0;
 static volatile uint8_t valor = 0;
 static volatile uint8_t valor_previo = 0;  /* Para detectar modificación de valor */
 static volatile uint8_t pantalla_mostrada = 0;  /* Flag para mostrar pantalla inicial solo una vez */
+static volatile uint32_t tiempo_inicio = 0;  /* Tiempo de inicio de la partida actual */
 static volatile uint32_t tiempo_final = 0;  /* Tiempo final al terminar la partida */
 
 /* Declaración externa de la cuadrícula del juego */
@@ -41,6 +42,9 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
         {
                 case ESPERANDO_INICIO:
                         /* Cualquier botón inicia el juego */
+                        /* Guardar tiempo de inicio para reiniciar el contador */
+                        tiempo_inicio = timer2_count();
+                        
                         /* Calcular candidatos por primera vez */
                         celdas_vacias = candidatos_actualizar_all(cuadricula);
                         
@@ -74,8 +78,9 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                 if (int_count == 0)
                                 {
                                         /* Fila 0: terminar la partida */
+                                        /* Guardar tiempo transcurrido desde el inicio de esta partida */
+                                        tiempo_final = timer2_count() - tiempo_inicio;
                                         estado_juego = PARTIDA_TERMINADA;
-                                        tiempo_final = timer2_count();
                                         /* La pantalla final se mostrará en este estado */
                                 }
                                 else
@@ -227,7 +232,17 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                                 
                                 pantalla_mostrada = 1;
                         }
-                        /* No hacer nada más - el juego permanece terminado */
+                        else
+                        {
+                                /* Cualquier botón después de mostrar pantalla final reinicia el juego */
+                                /* Mostrar pantalla inicial */
+                                Sudoku_Pantalla_Inicial();
+                                
+                                /* Volver al estado inicial */
+                                estado_juego = ESPERANDO_INICIO;
+                                int_count = 0;
+                                pantalla_mostrada = 0;
+                        }
                         break;
         }
 }
@@ -268,6 +283,18 @@ void Eint4567_ISR(void)
 int Sudoku_Partida_Terminada(void)
 {
 	return (estado_juego == PARTIDA_TERMINADA);
+}
+
+/* Función para consultar si el juego está en progreso */
+int Sudoku_Juego_En_Progreso(void)
+{
+	return (estado_juego != ESPERANDO_INICIO && estado_juego != PARTIDA_TERMINADA);
+}
+
+/* Función para obtener el tiempo de inicio de la partida */
+unsigned int Sudoku_Obtener_Tiempo_Inicio(void)
+{
+	return tiempo_inicio;
 }
 void Eint4567_init(void)
 {

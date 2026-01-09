@@ -831,6 +831,9 @@ void Sudoku_Pantalla_Final(INT32U tiempo_us)
 	Lcd_DspAscII8x16(90, 80, BLACK, "Tiempo final:");
 	Lcd_DspAscII8x16(130, 100, BLACK, tiempo_str);
 	
+	/* Mensaje para reiniciar */
+	Lcd_DspAscII8x16(30, 158, BLACK, "Pulse un boton para reiniciar");
+	
 	/* Transferir a pantalla */
 	Lcd_Dma_Trans();
 }

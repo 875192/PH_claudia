@@ -113,10 +113,12 @@ void Main(void)
         /* Actualizar cada 1 segundo (1000000 microsegundos) */
         if ((tiempo_actual - tiempo_anterior) >= 1000000)
         {
-            /* Solo actualizar si la partida no ha terminado */
-            if (!Sudoku_Partida_Terminada())
+            /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) */
+            if (Sudoku_Juego_En_Progreso())
             {
-                Sudoku_Actualizar_Tiempo(tiempo_actual);
+                /* Calcular tiempo transcurrido desde el inicio de la partida */
+                unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
+                Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
             }
             tiempo_anterior = tiempo_actual;
         }

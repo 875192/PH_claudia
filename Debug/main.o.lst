@@ -1038,7 +1038,7 @@
   97:../main.c     ****     /* Apuntar a la cola para poder observarla en el depurador */
   98:../main.c     ****     p_cola = cola_global;
  3961              		.loc 1 98 0
- 3962 0034 60309FE5 		ldr	r3, .L6
+ 3962 0034 74309FE5 		ldr	r3, .L6
  3963 0038 003093E5 		ldr	r3, [r3, #0]
  3964 003c 14300BE5 		str	r3, [fp, #-20]
   99:../main.c     ****     
@@ -1066,15 +1066,17 @@
  113:../main.c     ****         /* Actualizar cada 1 segundo (1000000 microsegundos) */
  114:../main.c     ****         if ((tiempo_actual - tiempo_anterior) >= 1000000)
  115:../main.c     ****         {
- 116:../main.c     ****             /* Solo actualizar si la partida no ha terminado */
- 117:../main.c     ****             if (!Sudoku_Partida_Terminada())
+ 116:../main.c     ****             /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) 
+ 117:../main.c     ****             if (Sudoku_Juego_En_Progreso())
  118:../main.c     ****             {
- 119:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_actual);
- 120:../main.c     ****             }
- 121:../main.c     ****             tiempo_anterior = tiempo_actual;
- 122:../main.c     ****         }
- 123:../main.c     ****     }
- 3973              		.loc 1 123 0
+ 119:../main.c     ****                 /* Calcular tiempo transcurrido desde el inicio de la partida */
+ 120:../main.c     ****                 unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
+ 121:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+ 122:../main.c     ****             }
+ 123:../main.c     ****             tiempo_anterior = tiempo_actual;
+ 124:../main.c     ****         }
+ 125:../main.c     ****     }
+ 3973              		.loc 1 125 0
  3974 0054 0000A0E1 		mov	r0, r0	@ nop
  3975              	.L4:
  111:../main.c     ****         tiempo_actual = timer2_count();
@@ -1086,34 +1088,43 @@
  3980 0060 18201BE5 		ldr	r2, [fp, #-24]
  3981 0064 10301BE5 		ldr	r3, [fp, #-16]
  3982 0068 022063E0 		rsb	r2, r3, r2
- 3983 006c 2C309FE5 		ldr	r3, .L6+4
+ 3983 006c 40309FE5 		ldr	r3, .L6+4
  3984 0070 030052E1 		cmp	r2, r3
  3985 0074 F6FFFF9A 		bls	.L5
- 117:../main.c     ****             if (!Sudoku_Partida_Terminada())
+ 117:../main.c     ****             if (Sudoku_Juego_En_Progreso())
  3986              		.loc 1 117 0
- 3987 0078 FEFFFFEB 		bl	Sudoku_Partida_Terminada
+ 3987 0078 FEFFFFEB 		bl	Sudoku_Juego_En_Progreso
  3988 007c 0030A0E1 		mov	r3, r0
  3989 0080 000053E3 		cmp	r3, #0
- 3990 0084 0100001A 		bne	.L3
- 119:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_actual);
- 3991              		.loc 1 119 0
- 3992 0088 18001BE5 		ldr	r0, [fp, #-24]
- 3993 008c FEFFFFEB 		bl	Sudoku_Actualizar_Tiempo
- 3994              	.L3:
- 121:../main.c     ****             tiempo_anterior = tiempo_actual;
- 3995              		.loc 1 121 0
- 3996 0090 18301BE5 		ldr	r3, [fp, #-24]
- 3997 0094 10300BE5 		str	r3, [fp, #-16]
- 3998              		.loc 1 123 0
- 3999 0098 EEFFFFEA 		b	.L4
- 4000              	.L7:
- 4001              		.align	2
- 4002              	.L6:
- 4003 009c 00000000 		.word	cola_global
- 4004 00a0 3F420F00 		.word	999999
- 4005              		.cfi_endproc
- 4006              	.LFE7:
- 4008              	.Letext0:
+ 3990 0084 0600000A 		beq	.L3
+ 3991              	.LBB2:
+ 120:../main.c     ****                 unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
+ 3992              		.loc 1 120 0
+ 3993 0088 FEFFFFEB 		bl	Sudoku_Obtener_Tiempo_Inicio
+ 3994 008c 0030A0E1 		mov	r3, r0
+ 3995 0090 18201BE5 		ldr	r2, [fp, #-24]
+ 3996 0094 023063E0 		rsb	r3, r3, r2
+ 3997 0098 1C300BE5 		str	r3, [fp, #-28]
+ 121:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+ 3998              		.loc 1 121 0
+ 3999 009c 1C001BE5 		ldr	r0, [fp, #-28]
+ 4000 00a0 FEFFFFEB 		bl	Sudoku_Actualizar_Tiempo
+ 4001              	.L3:
+ 4002              	.LBE2:
+ 123:../main.c     ****             tiempo_anterior = tiempo_actual;
+ 4003              		.loc 1 123 0
+ 4004 00a4 18301BE5 		ldr	r3, [fp, #-24]
+ 4005 00a8 10300BE5 		str	r3, [fp, #-16]
+ 4006              		.loc 1 125 0
+ 4007 00ac E9FFFFEA 		b	.L4
+ 4008              	.L7:
+ 4009              		.align	2
+ 4010              	.L6:
+ 4011 00b0 00000000 		.word	cola_global
+ 4012 00b4 3F420F00 		.word	999999
+ 4013              		.cfi_endproc
+ 4014              	.LFE7:
+ 4016              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
                             *COM*:00000004 CheckTSP
@@ -1125,19 +1136,19 @@ DEFINED SYMBOLS
                             *COM*:00000004 Xmin
                             *COM*:00000004 Ymin
                             *COM*:00000001 yn
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3020   .data:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3023   .data:00000000 cuadricula_C_C
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3171   .data:00000120 cuadricula_C_ARM
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3319   .data:00000240 cuadricula_ARM_C
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3467   .data:00000360 cuadricula_ARM_ARM
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3615   .data:00000480 cuadricula_ARM_ARM_ALL
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3763   .data:000005a0 solucion
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3912   .data:000006c0 cuadricula
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3919   .bss:00000000 celdas_vacias
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3916   .bss:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3922   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:3925   .text:00000000 Main
-C:\Users\jaime\AppData\Local\Temp\cc5mlPzi.s:4003   .text:0000009c $d
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3020   .data:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3023   .data:00000000 cuadricula_C_C
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3171   .data:00000120 cuadricula_C_ARM
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3319   .data:00000240 cuadricula_ARM_C
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3467   .data:00000360 cuadricula_ARM_ARM
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3615   .data:00000480 cuadricula_ARM_ARM_ALL
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3763   .data:000005a0 solucion
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3912   .data:000006c0 cuadricula
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3919   .bss:00000000 celdas_vacias
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3916   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3922   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:3925   .text:00000000 Main
+C:\Users\jaime\AppData\Local\Temp\ccMjmVjm.s:4011   .text:000000b0 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
@@ -1151,6 +1162,7 @@ Lcd_Init
 Sudoku_Pantalla_Inicial
 leds_off
 timer2_count
-Sudoku_Partida_Terminada
+Sudoku_Juego_En_Progreso
+Sudoku_Obtener_Tiempo_Inicio
 Sudoku_Actualizar_Tiempo
 cola_global
