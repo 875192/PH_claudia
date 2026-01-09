@@ -1,0 +1,1031 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"main_sudoku.c"
+  21              	.Ltext0:
+  22              		.file 1 "../main_sudoku.c"
+ 2783              		.align	5
+ 2786              	cuadricula_C_C:
+ 2787 0000 1500     		.short	21
+ 2788 0002 0000     		.short	0
+ 2789 0004 0000     		.short	0
+ 2790 0006 1300     		.short	19
+ 2791 0008 0000     		.short	0
+ 2792 000a 0000     		.short	0
+ 2793 000c 0000     		.short	0
+ 2794 000e 0000     		.short	0
+ 2795 0010 0000     		.short	0
+ 2796 0012 0000     		.short	0
+ 2797 0014 0000     		.short	0
+ 2798 0016 0000     		.short	0
+ 2799 0018 0000     		.short	0
+ 2800 001a 0000     		.short	0
+ 2801 001c 0000     		.short	0
+ 2802 001e 0000     		.short	0
+ 2803 0020 0000     		.short	0
+ 2804 0022 0000     		.short	0
+ 2805 0024 0000     		.short	0
+ 2806 0026 0000     		.short	0
+ 2807 0028 1900     		.short	25
+ 2808 002a 0000     		.short	0
+ 2809 002c 0000     		.short	0
+ 2810 002e 0000     		.short	0
+ 2811 0030 1500     		.short	21
+ 2812 0032 0000     		.short	0
+ 2813 0034 0000     		.short	0
+ 2814 0036 0000     		.short	0
+ 2815 0038 0000     		.short	0
+ 2816 003a 0000     		.short	0
+ 2817 003c 0000     		.short	0
+ 2818 003e 0000     		.short	0
+ 2819 0040 0000     		.short	0
+ 2820 0042 1900     		.short	25
+ 2821 0044 1600     		.short	22
+ 2822 0046 1700     		.short	23
+ 2823 0048 0000     		.short	0
+ 2824 004a 1500     		.short	21
+ 2825 004c 0000     		.short	0
+ 2826 004e 1300     		.short	19
+ 2827 0050 0000     		.short	0
+ 2828 0052 0000     		.short	0
+ 2829 0054 0000     		.short	0
+ 2830 0056 0000     		.short	0
+ 2831 0058 0000     		.short	0
+ 2832 005a 0000     		.short	0
+ 2833 005c 0000     		.short	0
+ 2834 005e 0000     		.short	0
+ 2835 0060 0000     		.short	0
+ 2836 0062 1800     		.short	24
+ 2837 0064 0000     		.short	0
+ 2838 0066 1900     		.short	25
+ 2839 0068 0000     		.short	0
+ 2840 006a 0000     		.short	0
+ 2841 006c 1600     		.short	22
+ 2842 006e 0000     		.short	0
+ 2843 0070 0000     		.short	0
+ 2844 0072 0000     		.short	0
+ 2845 0074 0000     		.short	0
+ 2846 0076 0000     		.short	0
+ 2847 0078 0000     		.short	0
+ 2848 007a 0000     		.short	0
+ 2849 007c 0000     		.short	0
+ 2850 007e 0000     		.short	0
+ 2851 0080 0000     		.short	0
+ 2852 0082 0000     		.short	0
+ 2853 0084 1500     		.short	21
+ 2854 0086 1800     		.short	24
+ 2855 0088 1600     		.short	22
+ 2856 008a 1100     		.short	17
+ 2857 008c 1400     		.short	20
+ 2858 008e 0000     		.short	0
+ 2859 0090 0000     		.short	0
+ 2860 0092 0000     		.short	0
+ 2861 0094 0000     		.short	0
+ 2862 0096 0000     		.short	0
+ 2863 0098 0000     		.short	0
+ 2864 009a 0000     		.short	0
+ 2865 009c 0000     		.short	0
+ 2866 009e 0000     		.short	0
+ 2867 00a0 0000     		.short	0
+ 2868 00a2 0000     		.short	0
+ 2869 00a4 1400     		.short	20
+ 2870 00a6 1200     		.short	18
+ 2871 00a8 0000     		.short	0
+ 2872 00aa 1300     		.short	19
+ 2873 00ac 0000     		.short	0
+ 2874 00ae 1700     		.short	23
+ 2875 00b0 0000     		.short	0
+ 2876 00b2 0000     		.short	0
+ 2877 00b4 0000     		.short	0
+ 2878 00b6 0000     		.short	0
+ 2879 00b8 0000     		.short	0
+ 2880 00ba 0000     		.short	0
+ 2881 00bc 0000     		.short	0
+ 2882 00be 0000     		.short	0
+ 2883 00c0 0000     		.short	0
+ 2884 00c2 1700     		.short	23
+ 2885 00c4 0000     		.short	0
+ 2886 00c6 1500     		.short	21
+ 2887 00c8 0000     		.short	0
+ 2888 00ca 1900     		.short	25
+ 2889 00cc 1200     		.short	18
+ 2890 00ce 1600     		.short	22
+ 2891 00d0 0000     		.short	0
+ 2892 00d2 0000     		.short	0
+ 2893 00d4 0000     		.short	0
+ 2894 00d6 0000     		.short	0
+ 2895 00d8 0000     		.short	0
+ 2896 00da 0000     		.short	0
+ 2897 00dc 0000     		.short	0
+ 2898 00de 0000     		.short	0
+ 2899 00e0 1600     		.short	22
+ 2900 00e2 0000     		.short	0
+ 2901 00e4 0000     		.short	0
+ 2902 00e6 0000     		.short	0
+ 2903 00e8 1800     		.short	24
+ 2904 00ea 0000     		.short	0
+ 2905 00ec 0000     		.short	0
+ 2906 00ee 0000     		.short	0
+ 2907 00f0 0000     		.short	0
+ 2908 00f2 0000     		.short	0
+ 2909 00f4 0000     		.short	0
+ 2910 00f6 0000     		.short	0
+ 2911 00f8 0000     		.short	0
+ 2912 00fa 0000     		.short	0
+ 2913 00fc 0000     		.short	0
+ 2914 00fe 0000     		.short	0
+ 2915 0100 0000     		.short	0
+ 2916 0102 0000     		.short	0
+ 2917 0104 0000     		.short	0
+ 2918 0106 0000     		.short	0
+ 2919 0108 0000     		.short	0
+ 2920 010a 1200     		.short	18
+ 2921 010c 0000     		.short	0
+ 2922 010e 0000     		.short	0
+ 2923 0110 1100     		.short	17
+ 2924 0112 0000     		.short	0
+ 2925 0114 0000     		.short	0
+ 2926 0116 0000     		.short	0
+ 2927 0118 0000     		.short	0
+ 2928 011a 0000     		.short	0
+ 2929 011c 0000     		.short	0
+ 2930 011e 0000     		.short	0
+ 2931              		.align	5
+ 2934              	cuadricula_C_ARM:
+ 2935 0120 1500     		.short	21
+ 2936 0122 0000     		.short	0
+ 2937 0124 0000     		.short	0
+ 2938 0126 1300     		.short	19
+ 2939 0128 0000     		.short	0
+ 2940 012a 0000     		.short	0
+ 2941 012c 0000     		.short	0
+ 2942 012e 0000     		.short	0
+ 2943 0130 0000     		.short	0
+ 2944 0132 0000     		.short	0
+ 2945 0134 0000     		.short	0
+ 2946 0136 0000     		.short	0
+ 2947 0138 0000     		.short	0
+ 2948 013a 0000     		.short	0
+ 2949 013c 0000     		.short	0
+ 2950 013e 0000     		.short	0
+ 2951 0140 0000     		.short	0
+ 2952 0142 0000     		.short	0
+ 2953 0144 0000     		.short	0
+ 2954 0146 0000     		.short	0
+ 2955 0148 1900     		.short	25
+ 2956 014a 0000     		.short	0
+ 2957 014c 0000     		.short	0
+ 2958 014e 0000     		.short	0
+ 2959 0150 1500     		.short	21
+ 2960 0152 0000     		.short	0
+ 2961 0154 0000     		.short	0
+ 2962 0156 0000     		.short	0
+ 2963 0158 0000     		.short	0
+ 2964 015a 0000     		.short	0
+ 2965 015c 0000     		.short	0
+ 2966 015e 0000     		.short	0
+ 2967 0160 0000     		.short	0
+ 2968 0162 1900     		.short	25
+ 2969 0164 1600     		.short	22
+ 2970 0166 1700     		.short	23
+ 2971 0168 0000     		.short	0
+ 2972 016a 1500     		.short	21
+ 2973 016c 0000     		.short	0
+ 2974 016e 1300     		.short	19
+ 2975 0170 0000     		.short	0
+ 2976 0172 0000     		.short	0
+ 2977 0174 0000     		.short	0
+ 2978 0176 0000     		.short	0
+ 2979 0178 0000     		.short	0
+ 2980 017a 0000     		.short	0
+ 2981 017c 0000     		.short	0
+ 2982 017e 0000     		.short	0
+ 2983 0180 0000     		.short	0
+ 2984 0182 1800     		.short	24
+ 2985 0184 0000     		.short	0
+ 2986 0186 1900     		.short	25
+ 2987 0188 0000     		.short	0
+ 2988 018a 0000     		.short	0
+ 2989 018c 1600     		.short	22
+ 2990 018e 0000     		.short	0
+ 2991 0190 0000     		.short	0
+ 2992 0192 0000     		.short	0
+ 2993 0194 0000     		.short	0
+ 2994 0196 0000     		.short	0
+ 2995 0198 0000     		.short	0
+ 2996 019a 0000     		.short	0
+ 2997 019c 0000     		.short	0
+ 2998 019e 0000     		.short	0
+ 2999 01a0 0000     		.short	0
+ 3000 01a2 0000     		.short	0
+ 3001 01a4 1500     		.short	21
+ 3002 01a6 1800     		.short	24
+ 3003 01a8 1600     		.short	22
+ 3004 01aa 1100     		.short	17
+ 3005 01ac 1400     		.short	20
+ 3006 01ae 0000     		.short	0
+ 3007 01b0 0000     		.short	0
+ 3008 01b2 0000     		.short	0
+ 3009 01b4 0000     		.short	0
+ 3010 01b6 0000     		.short	0
+ 3011 01b8 0000     		.short	0
+ 3012 01ba 0000     		.short	0
+ 3013 01bc 0000     		.short	0
+ 3014 01be 0000     		.short	0
+ 3015 01c0 0000     		.short	0
+ 3016 01c2 0000     		.short	0
+ 3017 01c4 1400     		.short	20
+ 3018 01c6 1200     		.short	18
+ 3019 01c8 0000     		.short	0
+ 3020 01ca 1300     		.short	19
+ 3021 01cc 0000     		.short	0
+ 3022 01ce 1700     		.short	23
+ 3023 01d0 0000     		.short	0
+ 3024 01d2 0000     		.short	0
+ 3025 01d4 0000     		.short	0
+ 3026 01d6 0000     		.short	0
+ 3027 01d8 0000     		.short	0
+ 3028 01da 0000     		.short	0
+ 3029 01dc 0000     		.short	0
+ 3030 01de 0000     		.short	0
+ 3031 01e0 0000     		.short	0
+ 3032 01e2 1700     		.short	23
+ 3033 01e4 0000     		.short	0
+ 3034 01e6 1500     		.short	21
+ 3035 01e8 0000     		.short	0
+ 3036 01ea 1900     		.short	25
+ 3037 01ec 1200     		.short	18
+ 3038 01ee 1600     		.short	22
+ 3039 01f0 0000     		.short	0
+ 3040 01f2 0000     		.short	0
+ 3041 01f4 0000     		.short	0
+ 3042 01f6 0000     		.short	0
+ 3043 01f8 0000     		.short	0
+ 3044 01fa 0000     		.short	0
+ 3045 01fc 0000     		.short	0
+ 3046 01fe 0000     		.short	0
+ 3047 0200 1600     		.short	22
+ 3048 0202 0000     		.short	0
+ 3049 0204 0000     		.short	0
+ 3050 0206 0000     		.short	0
+ 3051 0208 1800     		.short	24
+ 3052 020a 0000     		.short	0
+ 3053 020c 0000     		.short	0
+ 3054 020e 0000     		.short	0
+ 3055 0210 0000     		.short	0
+ 3056 0212 0000     		.short	0
+ 3057 0214 0000     		.short	0
+ 3058 0216 0000     		.short	0
+ 3059 0218 0000     		.short	0
+ 3060 021a 0000     		.short	0
+ 3061 021c 0000     		.short	0
+ 3062 021e 0000     		.short	0
+ 3063 0220 0000     		.short	0
+ 3064 0222 0000     		.short	0
+ 3065 0224 0000     		.short	0
+ 3066 0226 0000     		.short	0
+ 3067 0228 0000     		.short	0
+ 3068 022a 1200     		.short	18
+ 3069 022c 0000     		.short	0
+ 3070 022e 0000     		.short	0
+ 3071 0230 1100     		.short	17
+ 3072 0232 0000     		.short	0
+ 3073 0234 0000     		.short	0
+ 3074 0236 0000     		.short	0
+ 3075 0238 0000     		.short	0
+ 3076 023a 0000     		.short	0
+ 3077 023c 0000     		.short	0
+ 3078 023e 0000     		.short	0
+ 3079              		.align	5
+ 3082              	cuadricula_ARM_C:
+ 3083 0240 1500     		.short	21
+ 3084 0242 0000     		.short	0
+ 3085 0244 0000     		.short	0
+ 3086 0246 1300     		.short	19
+ 3087 0248 0000     		.short	0
+ 3088 024a 0000     		.short	0
+ 3089 024c 0000     		.short	0
+ 3090 024e 0000     		.short	0
+ 3091 0250 0000     		.short	0
+ 3092 0252 0000     		.short	0
+ 3093 0254 0000     		.short	0
+ 3094 0256 0000     		.short	0
+ 3095 0258 0000     		.short	0
+ 3096 025a 0000     		.short	0
+ 3097 025c 0000     		.short	0
+ 3098 025e 0000     		.short	0
+ 3099 0260 0000     		.short	0
+ 3100 0262 0000     		.short	0
+ 3101 0264 0000     		.short	0
+ 3102 0266 0000     		.short	0
+ 3103 0268 1900     		.short	25
+ 3104 026a 0000     		.short	0
+ 3105 026c 0000     		.short	0
+ 3106 026e 0000     		.short	0
+ 3107 0270 1500     		.short	21
+ 3108 0272 0000     		.short	0
+ 3109 0274 0000     		.short	0
+ 3110 0276 0000     		.short	0
+ 3111 0278 0000     		.short	0
+ 3112 027a 0000     		.short	0
+ 3113 027c 0000     		.short	0
+ 3114 027e 0000     		.short	0
+ 3115 0280 0000     		.short	0
+ 3116 0282 1900     		.short	25
+ 3117 0284 1600     		.short	22
+ 3118 0286 1700     		.short	23
+ 3119 0288 0000     		.short	0
+ 3120 028a 1500     		.short	21
+ 3121 028c 0000     		.short	0
+ 3122 028e 1300     		.short	19
+ 3123 0290 0000     		.short	0
+ 3124 0292 0000     		.short	0
+ 3125 0294 0000     		.short	0
+ 3126 0296 0000     		.short	0
+ 3127 0298 0000     		.short	0
+ 3128 029a 0000     		.short	0
+ 3129 029c 0000     		.short	0
+ 3130 029e 0000     		.short	0
+ 3131 02a0 0000     		.short	0
+ 3132 02a2 1800     		.short	24
+ 3133 02a4 0000     		.short	0
+ 3134 02a6 1900     		.short	25
+ 3135 02a8 0000     		.short	0
+ 3136 02aa 0000     		.short	0
+ 3137 02ac 1600     		.short	22
+ 3138 02ae 0000     		.short	0
+ 3139 02b0 0000     		.short	0
+ 3140 02b2 0000     		.short	0
+ 3141 02b4 0000     		.short	0
+ 3142 02b6 0000     		.short	0
+ 3143 02b8 0000     		.short	0
+ 3144 02ba 0000     		.short	0
+ 3145 02bc 0000     		.short	0
+ 3146 02be 0000     		.short	0
+ 3147 02c0 0000     		.short	0
+ 3148 02c2 0000     		.short	0
+ 3149 02c4 1500     		.short	21
+ 3150 02c6 1800     		.short	24
+ 3151 02c8 1600     		.short	22
+ 3152 02ca 1100     		.short	17
+ 3153 02cc 1400     		.short	20
+ 3154 02ce 0000     		.short	0
+ 3155 02d0 0000     		.short	0
+ 3156 02d2 0000     		.short	0
+ 3157 02d4 0000     		.short	0
+ 3158 02d6 0000     		.short	0
+ 3159 02d8 0000     		.short	0
+ 3160 02da 0000     		.short	0
+ 3161 02dc 0000     		.short	0
+ 3162 02de 0000     		.short	0
+ 3163 02e0 0000     		.short	0
+ 3164 02e2 0000     		.short	0
+ 3165 02e4 1400     		.short	20
+ 3166 02e6 1200     		.short	18
+ 3167 02e8 0000     		.short	0
+ 3168 02ea 1300     		.short	19
+ 3169 02ec 0000     		.short	0
+ 3170 02ee 1700     		.short	23
+ 3171 02f0 0000     		.short	0
+ 3172 02f2 0000     		.short	0
+ 3173 02f4 0000     		.short	0
+ 3174 02f6 0000     		.short	0
+ 3175 02f8 0000     		.short	0
+ 3176 02fa 0000     		.short	0
+ 3177 02fc 0000     		.short	0
+ 3178 02fe 0000     		.short	0
+ 3179 0300 0000     		.short	0
+ 3180 0302 1700     		.short	23
+ 3181 0304 0000     		.short	0
+ 3182 0306 1500     		.short	21
+ 3183 0308 0000     		.short	0
+ 3184 030a 1900     		.short	25
+ 3185 030c 1200     		.short	18
+ 3186 030e 1600     		.short	22
+ 3187 0310 0000     		.short	0
+ 3188 0312 0000     		.short	0
+ 3189 0314 0000     		.short	0
+ 3190 0316 0000     		.short	0
+ 3191 0318 0000     		.short	0
+ 3192 031a 0000     		.short	0
+ 3193 031c 0000     		.short	0
+ 3194 031e 0000     		.short	0
+ 3195 0320 1600     		.short	22
+ 3196 0322 0000     		.short	0
+ 3197 0324 0000     		.short	0
+ 3198 0326 0000     		.short	0
+ 3199 0328 1800     		.short	24
+ 3200 032a 0000     		.short	0
+ 3201 032c 0000     		.short	0
+ 3202 032e 0000     		.short	0
+ 3203 0330 0000     		.short	0
+ 3204 0332 0000     		.short	0
+ 3205 0334 0000     		.short	0
+ 3206 0336 0000     		.short	0
+ 3207 0338 0000     		.short	0
+ 3208 033a 0000     		.short	0
+ 3209 033c 0000     		.short	0
+ 3210 033e 0000     		.short	0
+ 3211 0340 0000     		.short	0
+ 3212 0342 0000     		.short	0
+ 3213 0344 0000     		.short	0
+ 3214 0346 0000     		.short	0
+ 3215 0348 0000     		.short	0
+ 3216 034a 1200     		.short	18
+ 3217 034c 0000     		.short	0
+ 3218 034e 0000     		.short	0
+ 3219 0350 1100     		.short	17
+ 3220 0352 0000     		.short	0
+ 3221 0354 0000     		.short	0
+ 3222 0356 0000     		.short	0
+ 3223 0358 0000     		.short	0
+ 3224 035a 0000     		.short	0
+ 3225 035c 0000     		.short	0
+ 3226 035e 0000     		.short	0
+ 3227              		.align	5
+ 3230              	cuadricula_ARM_ARM:
+ 3231 0360 1500     		.short	21
+ 3232 0362 0000     		.short	0
+ 3233 0364 0000     		.short	0
+ 3234 0366 1300     		.short	19
+ 3235 0368 0000     		.short	0
+ 3236 036a 0000     		.short	0
+ 3237 036c 0000     		.short	0
+ 3238 036e 0000     		.short	0
+ 3239 0370 0000     		.short	0
+ 3240 0372 0000     		.short	0
+ 3241 0374 0000     		.short	0
+ 3242 0376 0000     		.short	0
+ 3243 0378 0000     		.short	0
+ 3244 037a 0000     		.short	0
+ 3245 037c 0000     		.short	0
+ 3246 037e 0000     		.short	0
+ 3247 0380 0000     		.short	0
+ 3248 0382 0000     		.short	0
+ 3249 0384 0000     		.short	0
+ 3250 0386 0000     		.short	0
+ 3251 0388 1900     		.short	25
+ 3252 038a 0000     		.short	0
+ 3253 038c 0000     		.short	0
+ 3254 038e 0000     		.short	0
+ 3255 0390 1500     		.short	21
+ 3256 0392 0000     		.short	0
+ 3257 0394 0000     		.short	0
+ 3258 0396 0000     		.short	0
+ 3259 0398 0000     		.short	0
+ 3260 039a 0000     		.short	0
+ 3261 039c 0000     		.short	0
+ 3262 039e 0000     		.short	0
+ 3263 03a0 0000     		.short	0
+ 3264 03a2 1900     		.short	25
+ 3265 03a4 1600     		.short	22
+ 3266 03a6 1700     		.short	23
+ 3267 03a8 0000     		.short	0
+ 3268 03aa 1500     		.short	21
+ 3269 03ac 0000     		.short	0
+ 3270 03ae 1300     		.short	19
+ 3271 03b0 0000     		.short	0
+ 3272 03b2 0000     		.short	0
+ 3273 03b4 0000     		.short	0
+ 3274 03b6 0000     		.short	0
+ 3275 03b8 0000     		.short	0
+ 3276 03ba 0000     		.short	0
+ 3277 03bc 0000     		.short	0
+ 3278 03be 0000     		.short	0
+ 3279 03c0 0000     		.short	0
+ 3280 03c2 1800     		.short	24
+ 3281 03c4 0000     		.short	0
+ 3282 03c6 1900     		.short	25
+ 3283 03c8 0000     		.short	0
+ 3284 03ca 0000     		.short	0
+ 3285 03cc 1600     		.short	22
+ 3286 03ce 0000     		.short	0
+ 3287 03d0 0000     		.short	0
+ 3288 03d2 0000     		.short	0
+ 3289 03d4 0000     		.short	0
+ 3290 03d6 0000     		.short	0
+ 3291 03d8 0000     		.short	0
+ 3292 03da 0000     		.short	0
+ 3293 03dc 0000     		.short	0
+ 3294 03de 0000     		.short	0
+ 3295 03e0 0000     		.short	0
+ 3296 03e2 0000     		.short	0
+ 3297 03e4 1500     		.short	21
+ 3298 03e6 1800     		.short	24
+ 3299 03e8 1600     		.short	22
+ 3300 03ea 1100     		.short	17
+ 3301 03ec 1400     		.short	20
+ 3302 03ee 0000     		.short	0
+ 3303 03f0 0000     		.short	0
+ 3304 03f2 0000     		.short	0
+ 3305 03f4 0000     		.short	0
+ 3306 03f6 0000     		.short	0
+ 3307 03f8 0000     		.short	0
+ 3308 03fa 0000     		.short	0
+ 3309 03fc 0000     		.short	0
+ 3310 03fe 0000     		.short	0
+ 3311 0400 0000     		.short	0
+ 3312 0402 0000     		.short	0
+ 3313 0404 1400     		.short	20
+ 3314 0406 1200     		.short	18
+ 3315 0408 0000     		.short	0
+ 3316 040a 1300     		.short	19
+ 3317 040c 0000     		.short	0
+ 3318 040e 1700     		.short	23
+ 3319 0410 0000     		.short	0
+ 3320 0412 0000     		.short	0
+ 3321 0414 0000     		.short	0
+ 3322 0416 0000     		.short	0
+ 3323 0418 0000     		.short	0
+ 3324 041a 0000     		.short	0
+ 3325 041c 0000     		.short	0
+ 3326 041e 0000     		.short	0
+ 3327 0420 0000     		.short	0
+ 3328 0422 1700     		.short	23
+ 3329 0424 0000     		.short	0
+ 3330 0426 1500     		.short	21
+ 3331 0428 0000     		.short	0
+ 3332 042a 1900     		.short	25
+ 3333 042c 1200     		.short	18
+ 3334 042e 1600     		.short	22
+ 3335 0430 0000     		.short	0
+ 3336 0432 0000     		.short	0
+ 3337 0434 0000     		.short	0
+ 3338 0436 0000     		.short	0
+ 3339 0438 0000     		.short	0
+ 3340 043a 0000     		.short	0
+ 3341 043c 0000     		.short	0
+ 3342 043e 0000     		.short	0
+ 3343 0440 1600     		.short	22
+ 3344 0442 0000     		.short	0
+ 3345 0444 0000     		.short	0
+ 3346 0446 0000     		.short	0
+ 3347 0448 1800     		.short	24
+ 3348 044a 0000     		.short	0
+ 3349 044c 0000     		.short	0
+ 3350 044e 0000     		.short	0
+ 3351 0450 0000     		.short	0
+ 3352 0452 0000     		.short	0
+ 3353 0454 0000     		.short	0
+ 3354 0456 0000     		.short	0
+ 3355 0458 0000     		.short	0
+ 3356 045a 0000     		.short	0
+ 3357 045c 0000     		.short	0
+ 3358 045e 0000     		.short	0
+ 3359 0460 0000     		.short	0
+ 3360 0462 0000     		.short	0
+ 3361 0464 0000     		.short	0
+ 3362 0466 0000     		.short	0
+ 3363 0468 0000     		.short	0
+ 3364 046a 1200     		.short	18
+ 3365 046c 0000     		.short	0
+ 3366 046e 0000     		.short	0
+ 3367 0470 1100     		.short	17
+ 3368 0472 0000     		.short	0
+ 3369 0474 0000     		.short	0
+ 3370 0476 0000     		.short	0
+ 3371 0478 0000     		.short	0
+ 3372 047a 0000     		.short	0
+ 3373 047c 0000     		.short	0
+ 3374 047e 0000     		.short	0
+ 3375              		.align	5
+ 3378              	cuadricula_ARM_ARM_ALL:
+ 3379 0480 1500     		.short	21
+ 3380 0482 0000     		.short	0
+ 3381 0484 0000     		.short	0
+ 3382 0486 1300     		.short	19
+ 3383 0488 0000     		.short	0
+ 3384 048a 0000     		.short	0
+ 3385 048c 0000     		.short	0
+ 3386 048e 0000     		.short	0
+ 3387 0490 0000     		.short	0
+ 3388 0492 0000     		.short	0
+ 3389 0494 0000     		.short	0
+ 3390 0496 0000     		.short	0
+ 3391 0498 0000     		.short	0
+ 3392 049a 0000     		.short	0
+ 3393 049c 0000     		.short	0
+ 3394 049e 0000     		.short	0
+ 3395 04a0 0000     		.short	0
+ 3396 04a2 0000     		.short	0
+ 3397 04a4 0000     		.short	0
+ 3398 04a6 0000     		.short	0
+ 3399 04a8 1900     		.short	25
+ 3400 04aa 0000     		.short	0
+ 3401 04ac 0000     		.short	0
+ 3402 04ae 0000     		.short	0
+ 3403 04b0 1500     		.short	21
+ 3404 04b2 0000     		.short	0
+ 3405 04b4 0000     		.short	0
+ 3406 04b6 0000     		.short	0
+ 3407 04b8 0000     		.short	0
+ 3408 04ba 0000     		.short	0
+ 3409 04bc 0000     		.short	0
+ 3410 04be 0000     		.short	0
+ 3411 04c0 0000     		.short	0
+ 3412 04c2 1900     		.short	25
+ 3413 04c4 1600     		.short	22
+ 3414 04c6 1700     		.short	23
+ 3415 04c8 0000     		.short	0
+ 3416 04ca 1500     		.short	21
+ 3417 04cc 0000     		.short	0
+ 3418 04ce 1300     		.short	19
+ 3419 04d0 0000     		.short	0
+ 3420 04d2 0000     		.short	0
+ 3421 04d4 0000     		.short	0
+ 3422 04d6 0000     		.short	0
+ 3423 04d8 0000     		.short	0
+ 3424 04da 0000     		.short	0
+ 3425 04dc 0000     		.short	0
+ 3426 04de 0000     		.short	0
+ 3427 04e0 0000     		.short	0
+ 3428 04e2 1800     		.short	24
+ 3429 04e4 0000     		.short	0
+ 3430 04e6 1900     		.short	25
+ 3431 04e8 0000     		.short	0
+ 3432 04ea 0000     		.short	0
+ 3433 04ec 1600     		.short	22
+ 3434 04ee 0000     		.short	0
+ 3435 04f0 0000     		.short	0
+ 3436 04f2 0000     		.short	0
+ 3437 04f4 0000     		.short	0
+ 3438 04f6 0000     		.short	0
+ 3439 04f8 0000     		.short	0
+ 3440 04fa 0000     		.short	0
+ 3441 04fc 0000     		.short	0
+ 3442 04fe 0000     		.short	0
+ 3443 0500 0000     		.short	0
+ 3444 0502 0000     		.short	0
+ 3445 0504 1500     		.short	21
+ 3446 0506 1800     		.short	24
+ 3447 0508 1600     		.short	22
+ 3448 050a 1100     		.short	17
+ 3449 050c 1400     		.short	20
+ 3450 050e 0000     		.short	0
+ 3451 0510 0000     		.short	0
+ 3452 0512 0000     		.short	0
+ 3453 0514 0000     		.short	0
+ 3454 0516 0000     		.short	0
+ 3455 0518 0000     		.short	0
+ 3456 051a 0000     		.short	0
+ 3457 051c 0000     		.short	0
+ 3458 051e 0000     		.short	0
+ 3459 0520 0000     		.short	0
+ 3460 0522 0000     		.short	0
+ 3461 0524 1400     		.short	20
+ 3462 0526 1200     		.short	18
+ 3463 0528 0000     		.short	0
+ 3464 052a 1300     		.short	19
+ 3465 052c 0000     		.short	0
+ 3466 052e 1700     		.short	23
+ 3467 0530 0000     		.short	0
+ 3468 0532 0000     		.short	0
+ 3469 0534 0000     		.short	0
+ 3470 0536 0000     		.short	0
+ 3471 0538 0000     		.short	0
+ 3472 053a 0000     		.short	0
+ 3473 053c 0000     		.short	0
+ 3474 053e 0000     		.short	0
+ 3475 0540 0000     		.short	0
+ 3476 0542 1700     		.short	23
+ 3477 0544 0000     		.short	0
+ 3478 0546 1500     		.short	21
+ 3479 0548 0000     		.short	0
+ 3480 054a 1900     		.short	25
+ 3481 054c 1200     		.short	18
+ 3482 054e 1600     		.short	22
+ 3483 0550 0000     		.short	0
+ 3484 0552 0000     		.short	0
+ 3485 0554 0000     		.short	0
+ 3486 0556 0000     		.short	0
+ 3487 0558 0000     		.short	0
+ 3488 055a 0000     		.short	0
+ 3489 055c 0000     		.short	0
+ 3490 055e 0000     		.short	0
+ 3491 0560 1600     		.short	22
+ 3492 0562 0000     		.short	0
+ 3493 0564 0000     		.short	0
+ 3494 0566 0000     		.short	0
+ 3495 0568 1800     		.short	24
+ 3496 056a 0000     		.short	0
+ 3497 056c 0000     		.short	0
+ 3498 056e 0000     		.short	0
+ 3499 0570 0000     		.short	0
+ 3500 0572 0000     		.short	0
+ 3501 0574 0000     		.short	0
+ 3502 0576 0000     		.short	0
+ 3503 0578 0000     		.short	0
+ 3504 057a 0000     		.short	0
+ 3505 057c 0000     		.short	0
+ 3506 057e 0000     		.short	0
+ 3507 0580 0000     		.short	0
+ 3508 0582 0000     		.short	0
+ 3509 0584 0000     		.short	0
+ 3510 0586 0000     		.short	0
+ 3511 0588 0000     		.short	0
+ 3512 058a 1200     		.short	18
+ 3513 058c 0000     		.short	0
+ 3514 058e 0000     		.short	0
+ 3515 0590 1100     		.short	17
+ 3516 0592 0000     		.short	0
+ 3517 0594 0000     		.short	0
+ 3518 0596 0000     		.short	0
+ 3519 0598 0000     		.short	0
+ 3520 059a 0000     		.short	0
+ 3521 059c 0000     		.short	0
+ 3522 059e 0000     		.short	0
+ 3523              		.align	5
+ 3526              	solucion:
+ 3527 05a0 159A     		.short	-26091
+ 3528 05a2 00FA     		.short	-1536
+ 3529 05a4 009E     		.short	-25088
+ 3530 05a6 13EB     		.short	-5357
+ 3531 05a8 00FA     		.short	-1536
+ 3532 05aa 80AB     		.short	-21632
+ 3533 05ac 001F     		.short	7936
+ 3534 05ae 003A     		.short	14848
+ 3535 05b0 800A     		.short	2688
+ 3536 05b2 0000     		.short	0
+ 3537 05b4 0000     		.short	0
+ 3538 05b6 0000     		.short	0
+ 3539 05b8 0000     		.short	0
+ 3540 05ba 0000     		.short	0
+ 3541 05bc 0000     		.short	0
+ 3542 05be 0000     		.short	0
+ 3543 05c0 0098     		.short	-26624
+ 3544 05c2 00F8     		.short	-2048
+ 3545 05c4 009C     		.short	-25600
+ 3546 05c6 00EB     		.short	-5376
+ 3547 05c8 19FA     		.short	-1511
+ 3548 05ca 80AB     		.short	-21632
+ 3549 05cc 009F     		.short	-24832
+ 3550 05ce 00BA     		.short	-17920
+ 3551 05d0 958A     		.short	-30059
+ 3552 05d2 0000     		.short	0
+ 3553 05d4 0000     		.short	0
+ 3554 05d6 0000     		.short	0
+ 3555 05d8 0000     		.short	0
+ 3556 05da 0000     		.short	0
+ 3557 05dc 0000     		.short	0
+ 3558 05de 0000     		.short	0
+ 3559 05e0 00BA     		.short	-17920
+ 3560 05e2 19FA     		.short	-1511
+ 3561 05e4 16BE     		.short	-16874
+ 3562 05e6 17FB     		.short	-1257
+ 3563 05e8 00FA     		.short	-1536
+ 3564 05ea 95BB     		.short	-17515
+ 3565 05ec 00BF     		.short	-16640
+ 3566 05ee 13BA     		.short	-17901
+ 3567 05f0 80BA     		.short	-17792
+ 3568 05f2 0000     		.short	0
+ 3569 05f4 0000     		.short	0
+ 3570 05f6 0000     		.short	0
+ 3571 05f8 0000     		.short	0
+ 3572 05fa 0000     		.short	0
+ 3573 05fc 0000     		.short	0
+ 3574 05fe 0000     		.short	0
+ 3575 0600 00DC     		.short	-9216
+ 3576 0602 18FC     		.short	-1000
+ 3577 0604 00DC     		.short	-9216
+ 3578 0606 99FB     		.short	-1127
+ 3579 0608 80D3     		.short	-11392
+ 3580 060a 80DB     		.short	-9344
+ 3581 060c 16F5     		.short	-2794
+ 3582 060e 00F6     		.short	-2560
+ 3583 0610 80FC     		.short	-896
+ 3584 0612 0000     		.short	0
+ 3585 0614 0000     		.short	0
+ 3586 0616 0000     		.short	0
+ 3587 0618 0000     		.short	0
+ 3588 061a 0000     		.short	0
+ 3589 061c 0000     		.short	0
+ 3590 061e 0000     		.short	0
+ 3591 0620 805C     		.short	23680
+ 3592 0622 80FC     		.short	-896
+ 3593 0624 955C     		.short	23701
+ 3594 0626 98FF     		.short	-104
+ 3595 0628 96DF     		.short	-8298
+ 3596 062a 91DF     		.short	-8303
+ 3597 062c 947D     		.short	32148
+ 3598 062e 807E     		.short	32384
+ 3599 0630 807C     		.short	31872
+ 3600 0632 0000     		.short	0
+ 3601 0634 0000     		.short	0
+ 3602 0636 0000     		.short	0
+ 3603 0638 0000     		.short	0
+ 3604 063a 0000     		.short	0
+ 3605 063c 0000     		.short	0
+ 3606 063e 0000     		.short	0
+ 3607 0640 007F     		.short	32512
+ 3608 0642 00EF     		.short	-4352
+ 3609 0644 147F     		.short	32532
+ 3610 0646 92FF     		.short	-110
+ 3611 0648 80F7     		.short	-2176
+ 3612 064a 93FF     		.short	-109
+ 3613 064c 0037     		.short	14080
+ 3614 064e 1737     		.short	14103
+ 3615 0650 803F     		.short	16256
+ 3616 0652 0000     		.short	0
+ 3617 0654 0000     		.short	0
+ 3618 0656 0000     		.short	0
+ 3619 0658 0000     		.short	0
+ 3620 065a 0000     		.short	0
+ 3621 065c 0000     		.short	0
+ 3622 065e 0000     		.short	0
+ 3623 0660 00B9     		.short	-18176
+ 3624 0662 17F9     		.short	-1769
+ 3625 0664 00BD     		.short	-17152
+ 3626 0666 15FB     		.short	-1259
+ 3627 0668 00F9     		.short	-1792
+ 3628 066a 99FB     		.short	-1127
+ 3629 066c 92BD     		.short	-17006
+ 3630 066e 96BB     		.short	-17514
+ 3631 0670 80B9     		.short	-18048
+ 3632 0672 0000     		.short	0
+ 3633 0674 0000     		.short	0
+ 3634 0676 0000     		.short	0
+ 3635 0678 0000     		.short	0
+ 3636 067a 0000     		.short	0
+ 3637 067c 0000     		.short	0
+ 3638 067e 0000     		.short	0
+ 3639 0680 1678     		.short	30742
+ 3640 0682 00F0     		.short	-4096
+ 3641 0684 007C     		.short	31744
+ 3642 0686 00FB     		.short	-1280
+ 3643 0688 18D9     		.short	-9960
+ 3644 068a 80DB     		.short	-9344
+ 3645 068c 8055     		.short	21888
+ 3646 068e 8073     		.short	29568
+ 3647 0690 8059     		.short	22912
+ 3648 0692 0000     		.short	0
+ 3649 0694 0000     		.short	0
+ 3650 0696 0000     		.short	0
+ 3651 0698 0000     		.short	0
+ 3652 069a 0000     		.short	0
+ 3653 069c 0000     		.short	0
+ 3654 069e 0000     		.short	0
+ 3655 06a0 8039     		.short	14720
+ 3656 06a2 80F1     		.short	-3712
+ 3657 06a4 803D     		.short	15744
+ 3658 06a6 80EB     		.short	-5248
+ 3659 06a8 80D9     		.short	-9856
+ 3660 06aa 92CB     		.short	-13422
+ 3661 06ac 8015     		.short	5504
+ 3662 06ae 8033     		.short	13184
+ 3663 06b0 9119     		.short	6545
+ 3664 06b2 0000     		.short	0
+ 3665 06b4 0000     		.short	0
+ 3666 06b6 0000     		.short	0
+ 3667 06b8 0000     		.short	0
+ 3668 06ba 0000     		.short	0
+ 3669 06bc 0000     		.short	0
+ 3670 06be 0000     		.short	0
+ 3671              		.global	cuadricula
+ 3672              		.align	2
+ 3675              	cuadricula:
+ 3676 06c0 60030000 		.word	cuadricula_ARM_ARM
+ 3677              		.global	celdas_vacias
+ 3678 06c4 00000000 		.bss
+ 3678      00000000 
+ 3678      00000000 
+ 3678      00000000 
+ 3678      00000000 
+ 3679              		.align	2
+ 3682              	celdas_vacias:
+ 3683 0000 00000000 		.space	4
+ 3684              		.text
+ 3685              		.align	2
+ 3686              		.global	Main
+ 3688              	Main:
+ 3689              	.LFB7:
+   1:../main_sudoku.c **** /*********************************************************************************************
+   2:../main_sudoku.c **** * Fichero:	main.c
+   3:../main_sudoku.c **** * Autor:    
+   4:../main_sudoku.c **** * Descrip:	punto de entrada de C
+   5:../main_sudoku.c **** * Version:      <P4-ARM.timer-leds>
+   6:../main_sudoku.c **** *********************************************************************************************/
+   7:../main_sudoku.c **** 
+   8:../main_sudoku.c **** /*--- ficheros de cabecera ---*/
+   9:../main_sudoku.c **** #include "8led.h"
+  10:../main_sudoku.c **** #include "button.h"
+  11:../main_sudoku.c **** #include "led.h"
+  12:../main_sudoku.c **** #include "timer1.h"
+  13:../main_sudoku.c **** #include "timer2.h"
+  14:../main_sudoku.c **** #include "timer3.h"
+  15:../main_sudoku.c **** #include "cola.h"
+  16:../main_sudoku.c **** #include "44blib.h"
+  17:../main_sudoku.c **** #include "44b.h"
+  18:../main_sudoku.c **** #include "sudoku_2025.h"
+  19:../main_sudoku.c **** 
+  20:../main_sudoku.c **** /*--- variables globales ---*/
+  21:../main_sudoku.c **** #include "tableros.h"
+  22:../main_sudoku.c **** 
+  23:../main_sudoku.c **** /* Apuntar a una de las cuadrículas disponibles */
+  24:../main_sudoku.c **** CELDA (*cuadricula)[NUM_COLUMNAS] = cuadricula_ARM_ARM; // CAMBIAR SEGUN LA VERSIÓN A PROBAR
+  25:../main_sudoku.c **** int celdas_vacias = 0;
+  26:../main_sudoku.c **** 
+  27:../main_sudoku.c **** 
+  28:../main_sudoku.c **** /*--- codigo de funciones ---*/
+  29:../main_sudoku.c **** void Main(void)
+  30:../main_sudoku.c **** {
+ 3690              		.loc 1 30 0
+ 3691              		.cfi_startproc
+ 3692              		@ Function supports interworking.
+ 3693              		@ args = 0, pretend = 0, frame = 8
+ 3694              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3695 0000 0DC0A0E1 		mov	ip, sp
+ 3696              	.LCFI0:
+ 3697              		.cfi_def_cfa_register 12
+ 3698 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3699 0008 04B04CE2 		sub	fp, ip, #4
+ 3700              		.cfi_offset 14, -8
+ 3701              		.cfi_offset 13, -12
+ 3702              		.cfi_offset 11, -16
+ 3703              	.LCFI1:
+ 3704              		.cfi_def_cfa 11, 4
+ 3705 000c 08D04DE2 		sub	sp, sp, #8
+  31:../main_sudoku.c **** 	
+  32:../main_sudoku.c **** 	/* Variables para observar la cola durante la depuración */
+  33:../main_sudoku.c **** 	ColaDebug* p_cola;              // Puntero a la estructura completa de la cola
+  34:../main_sudoku.c **** 	
+  35:../main_sudoku.c **** 	/* Inicializa controladores */
+  36:../main_sudoku.c **** 	sys_init();         // Inicializacion de la placa, interrupciones y puertos
+ 3706              		.loc 1 36 0
+ 3707 0010 FEFFFFEB 		bl	sys_init
+  37:../main_sudoku.c **** 	timer2_init();      // Inicializacion del timer2 para medicion de tiempo
+ 3708              		.loc 1 37 0
+ 3709 0014 FEFFFFEB 		bl	timer2_init
+  38:../main_sudoku.c **** 	timer1_init();      // Inicializacion del timer1 para latido (heartbeat) - Paso 6
+ 3710              		.loc 1 38 0
+ 3711 0018 FEFFFFEB 		bl	timer1_init
+  39:../main_sudoku.c **** 	cola_init();        // Inicializacion de la cola de depuracion (Paso 4)
+ 3712              		.loc 1 39 0
+ 3713 001c FEFFFFEB 		bl	cola_init
+  40:../main_sudoku.c **** 	Eint4567_init();	// inicializamos los pulsadores. Cada vez que se pulse se ver� reflejado en el 
+ 3714              		.loc 1 40 0
+ 3715 0020 FEFFFFEB 		bl	Eint4567_init
+  41:../main_sudoku.c **** 	D8Led_init();       // inicializamos el 8led
+ 3716              		.loc 1 41 0
+ 3717 0024 FEFFFFEB 		bl	D8Led_init
+  42:../main_sudoku.c **** 
+  43:../main_sudoku.c **** 	/* Valor inicial de los leds */
+  44:../main_sudoku.c **** 	leds_off();
+ 3718              		.loc 1 44 0
+ 3719 0028 FEFFFFEB 		bl	leds_off
+  45:../main_sudoku.c **** 	
+  46:../main_sudoku.c **** 	/* Apuntar a la cola para poder observarla en el depurador */
+  47:../main_sudoku.c **** 	p_cola = cola_global;
+ 3720              		.loc 1 47 0
+ 3721 002c 08309FE5 		ldr	r3, .L3
+ 3722 0030 003093E5 		ldr	r3, [r3, #0]
+ 3723 0034 10300BE5 		str	r3, [fp, #-16]
+ 3724              	.L2:
+  48:../main_sudoku.c **** 	
+  49:../main_sudoku.c **** 	/* Bucle principal */
+  50:../main_sudoku.c **** 	while (1)
+  51:../main_sudoku.c **** 	{
+  52:../main_sudoku.c **** 		/* El latido (LED2 parpadeando) se gestiona automáticamente por timer1 */
+  53:../main_sudoku.c **** 		/* El programa está vivo mientras el LED2 parpadee a 6 Hz */
+  54:../main_sudoku.c **** 	}
+ 3725              		.loc 1 54 0 discriminator 1
+ 3726 0038 FEFFFFEA 		b	.L2
+ 3727              	.L4:
+ 3728              		.align	2
+ 3729              	.L3:
+ 3730 003c 00000000 		.word	cola_global
+ 3731              		.cfi_endproc
+ 3732              	.LFE7:
+ 3734              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main_sudoku.c
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:2783   .data:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:2786   .data:00000000 cuadricula_C_C
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:2934   .data:00000120 cuadricula_C_ARM
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3082   .data:00000240 cuadricula_ARM_C
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3230   .data:00000360 cuadricula_ARM_ARM
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3378   .data:00000480 cuadricula_ARM_ARM_ALL
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3526   .data:000005a0 solucion
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3675   .data:000006c0 cuadricula
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3682   .bss:00000000 celdas_vacias
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3679   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3685   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3688   .text:00000000 Main
+C:\Users\jaime\AppData\Local\Temp\ccVCbhqg.s:3730   .text:0000003c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+sys_init
+timer2_init
+timer1_init
+cola_init
+Eint4567_init
+D8Led_init
+leds_off
+cola_global

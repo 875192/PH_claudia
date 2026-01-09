@@ -1,0 +1,2081 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"sudoku_2025.c"
+  21              	.Ltext0:
+  22              		.file 1 "../sudoku_2025.c"
+ 2010              		.align	2
+ 2012              	celda_eliminar_candidato:
+ 2013              	.LFB0:
+   1:../celda.h    **** 	/* guarda para evitar inclusiones mÃºltiples (include guard) */
+   2:../celda.h    **** 	#ifndef CELDA_H
+   3:../celda.h    **** 	#define CELDA_H
+   4:../celda.h    **** 	
+   5:../celda.h    **** 	#include <inttypes.h>
+   6:../celda.h    **** 	
+   7:../celda.h    **** 	/* Cada celda se codifica en 16 bits
+   8:../celda.h    **** 	 * bits [15,7]: los 9 bits mÃ¡s significativos representan el vector de candidatos,
+   9:../celda.h    **** 	 * si el bit 7 + valor - 1 estÃ¡ a 0, valor es candidato, 1 en caso contrario
+  10:../celda.h    **** 	 * bit 6: no empleado
+  11:../celda.h    **** 	 * bit 5: error
+  12:../celda.h    **** 	 * bit 4: pista
+  13:../celda.h    **** 	 * bits [3,0]: valor de la celda
+  14:../celda.h    **** 	 */
+  15:../celda.h    **** 	
+  16:../celda.h    **** enum { BIT_CANDIDATOS = 7, BIT_NO_USADO = 6, BIT_ERROR = 5, BIT_PISTA = 4 };
+  17:../celda.h    **** 	
+  18:../celda.h    **** 	typedef uint16_t CELDA;
+  19:../celda.h    **** 	
+  20:../celda.h    **** 	/* *****************************************************************************
+  21:../celda.h    **** 	 * elimina el candidato del valor almacenado en la celda indicada */
+  22:../celda.h    **** 	__inline static void
+  23:../celda.h    **** 	celda_eliminar_candidato(CELDA *celdaptr, uint8_t valor)
+  24:../celda.h    **** 	{
+ 2014              		.loc 7 24 0
+ 2015              		.cfi_startproc
+ 2016              		@ Function supports interworking.
+ 2017              		@ args = 0, pretend = 0, frame = 8
+ 2018              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2019 0000 0DC0A0E1 		mov	ip, sp
+ 2020              	.LCFI0:
+ 2021              		.cfi_def_cfa_register 12
+ 2022 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2023 0008 04B04CE2 		sub	fp, ip, #4
+ 2024              		.cfi_offset 14, -8
+ 2025              		.cfi_offset 13, -12
+ 2026              		.cfi_offset 11, -16
+ 2027              	.LCFI1:
+ 2028              		.cfi_def_cfa 11, 4
+ 2029 000c 08D04DE2 		sub	sp, sp, #8
+ 2030 0010 10000BE5 		str	r0, [fp, #-16]
+ 2031 0014 0130A0E1 		mov	r3, r1
+ 2032 0018 11304BE5 		strb	r3, [fp, #-17]
+  25:../celda.h    **** 		*celdaptr = *celdaptr | (0x0001 << (BIT_CANDIDATOS + valor - 1));
+ 2033              		.loc 7 25 0
+ 2034 001c 10301BE5 		ldr	r3, [fp, #-16]
+ 2035 0020 B030D3E1 		ldrh	r3, [r3, #0]
+ 2036 0024 0338A0E1 		mov	r3, r3, asl #16
+ 2037 0028 2328A0E1 		mov	r2, r3, lsr #16
+ 2038 002c 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 2039 0030 063083E2 		add	r3, r3, #6
+ 2040 0034 0110A0E3 		mov	r1, #1
+ 2041 0038 1133A0E1 		mov	r3, r1, asl r3
+ 2042 003c 0338A0E1 		mov	r3, r3, asl #16
+ 2043 0040 2338A0E1 		mov	r3, r3, lsr #16
+ 2044 0044 033082E1 		orr	r3, r2, r3
+ 2045 0048 0338A0E1 		mov	r3, r3, asl #16
+ 2046 004c 2338A0E1 		mov	r3, r3, lsr #16
+ 2047 0050 0338A0E1 		mov	r3, r3, asl #16
+ 2048 0054 2328A0E1 		mov	r2, r3, lsr #16
+ 2049 0058 10301BE5 		ldr	r3, [fp, #-16]
+ 2050 005c B020C3E1 		strh	r2, [r3, #0]	@ movhi
+  26:../celda.h    **** 	}
+ 2051              		.loc 7 26 0
+ 2052 0060 0CD04BE2 		sub	sp, fp, #12
+ 2053 0064 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2054 0068 1EFF2FE1 		bx	lr
+ 2055              		.cfi_endproc
+ 2056              	.LFE0:
+ 2058              		.align	2
+ 2060              	celda_leer_valor:
+ 2061              	.LFB2:
+  27:../celda.h    **** 	
+  28:../celda.h    **** 	/* *****************************************************************************
+  29:../celda.h    **** 	 * modifica el valor almacenado en la celda indicada */
+  30:../celda.h    **** 	__inline static void
+  31:../celda.h    **** 	celda_poner_valor(CELDA *celdaptr, uint8_t val)
+  32:../celda.h    **** 	{
+  33:../celda.h    **** 		*celdaptr = (*celdaptr & 0xFFF0) | (val & 0x000F);
+  34:../celda.h    **** 	}
+  35:../celda.h    **** 	
+  36:../celda.h    **** 	/* *****************************************************************************
+  37:../celda.h    **** 	 * extrae el valor almacenado en los 16 bits de una celda */
+  38:../celda.h    ****         __inline static uint8_t
+  39:../celda.h    ****         celda_leer_valor(CELDA celda)
+  40:../celda.h    ****         {
+ 2062              		.loc 7 40 0
+ 2063              		.cfi_startproc
+ 2064              		@ Function supports interworking.
+ 2065              		@ args = 0, pretend = 0, frame = 8
+ 2066              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2067 006c 0DC0A0E1 		mov	ip, sp
+ 2068              	.LCFI2:
+ 2069              		.cfi_def_cfa_register 12
+ 2070 0070 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2071 0074 04B04CE2 		sub	fp, ip, #4
+ 2072              		.cfi_offset 14, -8
+ 2073              		.cfi_offset 13, -12
+ 2074              		.cfi_offset 11, -16
+ 2075              	.LCFI3:
+ 2076              		.cfi_def_cfa 11, 4
+ 2077 0078 08D04DE2 		sub	sp, sp, #8
+ 2078 007c 0030A0E1 		mov	r3, r0
+ 2079 0080 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
+  41:../celda.h    ****                 return (celda & 0x000F);
+ 2080              		.loc 7 41 0
+ 2081 0084 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
+ 2082 0088 FF3003E2 		and	r3, r3, #255
+ 2083 008c 0F3003E2 		and	r3, r3, #15
+ 2084 0090 FF3003E2 		and	r3, r3, #255
+  42:../celda.h    ****         }
+ 2085              		.loc 7 42 0
+ 2086 0094 0300A0E1 		mov	r0, r3
+ 2087 0098 0CD04BE2 		sub	sp, fp, #12
+ 2088 009c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2089 00a0 1EFF2FE1 		bx	lr
+ 2090              		.cfi_endproc
+ 2091              	.LFE2:
+ 2093              		.data
+ 2094              		.align	5
+ 2097              	cuadricula_C_C:
+ 2098 0000 1500     		.short	21
+ 2099 0002 0000     		.short	0
+ 2100 0004 0000     		.short	0
+ 2101 0006 1300     		.short	19
+ 2102 0008 0000     		.short	0
+ 2103 000a 0000     		.short	0
+ 2104 000c 0000     		.short	0
+ 2105 000e 0000     		.short	0
+ 2106 0010 0000     		.short	0
+ 2107 0012 0000     		.short	0
+ 2108 0014 0000     		.short	0
+ 2109 0016 0000     		.short	0
+ 2110 0018 0000     		.short	0
+ 2111 001a 0000     		.short	0
+ 2112 001c 0000     		.short	0
+ 2113 001e 0000     		.short	0
+ 2114 0020 0000     		.short	0
+ 2115 0022 0000     		.short	0
+ 2116 0024 0000     		.short	0
+ 2117 0026 0000     		.short	0
+ 2118 0028 1900     		.short	25
+ 2119 002a 0000     		.short	0
+ 2120 002c 0000     		.short	0
+ 2121 002e 0000     		.short	0
+ 2122 0030 1500     		.short	21
+ 2123 0032 0000     		.short	0
+ 2124 0034 0000     		.short	0
+ 2125 0036 0000     		.short	0
+ 2126 0038 0000     		.short	0
+ 2127 003a 0000     		.short	0
+ 2128 003c 0000     		.short	0
+ 2129 003e 0000     		.short	0
+ 2130 0040 0000     		.short	0
+ 2131 0042 1900     		.short	25
+ 2132 0044 1600     		.short	22
+ 2133 0046 1700     		.short	23
+ 2134 0048 0000     		.short	0
+ 2135 004a 1500     		.short	21
+ 2136 004c 0000     		.short	0
+ 2137 004e 1300     		.short	19
+ 2138 0050 0000     		.short	0
+ 2139 0052 0000     		.short	0
+ 2140 0054 0000     		.short	0
+ 2141 0056 0000     		.short	0
+ 2142 0058 0000     		.short	0
+ 2143 005a 0000     		.short	0
+ 2144 005c 0000     		.short	0
+ 2145 005e 0000     		.short	0
+ 2146 0060 0000     		.short	0
+ 2147 0062 1800     		.short	24
+ 2148 0064 0000     		.short	0
+ 2149 0066 1900     		.short	25
+ 2150 0068 0000     		.short	0
+ 2151 006a 0000     		.short	0
+ 2152 006c 1600     		.short	22
+ 2153 006e 0000     		.short	0
+ 2154 0070 0000     		.short	0
+ 2155 0072 0000     		.short	0
+ 2156 0074 0000     		.short	0
+ 2157 0076 0000     		.short	0
+ 2158 0078 0000     		.short	0
+ 2159 007a 0000     		.short	0
+ 2160 007c 0000     		.short	0
+ 2161 007e 0000     		.short	0
+ 2162 0080 0000     		.short	0
+ 2163 0082 0000     		.short	0
+ 2164 0084 1500     		.short	21
+ 2165 0086 1800     		.short	24
+ 2166 0088 1600     		.short	22
+ 2167 008a 1100     		.short	17
+ 2168 008c 1400     		.short	20
+ 2169 008e 0000     		.short	0
+ 2170 0090 0000     		.short	0
+ 2171 0092 0000     		.short	0
+ 2172 0094 0000     		.short	0
+ 2173 0096 0000     		.short	0
+ 2174 0098 0000     		.short	0
+ 2175 009a 0000     		.short	0
+ 2176 009c 0000     		.short	0
+ 2177 009e 0000     		.short	0
+ 2178 00a0 0000     		.short	0
+ 2179 00a2 0000     		.short	0
+ 2180 00a4 1400     		.short	20
+ 2181 00a6 1200     		.short	18
+ 2182 00a8 0000     		.short	0
+ 2183 00aa 1300     		.short	19
+ 2184 00ac 0000     		.short	0
+ 2185 00ae 1700     		.short	23
+ 2186 00b0 0000     		.short	0
+ 2187 00b2 0000     		.short	0
+ 2188 00b4 0000     		.short	0
+ 2189 00b6 0000     		.short	0
+ 2190 00b8 0000     		.short	0
+ 2191 00ba 0000     		.short	0
+ 2192 00bc 0000     		.short	0
+ 2193 00be 0000     		.short	0
+ 2194 00c0 0000     		.short	0
+ 2195 00c2 1700     		.short	23
+ 2196 00c4 0000     		.short	0
+ 2197 00c6 1500     		.short	21
+ 2198 00c8 0000     		.short	0
+ 2199 00ca 1900     		.short	25
+ 2200 00cc 1200     		.short	18
+ 2201 00ce 1600     		.short	22
+ 2202 00d0 0000     		.short	0
+ 2203 00d2 0000     		.short	0
+ 2204 00d4 0000     		.short	0
+ 2205 00d6 0000     		.short	0
+ 2206 00d8 0000     		.short	0
+ 2207 00da 0000     		.short	0
+ 2208 00dc 0000     		.short	0
+ 2209 00de 0000     		.short	0
+ 2210 00e0 1600     		.short	22
+ 2211 00e2 0000     		.short	0
+ 2212 00e4 0000     		.short	0
+ 2213 00e6 0000     		.short	0
+ 2214 00e8 1800     		.short	24
+ 2215 00ea 0000     		.short	0
+ 2216 00ec 0000     		.short	0
+ 2217 00ee 0000     		.short	0
+ 2218 00f0 0000     		.short	0
+ 2219 00f2 0000     		.short	0
+ 2220 00f4 0000     		.short	0
+ 2221 00f6 0000     		.short	0
+ 2222 00f8 0000     		.short	0
+ 2223 00fa 0000     		.short	0
+ 2224 00fc 0000     		.short	0
+ 2225 00fe 0000     		.short	0
+ 2226 0100 0000     		.short	0
+ 2227 0102 0000     		.short	0
+ 2228 0104 0000     		.short	0
+ 2229 0106 0000     		.short	0
+ 2230 0108 0000     		.short	0
+ 2231 010a 1200     		.short	18
+ 2232 010c 0000     		.short	0
+ 2233 010e 0000     		.short	0
+ 2234 0110 1100     		.short	17
+ 2235 0112 0000     		.short	0
+ 2236 0114 0000     		.short	0
+ 2237 0116 0000     		.short	0
+ 2238 0118 0000     		.short	0
+ 2239 011a 0000     		.short	0
+ 2240 011c 0000     		.short	0
+ 2241 011e 0000     		.short	0
+ 2242              		.align	5
+ 2245              	cuadricula_C_ARM:
+ 2246 0120 1500     		.short	21
+ 2247 0122 0000     		.short	0
+ 2248 0124 0000     		.short	0
+ 2249 0126 1300     		.short	19
+ 2250 0128 0000     		.short	0
+ 2251 012a 0000     		.short	0
+ 2252 012c 0000     		.short	0
+ 2253 012e 0000     		.short	0
+ 2254 0130 0000     		.short	0
+ 2255 0132 0000     		.short	0
+ 2256 0134 0000     		.short	0
+ 2257 0136 0000     		.short	0
+ 2258 0138 0000     		.short	0
+ 2259 013a 0000     		.short	0
+ 2260 013c 0000     		.short	0
+ 2261 013e 0000     		.short	0
+ 2262 0140 0000     		.short	0
+ 2263 0142 0000     		.short	0
+ 2264 0144 0000     		.short	0
+ 2265 0146 0000     		.short	0
+ 2266 0148 1900     		.short	25
+ 2267 014a 0000     		.short	0
+ 2268 014c 0000     		.short	0
+ 2269 014e 0000     		.short	0
+ 2270 0150 1500     		.short	21
+ 2271 0152 0000     		.short	0
+ 2272 0154 0000     		.short	0
+ 2273 0156 0000     		.short	0
+ 2274 0158 0000     		.short	0
+ 2275 015a 0000     		.short	0
+ 2276 015c 0000     		.short	0
+ 2277 015e 0000     		.short	0
+ 2278 0160 0000     		.short	0
+ 2279 0162 1900     		.short	25
+ 2280 0164 1600     		.short	22
+ 2281 0166 1700     		.short	23
+ 2282 0168 0000     		.short	0
+ 2283 016a 1500     		.short	21
+ 2284 016c 0000     		.short	0
+ 2285 016e 1300     		.short	19
+ 2286 0170 0000     		.short	0
+ 2287 0172 0000     		.short	0
+ 2288 0174 0000     		.short	0
+ 2289 0176 0000     		.short	0
+ 2290 0178 0000     		.short	0
+ 2291 017a 0000     		.short	0
+ 2292 017c 0000     		.short	0
+ 2293 017e 0000     		.short	0
+ 2294 0180 0000     		.short	0
+ 2295 0182 1800     		.short	24
+ 2296 0184 0000     		.short	0
+ 2297 0186 1900     		.short	25
+ 2298 0188 0000     		.short	0
+ 2299 018a 0000     		.short	0
+ 2300 018c 1600     		.short	22
+ 2301 018e 0000     		.short	0
+ 2302 0190 0000     		.short	0
+ 2303 0192 0000     		.short	0
+ 2304 0194 0000     		.short	0
+ 2305 0196 0000     		.short	0
+ 2306 0198 0000     		.short	0
+ 2307 019a 0000     		.short	0
+ 2308 019c 0000     		.short	0
+ 2309 019e 0000     		.short	0
+ 2310 01a0 0000     		.short	0
+ 2311 01a2 0000     		.short	0
+ 2312 01a4 1500     		.short	21
+ 2313 01a6 1800     		.short	24
+ 2314 01a8 1600     		.short	22
+ 2315 01aa 1100     		.short	17
+ 2316 01ac 1400     		.short	20
+ 2317 01ae 0000     		.short	0
+ 2318 01b0 0000     		.short	0
+ 2319 01b2 0000     		.short	0
+ 2320 01b4 0000     		.short	0
+ 2321 01b6 0000     		.short	0
+ 2322 01b8 0000     		.short	0
+ 2323 01ba 0000     		.short	0
+ 2324 01bc 0000     		.short	0
+ 2325 01be 0000     		.short	0
+ 2326 01c0 0000     		.short	0
+ 2327 01c2 0000     		.short	0
+ 2328 01c4 1400     		.short	20
+ 2329 01c6 1200     		.short	18
+ 2330 01c8 0000     		.short	0
+ 2331 01ca 1300     		.short	19
+ 2332 01cc 0000     		.short	0
+ 2333 01ce 1700     		.short	23
+ 2334 01d0 0000     		.short	0
+ 2335 01d2 0000     		.short	0
+ 2336 01d4 0000     		.short	0
+ 2337 01d6 0000     		.short	0
+ 2338 01d8 0000     		.short	0
+ 2339 01da 0000     		.short	0
+ 2340 01dc 0000     		.short	0
+ 2341 01de 0000     		.short	0
+ 2342 01e0 0000     		.short	0
+ 2343 01e2 1700     		.short	23
+ 2344 01e4 0000     		.short	0
+ 2345 01e6 1500     		.short	21
+ 2346 01e8 0000     		.short	0
+ 2347 01ea 1900     		.short	25
+ 2348 01ec 1200     		.short	18
+ 2349 01ee 1600     		.short	22
+ 2350 01f0 0000     		.short	0
+ 2351 01f2 0000     		.short	0
+ 2352 01f4 0000     		.short	0
+ 2353 01f6 0000     		.short	0
+ 2354 01f8 0000     		.short	0
+ 2355 01fa 0000     		.short	0
+ 2356 01fc 0000     		.short	0
+ 2357 01fe 0000     		.short	0
+ 2358 0200 1600     		.short	22
+ 2359 0202 0000     		.short	0
+ 2360 0204 0000     		.short	0
+ 2361 0206 0000     		.short	0
+ 2362 0208 1800     		.short	24
+ 2363 020a 0000     		.short	0
+ 2364 020c 0000     		.short	0
+ 2365 020e 0000     		.short	0
+ 2366 0210 0000     		.short	0
+ 2367 0212 0000     		.short	0
+ 2368 0214 0000     		.short	0
+ 2369 0216 0000     		.short	0
+ 2370 0218 0000     		.short	0
+ 2371 021a 0000     		.short	0
+ 2372 021c 0000     		.short	0
+ 2373 021e 0000     		.short	0
+ 2374 0220 0000     		.short	0
+ 2375 0222 0000     		.short	0
+ 2376 0224 0000     		.short	0
+ 2377 0226 0000     		.short	0
+ 2378 0228 0000     		.short	0
+ 2379 022a 1200     		.short	18
+ 2380 022c 0000     		.short	0
+ 2381 022e 0000     		.short	0
+ 2382 0230 1100     		.short	17
+ 2383 0232 0000     		.short	0
+ 2384 0234 0000     		.short	0
+ 2385 0236 0000     		.short	0
+ 2386 0238 0000     		.short	0
+ 2387 023a 0000     		.short	0
+ 2388 023c 0000     		.short	0
+ 2389 023e 0000     		.short	0
+ 2390              		.align	5
+ 2393              	cuadricula_ARM_C:
+ 2394 0240 1500     		.short	21
+ 2395 0242 0000     		.short	0
+ 2396 0244 0000     		.short	0
+ 2397 0246 1300     		.short	19
+ 2398 0248 0000     		.short	0
+ 2399 024a 0000     		.short	0
+ 2400 024c 0000     		.short	0
+ 2401 024e 0000     		.short	0
+ 2402 0250 0000     		.short	0
+ 2403 0252 0000     		.short	0
+ 2404 0254 0000     		.short	0
+ 2405 0256 0000     		.short	0
+ 2406 0258 0000     		.short	0
+ 2407 025a 0000     		.short	0
+ 2408 025c 0000     		.short	0
+ 2409 025e 0000     		.short	0
+ 2410 0260 0000     		.short	0
+ 2411 0262 0000     		.short	0
+ 2412 0264 0000     		.short	0
+ 2413 0266 0000     		.short	0
+ 2414 0268 1900     		.short	25
+ 2415 026a 0000     		.short	0
+ 2416 026c 0000     		.short	0
+ 2417 026e 0000     		.short	0
+ 2418 0270 1500     		.short	21
+ 2419 0272 0000     		.short	0
+ 2420 0274 0000     		.short	0
+ 2421 0276 0000     		.short	0
+ 2422 0278 0000     		.short	0
+ 2423 027a 0000     		.short	0
+ 2424 027c 0000     		.short	0
+ 2425 027e 0000     		.short	0
+ 2426 0280 0000     		.short	0
+ 2427 0282 1900     		.short	25
+ 2428 0284 1600     		.short	22
+ 2429 0286 1700     		.short	23
+ 2430 0288 0000     		.short	0
+ 2431 028a 1500     		.short	21
+ 2432 028c 0000     		.short	0
+ 2433 028e 1300     		.short	19
+ 2434 0290 0000     		.short	0
+ 2435 0292 0000     		.short	0
+ 2436 0294 0000     		.short	0
+ 2437 0296 0000     		.short	0
+ 2438 0298 0000     		.short	0
+ 2439 029a 0000     		.short	0
+ 2440 029c 0000     		.short	0
+ 2441 029e 0000     		.short	0
+ 2442 02a0 0000     		.short	0
+ 2443 02a2 1800     		.short	24
+ 2444 02a4 0000     		.short	0
+ 2445 02a6 1900     		.short	25
+ 2446 02a8 0000     		.short	0
+ 2447 02aa 0000     		.short	0
+ 2448 02ac 1600     		.short	22
+ 2449 02ae 0000     		.short	0
+ 2450 02b0 0000     		.short	0
+ 2451 02b2 0000     		.short	0
+ 2452 02b4 0000     		.short	0
+ 2453 02b6 0000     		.short	0
+ 2454 02b8 0000     		.short	0
+ 2455 02ba 0000     		.short	0
+ 2456 02bc 0000     		.short	0
+ 2457 02be 0000     		.short	0
+ 2458 02c0 0000     		.short	0
+ 2459 02c2 0000     		.short	0
+ 2460 02c4 1500     		.short	21
+ 2461 02c6 1800     		.short	24
+ 2462 02c8 1600     		.short	22
+ 2463 02ca 1100     		.short	17
+ 2464 02cc 1400     		.short	20
+ 2465 02ce 0000     		.short	0
+ 2466 02d0 0000     		.short	0
+ 2467 02d2 0000     		.short	0
+ 2468 02d4 0000     		.short	0
+ 2469 02d6 0000     		.short	0
+ 2470 02d8 0000     		.short	0
+ 2471 02da 0000     		.short	0
+ 2472 02dc 0000     		.short	0
+ 2473 02de 0000     		.short	0
+ 2474 02e0 0000     		.short	0
+ 2475 02e2 0000     		.short	0
+ 2476 02e4 1400     		.short	20
+ 2477 02e6 1200     		.short	18
+ 2478 02e8 0000     		.short	0
+ 2479 02ea 1300     		.short	19
+ 2480 02ec 0000     		.short	0
+ 2481 02ee 1700     		.short	23
+ 2482 02f0 0000     		.short	0
+ 2483 02f2 0000     		.short	0
+ 2484 02f4 0000     		.short	0
+ 2485 02f6 0000     		.short	0
+ 2486 02f8 0000     		.short	0
+ 2487 02fa 0000     		.short	0
+ 2488 02fc 0000     		.short	0
+ 2489 02fe 0000     		.short	0
+ 2490 0300 0000     		.short	0
+ 2491 0302 1700     		.short	23
+ 2492 0304 0000     		.short	0
+ 2493 0306 1500     		.short	21
+ 2494 0308 0000     		.short	0
+ 2495 030a 1900     		.short	25
+ 2496 030c 1200     		.short	18
+ 2497 030e 1600     		.short	22
+ 2498 0310 0000     		.short	0
+ 2499 0312 0000     		.short	0
+ 2500 0314 0000     		.short	0
+ 2501 0316 0000     		.short	0
+ 2502 0318 0000     		.short	0
+ 2503 031a 0000     		.short	0
+ 2504 031c 0000     		.short	0
+ 2505 031e 0000     		.short	0
+ 2506 0320 1600     		.short	22
+ 2507 0322 0000     		.short	0
+ 2508 0324 0000     		.short	0
+ 2509 0326 0000     		.short	0
+ 2510 0328 1800     		.short	24
+ 2511 032a 0000     		.short	0
+ 2512 032c 0000     		.short	0
+ 2513 032e 0000     		.short	0
+ 2514 0330 0000     		.short	0
+ 2515 0332 0000     		.short	0
+ 2516 0334 0000     		.short	0
+ 2517 0336 0000     		.short	0
+ 2518 0338 0000     		.short	0
+ 2519 033a 0000     		.short	0
+ 2520 033c 0000     		.short	0
+ 2521 033e 0000     		.short	0
+ 2522 0340 0000     		.short	0
+ 2523 0342 0000     		.short	0
+ 2524 0344 0000     		.short	0
+ 2525 0346 0000     		.short	0
+ 2526 0348 0000     		.short	0
+ 2527 034a 1200     		.short	18
+ 2528 034c 0000     		.short	0
+ 2529 034e 0000     		.short	0
+ 2530 0350 1100     		.short	17
+ 2531 0352 0000     		.short	0
+ 2532 0354 0000     		.short	0
+ 2533 0356 0000     		.short	0
+ 2534 0358 0000     		.short	0
+ 2535 035a 0000     		.short	0
+ 2536 035c 0000     		.short	0
+ 2537 035e 0000     		.short	0
+ 2538              		.align	5
+ 2541              	cuadricula_ARM_ARM:
+ 2542 0360 1500     		.short	21
+ 2543 0362 0000     		.short	0
+ 2544 0364 0000     		.short	0
+ 2545 0366 1300     		.short	19
+ 2546 0368 0000     		.short	0
+ 2547 036a 0000     		.short	0
+ 2548 036c 0000     		.short	0
+ 2549 036e 0000     		.short	0
+ 2550 0370 0000     		.short	0
+ 2551 0372 0000     		.short	0
+ 2552 0374 0000     		.short	0
+ 2553 0376 0000     		.short	0
+ 2554 0378 0000     		.short	0
+ 2555 037a 0000     		.short	0
+ 2556 037c 0000     		.short	0
+ 2557 037e 0000     		.short	0
+ 2558 0380 0000     		.short	0
+ 2559 0382 0000     		.short	0
+ 2560 0384 0000     		.short	0
+ 2561 0386 0000     		.short	0
+ 2562 0388 1900     		.short	25
+ 2563 038a 0000     		.short	0
+ 2564 038c 0000     		.short	0
+ 2565 038e 0000     		.short	0
+ 2566 0390 1500     		.short	21
+ 2567 0392 0000     		.short	0
+ 2568 0394 0000     		.short	0
+ 2569 0396 0000     		.short	0
+ 2570 0398 0000     		.short	0
+ 2571 039a 0000     		.short	0
+ 2572 039c 0000     		.short	0
+ 2573 039e 0000     		.short	0
+ 2574 03a0 0000     		.short	0
+ 2575 03a2 1900     		.short	25
+ 2576 03a4 1600     		.short	22
+ 2577 03a6 1700     		.short	23
+ 2578 03a8 0000     		.short	0
+ 2579 03aa 1500     		.short	21
+ 2580 03ac 0000     		.short	0
+ 2581 03ae 1300     		.short	19
+ 2582 03b0 0000     		.short	0
+ 2583 03b2 0000     		.short	0
+ 2584 03b4 0000     		.short	0
+ 2585 03b6 0000     		.short	0
+ 2586 03b8 0000     		.short	0
+ 2587 03ba 0000     		.short	0
+ 2588 03bc 0000     		.short	0
+ 2589 03be 0000     		.short	0
+ 2590 03c0 0000     		.short	0
+ 2591 03c2 1800     		.short	24
+ 2592 03c4 0000     		.short	0
+ 2593 03c6 1900     		.short	25
+ 2594 03c8 0000     		.short	0
+ 2595 03ca 0000     		.short	0
+ 2596 03cc 1600     		.short	22
+ 2597 03ce 0000     		.short	0
+ 2598 03d0 0000     		.short	0
+ 2599 03d2 0000     		.short	0
+ 2600 03d4 0000     		.short	0
+ 2601 03d6 0000     		.short	0
+ 2602 03d8 0000     		.short	0
+ 2603 03da 0000     		.short	0
+ 2604 03dc 0000     		.short	0
+ 2605 03de 0000     		.short	0
+ 2606 03e0 0000     		.short	0
+ 2607 03e2 0000     		.short	0
+ 2608 03e4 1500     		.short	21
+ 2609 03e6 1800     		.short	24
+ 2610 03e8 1600     		.short	22
+ 2611 03ea 1100     		.short	17
+ 2612 03ec 1400     		.short	20
+ 2613 03ee 0000     		.short	0
+ 2614 03f0 0000     		.short	0
+ 2615 03f2 0000     		.short	0
+ 2616 03f4 0000     		.short	0
+ 2617 03f6 0000     		.short	0
+ 2618 03f8 0000     		.short	0
+ 2619 03fa 0000     		.short	0
+ 2620 03fc 0000     		.short	0
+ 2621 03fe 0000     		.short	0
+ 2622 0400 0000     		.short	0
+ 2623 0402 0000     		.short	0
+ 2624 0404 1400     		.short	20
+ 2625 0406 1200     		.short	18
+ 2626 0408 0000     		.short	0
+ 2627 040a 1300     		.short	19
+ 2628 040c 0000     		.short	0
+ 2629 040e 1700     		.short	23
+ 2630 0410 0000     		.short	0
+ 2631 0412 0000     		.short	0
+ 2632 0414 0000     		.short	0
+ 2633 0416 0000     		.short	0
+ 2634 0418 0000     		.short	0
+ 2635 041a 0000     		.short	0
+ 2636 041c 0000     		.short	0
+ 2637 041e 0000     		.short	0
+ 2638 0420 0000     		.short	0
+ 2639 0422 1700     		.short	23
+ 2640 0424 0000     		.short	0
+ 2641 0426 1500     		.short	21
+ 2642 0428 0000     		.short	0
+ 2643 042a 1900     		.short	25
+ 2644 042c 1200     		.short	18
+ 2645 042e 1600     		.short	22
+ 2646 0430 0000     		.short	0
+ 2647 0432 0000     		.short	0
+ 2648 0434 0000     		.short	0
+ 2649 0436 0000     		.short	0
+ 2650 0438 0000     		.short	0
+ 2651 043a 0000     		.short	0
+ 2652 043c 0000     		.short	0
+ 2653 043e 0000     		.short	0
+ 2654 0440 1600     		.short	22
+ 2655 0442 0000     		.short	0
+ 2656 0444 0000     		.short	0
+ 2657 0446 0000     		.short	0
+ 2658 0448 1800     		.short	24
+ 2659 044a 0000     		.short	0
+ 2660 044c 0000     		.short	0
+ 2661 044e 0000     		.short	0
+ 2662 0450 0000     		.short	0
+ 2663 0452 0000     		.short	0
+ 2664 0454 0000     		.short	0
+ 2665 0456 0000     		.short	0
+ 2666 0458 0000     		.short	0
+ 2667 045a 0000     		.short	0
+ 2668 045c 0000     		.short	0
+ 2669 045e 0000     		.short	0
+ 2670 0460 0000     		.short	0
+ 2671 0462 0000     		.short	0
+ 2672 0464 0000     		.short	0
+ 2673 0466 0000     		.short	0
+ 2674 0468 0000     		.short	0
+ 2675 046a 1200     		.short	18
+ 2676 046c 0000     		.short	0
+ 2677 046e 0000     		.short	0
+ 2678 0470 1100     		.short	17
+ 2679 0472 0000     		.short	0
+ 2680 0474 0000     		.short	0
+ 2681 0476 0000     		.short	0
+ 2682 0478 0000     		.short	0
+ 2683 047a 0000     		.short	0
+ 2684 047c 0000     		.short	0
+ 2685 047e 0000     		.short	0
+ 2686              		.align	5
+ 2689              	cuadricula_ARM_ARM_ALL:
+ 2690 0480 1500     		.short	21
+ 2691 0482 0000     		.short	0
+ 2692 0484 0000     		.short	0
+ 2693 0486 1300     		.short	19
+ 2694 0488 0000     		.short	0
+ 2695 048a 0000     		.short	0
+ 2696 048c 0000     		.short	0
+ 2697 048e 0000     		.short	0
+ 2698 0490 0000     		.short	0
+ 2699 0492 0000     		.short	0
+ 2700 0494 0000     		.short	0
+ 2701 0496 0000     		.short	0
+ 2702 0498 0000     		.short	0
+ 2703 049a 0000     		.short	0
+ 2704 049c 0000     		.short	0
+ 2705 049e 0000     		.short	0
+ 2706 04a0 0000     		.short	0
+ 2707 04a2 0000     		.short	0
+ 2708 04a4 0000     		.short	0
+ 2709 04a6 0000     		.short	0
+ 2710 04a8 1900     		.short	25
+ 2711 04aa 0000     		.short	0
+ 2712 04ac 0000     		.short	0
+ 2713 04ae 0000     		.short	0
+ 2714 04b0 1500     		.short	21
+ 2715 04b2 0000     		.short	0
+ 2716 04b4 0000     		.short	0
+ 2717 04b6 0000     		.short	0
+ 2718 04b8 0000     		.short	0
+ 2719 04ba 0000     		.short	0
+ 2720 04bc 0000     		.short	0
+ 2721 04be 0000     		.short	0
+ 2722 04c0 0000     		.short	0
+ 2723 04c2 1900     		.short	25
+ 2724 04c4 1600     		.short	22
+ 2725 04c6 1700     		.short	23
+ 2726 04c8 0000     		.short	0
+ 2727 04ca 1500     		.short	21
+ 2728 04cc 0000     		.short	0
+ 2729 04ce 1300     		.short	19
+ 2730 04d0 0000     		.short	0
+ 2731 04d2 0000     		.short	0
+ 2732 04d4 0000     		.short	0
+ 2733 04d6 0000     		.short	0
+ 2734 04d8 0000     		.short	0
+ 2735 04da 0000     		.short	0
+ 2736 04dc 0000     		.short	0
+ 2737 04de 0000     		.short	0
+ 2738 04e0 0000     		.short	0
+ 2739 04e2 1800     		.short	24
+ 2740 04e4 0000     		.short	0
+ 2741 04e6 1900     		.short	25
+ 2742 04e8 0000     		.short	0
+ 2743 04ea 0000     		.short	0
+ 2744 04ec 1600     		.short	22
+ 2745 04ee 0000     		.short	0
+ 2746 04f0 0000     		.short	0
+ 2747 04f2 0000     		.short	0
+ 2748 04f4 0000     		.short	0
+ 2749 04f6 0000     		.short	0
+ 2750 04f8 0000     		.short	0
+ 2751 04fa 0000     		.short	0
+ 2752 04fc 0000     		.short	0
+ 2753 04fe 0000     		.short	0
+ 2754 0500 0000     		.short	0
+ 2755 0502 0000     		.short	0
+ 2756 0504 1500     		.short	21
+ 2757 0506 1800     		.short	24
+ 2758 0508 1600     		.short	22
+ 2759 050a 1100     		.short	17
+ 2760 050c 1400     		.short	20
+ 2761 050e 0000     		.short	0
+ 2762 0510 0000     		.short	0
+ 2763 0512 0000     		.short	0
+ 2764 0514 0000     		.short	0
+ 2765 0516 0000     		.short	0
+ 2766 0518 0000     		.short	0
+ 2767 051a 0000     		.short	0
+ 2768 051c 0000     		.short	0
+ 2769 051e 0000     		.short	0
+ 2770 0520 0000     		.short	0
+ 2771 0522 0000     		.short	0
+ 2772 0524 1400     		.short	20
+ 2773 0526 1200     		.short	18
+ 2774 0528 0000     		.short	0
+ 2775 052a 1300     		.short	19
+ 2776 052c 0000     		.short	0
+ 2777 052e 1700     		.short	23
+ 2778 0530 0000     		.short	0
+ 2779 0532 0000     		.short	0
+ 2780 0534 0000     		.short	0
+ 2781 0536 0000     		.short	0
+ 2782 0538 0000     		.short	0
+ 2783 053a 0000     		.short	0
+ 2784 053c 0000     		.short	0
+ 2785 053e 0000     		.short	0
+ 2786 0540 0000     		.short	0
+ 2787 0542 1700     		.short	23
+ 2788 0544 0000     		.short	0
+ 2789 0546 1500     		.short	21
+ 2790 0548 0000     		.short	0
+ 2791 054a 1900     		.short	25
+ 2792 054c 1200     		.short	18
+ 2793 054e 1600     		.short	22
+ 2794 0550 0000     		.short	0
+ 2795 0552 0000     		.short	0
+ 2796 0554 0000     		.short	0
+ 2797 0556 0000     		.short	0
+ 2798 0558 0000     		.short	0
+ 2799 055a 0000     		.short	0
+ 2800 055c 0000     		.short	0
+ 2801 055e 0000     		.short	0
+ 2802 0560 1600     		.short	22
+ 2803 0562 0000     		.short	0
+ 2804 0564 0000     		.short	0
+ 2805 0566 0000     		.short	0
+ 2806 0568 1800     		.short	24
+ 2807 056a 0000     		.short	0
+ 2808 056c 0000     		.short	0
+ 2809 056e 0000     		.short	0
+ 2810 0570 0000     		.short	0
+ 2811 0572 0000     		.short	0
+ 2812 0574 0000     		.short	0
+ 2813 0576 0000     		.short	0
+ 2814 0578 0000     		.short	0
+ 2815 057a 0000     		.short	0
+ 2816 057c 0000     		.short	0
+ 2817 057e 0000     		.short	0
+ 2818 0580 0000     		.short	0
+ 2819 0582 0000     		.short	0
+ 2820 0584 0000     		.short	0
+ 2821 0586 0000     		.short	0
+ 2822 0588 0000     		.short	0
+ 2823 058a 1200     		.short	18
+ 2824 058c 0000     		.short	0
+ 2825 058e 0000     		.short	0
+ 2826 0590 1100     		.short	17
+ 2827 0592 0000     		.short	0
+ 2828 0594 0000     		.short	0
+ 2829 0596 0000     		.short	0
+ 2830 0598 0000     		.short	0
+ 2831 059a 0000     		.short	0
+ 2832 059c 0000     		.short	0
+ 2833 059e 0000     		.short	0
+ 2834              		.align	5
+ 2837              	solucion:
+ 2838 05a0 159A     		.short	-26091
+ 2839 05a2 00FA     		.short	-1536
+ 2840 05a4 009E     		.short	-25088
+ 2841 05a6 13EB     		.short	-5357
+ 2842 05a8 00FA     		.short	-1536
+ 2843 05aa 80AB     		.short	-21632
+ 2844 05ac 001F     		.short	7936
+ 2845 05ae 003A     		.short	14848
+ 2846 05b0 800A     		.short	2688
+ 2847 05b2 0000     		.short	0
+ 2848 05b4 0000     		.short	0
+ 2849 05b6 0000     		.short	0
+ 2850 05b8 0000     		.short	0
+ 2851 05ba 0000     		.short	0
+ 2852 05bc 0000     		.short	0
+ 2853 05be 0000     		.short	0
+ 2854 05c0 0098     		.short	-26624
+ 2855 05c2 00F8     		.short	-2048
+ 2856 05c4 009C     		.short	-25600
+ 2857 05c6 00EB     		.short	-5376
+ 2858 05c8 19FA     		.short	-1511
+ 2859 05ca 80AB     		.short	-21632
+ 2860 05cc 009F     		.short	-24832
+ 2861 05ce 00BA     		.short	-17920
+ 2862 05d0 958A     		.short	-30059
+ 2863 05d2 0000     		.short	0
+ 2864 05d4 0000     		.short	0
+ 2865 05d6 0000     		.short	0
+ 2866 05d8 0000     		.short	0
+ 2867 05da 0000     		.short	0
+ 2868 05dc 0000     		.short	0
+ 2869 05de 0000     		.short	0
+ 2870 05e0 00BA     		.short	-17920
+ 2871 05e2 19FA     		.short	-1511
+ 2872 05e4 16BE     		.short	-16874
+ 2873 05e6 17FB     		.short	-1257
+ 2874 05e8 00FA     		.short	-1536
+ 2875 05ea 95BB     		.short	-17515
+ 2876 05ec 00BF     		.short	-16640
+ 2877 05ee 13BA     		.short	-17901
+ 2878 05f0 80BA     		.short	-17792
+ 2879 05f2 0000     		.short	0
+ 2880 05f4 0000     		.short	0
+ 2881 05f6 0000     		.short	0
+ 2882 05f8 0000     		.short	0
+ 2883 05fa 0000     		.short	0
+ 2884 05fc 0000     		.short	0
+ 2885 05fe 0000     		.short	0
+ 2886 0600 00DC     		.short	-9216
+ 2887 0602 18FC     		.short	-1000
+ 2888 0604 00DC     		.short	-9216
+ 2889 0606 99FB     		.short	-1127
+ 2890 0608 80D3     		.short	-11392
+ 2891 060a 80DB     		.short	-9344
+ 2892 060c 16F5     		.short	-2794
+ 2893 060e 00F6     		.short	-2560
+ 2894 0610 80FC     		.short	-896
+ 2895 0612 0000     		.short	0
+ 2896 0614 0000     		.short	0
+ 2897 0616 0000     		.short	0
+ 2898 0618 0000     		.short	0
+ 2899 061a 0000     		.short	0
+ 2900 061c 0000     		.short	0
+ 2901 061e 0000     		.short	0
+ 2902 0620 805C     		.short	23680
+ 2903 0622 80FC     		.short	-896
+ 2904 0624 955C     		.short	23701
+ 2905 0626 98FF     		.short	-104
+ 2906 0628 96DF     		.short	-8298
+ 2907 062a 91DF     		.short	-8303
+ 2908 062c 947D     		.short	32148
+ 2909 062e 807E     		.short	32384
+ 2910 0630 807C     		.short	31872
+ 2911 0632 0000     		.short	0
+ 2912 0634 0000     		.short	0
+ 2913 0636 0000     		.short	0
+ 2914 0638 0000     		.short	0
+ 2915 063a 0000     		.short	0
+ 2916 063c 0000     		.short	0
+ 2917 063e 0000     		.short	0
+ 2918 0640 007F     		.short	32512
+ 2919 0642 00EF     		.short	-4352
+ 2920 0644 147F     		.short	32532
+ 2921 0646 92FF     		.short	-110
+ 2922 0648 80F7     		.short	-2176
+ 2923 064a 93FF     		.short	-109
+ 2924 064c 0037     		.short	14080
+ 2925 064e 1737     		.short	14103
+ 2926 0650 803F     		.short	16256
+ 2927 0652 0000     		.short	0
+ 2928 0654 0000     		.short	0
+ 2929 0656 0000     		.short	0
+ 2930 0658 0000     		.short	0
+ 2931 065a 0000     		.short	0
+ 2932 065c 0000     		.short	0
+ 2933 065e 0000     		.short	0
+ 2934 0660 00B9     		.short	-18176
+ 2935 0662 17F9     		.short	-1769
+ 2936 0664 00BD     		.short	-17152
+ 2937 0666 15FB     		.short	-1259
+ 2938 0668 00F9     		.short	-1792
+ 2939 066a 99FB     		.short	-1127
+ 2940 066c 92BD     		.short	-17006
+ 2941 066e 96BB     		.short	-17514
+ 2942 0670 80B9     		.short	-18048
+ 2943 0672 0000     		.short	0
+ 2944 0674 0000     		.short	0
+ 2945 0676 0000     		.short	0
+ 2946 0678 0000     		.short	0
+ 2947 067a 0000     		.short	0
+ 2948 067c 0000     		.short	0
+ 2949 067e 0000     		.short	0
+ 2950 0680 1678     		.short	30742
+ 2951 0682 00F0     		.short	-4096
+ 2952 0684 007C     		.short	31744
+ 2953 0686 00FB     		.short	-1280
+ 2954 0688 18D9     		.short	-9960
+ 2955 068a 80DB     		.short	-9344
+ 2956 068c 8055     		.short	21888
+ 2957 068e 8073     		.short	29568
+ 2958 0690 8059     		.short	22912
+ 2959 0692 0000     		.short	0
+ 2960 0694 0000     		.short	0
+ 2961 0696 0000     		.short	0
+ 2962 0698 0000     		.short	0
+ 2963 069a 0000     		.short	0
+ 2964 069c 0000     		.short	0
+ 2965 069e 0000     		.short	0
+ 2966 06a0 8039     		.short	14720
+ 2967 06a2 80F1     		.short	-3712
+ 2968 06a4 803D     		.short	15744
+ 2969 06a6 80EB     		.short	-5248
+ 2970 06a8 80D9     		.short	-9856
+ 2971 06aa 92CB     		.short	-13422
+ 2972 06ac 8015     		.short	5504
+ 2973 06ae 8033     		.short	13184
+ 2974 06b0 9119     		.short	6545
+ 2975 06b2 0000     		.short	0
+ 2976 06b4 0000     		.short	0
+ 2977 06b6 0000     		.short	0
+ 2978 06b8 0000     		.short	0
+ 2979 06ba 0000     		.short	0
+ 2980 06bc 0000     		.short	0
+ 2981 06be 0000     		.short	0
+ 2982              		.text
+ 2983              		.align	2
+ 2984              		.global	candidatos_propagar_c
+ 2986              	candidatos_propagar_c:
+ 2987              	.LFB7:
+   1:../sudoku_2025.c **** #include <stddef.h>
+   2:../sudoku_2025.c **** #include "sudoku_2025.h"
+   3:../sudoku_2025.c **** #include "tableros.h"
+   4:../sudoku_2025.c **** #include "../common/def.h"
+   5:../sudoku_2025.c **** 
+   6:../sudoku_2025.c **** /* *****************************************************************************
+   7:../sudoku_2025.c ****  * propaga el valor de una determinada celda
+   8:../sudoku_2025.c ****  * para actualizar las listas de candidatos
+   9:../sudoku_2025.c ****  * de las celdas en su su fila, columna y regi�n */
+  10:../sudoku_2025.c **** /* Recibe como par�metro la cuadr�cula, y la fila y columna de
+  11:../sudoku_2025.c ****  * la celda a propagar; no devuelve nada
+  12:../sudoku_2025.c ****  */
+  13:../sudoku_2025.c **** void candidatos_propagar_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
+  14:../sudoku_2025.c ****                              uint8_t fila, uint8_t columna)
+  15:../sudoku_2025.c **** {
+ 2988              		.loc 1 15 0
+ 2989              		.cfi_startproc
+ 2990              		@ Function supports interworking.
+ 2991              		@ args = 0, pretend = 0, frame = 24
+ 2992              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2993 00a4 0DC0A0E1 		mov	ip, sp
+ 2994              	.LCFI4:
+ 2995              		.cfi_def_cfa_register 12
+ 2996 00a8 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2997 00ac 04B04CE2 		sub	fp, ip, #4
+ 2998              		.cfi_offset 14, -8
+ 2999              		.cfi_offset 13, -12
+ 3000              		.cfi_offset 11, -16
+ 3001              	.LCFI5:
+ 3002              		.cfi_def_cfa 11, 4
+ 3003 00b0 18D04DE2 		sub	sp, sp, #24
+ 3004 00b4 20000BE5 		str	r0, [fp, #-32]
+ 3005 00b8 0230A0E1 		mov	r3, r2
+ 3006 00bc 0120A0E1 		mov	r2, r1
+ 3007 00c0 21204BE5 		strb	r2, [fp, #-33]
+ 3008 00c4 22304BE5 		strb	r3, [fp, #-34]
+  16:../sudoku_2025.c **** 	uint8_t j, i , init_i, init_j;
+  17:../sudoku_2025.c ****     /* puede ayudar esta "look up table" a mejorar el rendimiento */
+  18:../sudoku_2025.c ****     const uint8_t init_region[NUM_FILAS] = {0, 0, 0, 3, 3, 3, 6, 6, 6};
+ 3009              		.loc 1 18 0
+ 3010 00c8 A4219FE5 		ldr	r2, .L12
+ 3011 00cc 1C304BE2 		sub	r3, fp, #28
+ 3012 00d0 070092E8 		ldmia	r2, {r0, r1, r2}
+ 3013 00d4 0300A3E8 		stmia	r3!, {r0, r1}
+ 3014 00d8 0020C3E5 		strb	r2, [r3, #0]
+  19:../sudoku_2025.c **** 
+  20:../sudoku_2025.c ****     /* valor que se propaga */
+  21:../sudoku_2025.c ****     uint8_t valor = celda_leer_valor(cuadricula[fila][columna]);
+ 3015              		.loc 1 21 0
+ 3016 00dc 21305BE5 		ldrb	r3, [fp, #-33]	@ zero_extendqisi2
+ 3017 00e0 8332A0E1 		mov	r3, r3, asl #5
+ 3018 00e4 20201BE5 		ldr	r2, [fp, #-32]
+ 3019 00e8 032082E0 		add	r2, r2, r3
+ 3020 00ec 22305BE5 		ldrb	r3, [fp, #-34]	@ zero_extendqisi2
+ 3021 00f0 8330A0E1 		mov	r3, r3, asl #1
+ 3022 00f4 033082E0 		add	r3, r2, r3
+ 3023 00f8 B030D3E1 		ldrh	r3, [r3, #0]
+ 3024 00fc 0300A0E1 		mov	r0, r3
+ 3025 0100 D9FFFFEB 		bl	celda_leer_valor
+ 3026 0104 0030A0E1 		mov	r3, r0
+ 3027 0108 0F304BE5 		strb	r3, [fp, #-15]
+  22:../sudoku_2025.c **** 
+  23:../sudoku_2025.c ****     /* recorrer fila descartando valor de listas candidatos (incluyendo la celda origen) */
+  24:../sudoku_2025.c ****     for (j = 0; j < NUM_FILAS; j++) {
+ 3028              		.loc 1 24 0
+ 3029 010c 0030A0E3 		mov	r3, #0
+ 3030 0110 0D304BE5 		strb	r3, [fp, #-13]
+ 3031 0114 0D0000EA 		b	.L4
+ 3032              	.L5:
+  25:../sudoku_2025.c ****         celda_eliminar_candidato(&cuadricula[fila][j], valor);
+ 3033              		.loc 1 25 0 discriminator 2
+ 3034 0118 20201BE5 		ldr	r2, [fp, #-32]
+ 3035 011c 21305BE5 		ldrb	r3, [fp, #-33]	@ zero_extendqisi2
+ 3036 0120 0312A0E1 		mov	r1, r3, asl #4
+ 3037 0124 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 3038 0128 033081E0 		add	r3, r1, r3
+ 3039 012c 8330A0E1 		mov	r3, r3, asl #1
+ 3040 0130 032082E0 		add	r2, r2, r3
+ 3041 0134 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 3042 0138 0200A0E1 		mov	r0, r2
+ 3043 013c 0310A0E1 		mov	r1, r3
+ 3044 0140 AEFFFFEB 		bl	celda_eliminar_candidato
+  24:../sudoku_2025.c ****     for (j = 0; j < NUM_FILAS; j++) {
+ 3045              		.loc 1 24 0 discriminator 2
+ 3046 0144 0D305BE5 		ldrb	r3, [fp, #-13]
+ 3047 0148 013083E2 		add	r3, r3, #1
+ 3048 014c 0D304BE5 		strb	r3, [fp, #-13]
+ 3049              	.L4:
+  24:../sudoku_2025.c ****     for (j = 0; j < NUM_FILAS; j++) {
+ 3050              		.loc 1 24 0 is_stmt 0 discriminator 1
+ 3051 0150 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 3052 0154 080053E3 		cmp	r3, #8
+ 3053 0158 EEFFFF9A 		bls	.L5
+  26:../sudoku_2025.c ****     }
+  27:../sudoku_2025.c **** 
+  28:../sudoku_2025.c ****     /* recorrer columna descartando valor de listas candidatos (incluyendo la celda origen) */
+  29:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3054              		.loc 1 29 0 is_stmt 1
+ 3055 015c 0030A0E3 		mov	r3, #0
+ 3056 0160 0E304BE5 		strb	r3, [fp, #-14]
+ 3057 0164 0D0000EA 		b	.L6
+ 3058              	.L7:
+  30:../sudoku_2025.c ****         celda_eliminar_candidato(&cuadricula[i][columna], valor);
+ 3059              		.loc 1 30 0 discriminator 2
+ 3060 0168 20201BE5 		ldr	r2, [fp, #-32]
+ 3061 016c 0E305BE5 		ldrb	r3, [fp, #-14]	@ zero_extendqisi2
+ 3062 0170 0312A0E1 		mov	r1, r3, asl #4
+ 3063 0174 22305BE5 		ldrb	r3, [fp, #-34]	@ zero_extendqisi2
+ 3064 0178 033081E0 		add	r3, r1, r3
+ 3065 017c 8330A0E1 		mov	r3, r3, asl #1
+ 3066 0180 032082E0 		add	r2, r2, r3
+ 3067 0184 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 3068 0188 0200A0E1 		mov	r0, r2
+ 3069 018c 0310A0E1 		mov	r1, r3
+ 3070 0190 9AFFFFEB 		bl	celda_eliminar_candidato
+  29:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3071              		.loc 1 29 0 discriminator 2
+ 3072 0194 0E305BE5 		ldrb	r3, [fp, #-14]
+ 3073 0198 013083E2 		add	r3, r3, #1
+ 3074 019c 0E304BE5 		strb	r3, [fp, #-14]
+ 3075              	.L6:
+  29:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3076              		.loc 1 29 0 is_stmt 0 discriminator 1
+ 3077 01a0 0E305BE5 		ldrb	r3, [fp, #-14]	@ zero_extendqisi2
+ 3078 01a4 080053E3 		cmp	r3, #8
+ 3079 01a8 EEFFFF9A 		bls	.L7
+  31:../sudoku_2025.c ****     }
+  32:../sudoku_2025.c **** 
+  33:../sudoku_2025.c ****     /* recorrer región descartando valor de listas candidatos */
+  34:../sudoku_2025.c ****     init_i = init_region[fila];
+ 3080              		.loc 1 34 0 is_stmt 1
+ 3081 01ac 21205BE5 		ldrb	r2, [fp, #-33]	@ zero_extendqisi2
+ 3082 01b0 0F30E0E3 		mvn	r3, #15
+ 3083 01b4 0C104BE2 		sub	r1, fp, #12
+ 3084 01b8 022081E0 		add	r2, r1, r2
+ 3085 01bc 033082E0 		add	r3, r2, r3
+ 3086 01c0 0030D3E5 		ldrb	r3, [r3, #0]
+ 3087 01c4 10304BE5 		strb	r3, [fp, #-16]
+  35:../sudoku_2025.c ****     init_j = init_region[columna];
+ 3088              		.loc 1 35 0
+ 3089 01c8 22205BE5 		ldrb	r2, [fp, #-34]	@ zero_extendqisi2
+ 3090 01cc 0F30E0E3 		mvn	r3, #15
+ 3091 01d0 0C104BE2 		sub	r1, fp, #12
+ 3092 01d4 022081E0 		add	r2, r1, r2
+ 3093 01d8 033082E0 		add	r3, r2, r3
+ 3094 01dc 0030D3E5 		ldrb	r3, [r3, #0]
+ 3095 01e0 11304BE5 		strb	r3, [fp, #-17]
+  36:../sudoku_2025.c ****     
+  37:../sudoku_2025.c ****     for (i = init_i; i < init_i + 3; i++) {
+ 3096              		.loc 1 37 0
+ 3097 01e4 10305BE5 		ldrb	r3, [fp, #-16]
+ 3098 01e8 0E304BE5 		strb	r3, [fp, #-14]
+ 3099 01ec 180000EA 		b	.L8
+ 3100              	.L11:
+  38:../sudoku_2025.c ****         for (j = init_j; j < init_j + 3; j++) {
+ 3101              		.loc 1 38 0
+ 3102 01f0 11305BE5 		ldrb	r3, [fp, #-17]
+ 3103 01f4 0D304BE5 		strb	r3, [fp, #-13]
+ 3104 01f8 0D0000EA 		b	.L9
+ 3105              	.L10:
+  39:../sudoku_2025.c ****             celda_eliminar_candidato(&cuadricula[i][j], valor);
+ 3106              		.loc 1 39 0 discriminator 2
+ 3107 01fc 20201BE5 		ldr	r2, [fp, #-32]
+ 3108 0200 0E305BE5 		ldrb	r3, [fp, #-14]	@ zero_extendqisi2
+ 3109 0204 0312A0E1 		mov	r1, r3, asl #4
+ 3110 0208 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 3111 020c 033081E0 		add	r3, r1, r3
+ 3112 0210 8330A0E1 		mov	r3, r3, asl #1
+ 3113 0214 032082E0 		add	r2, r2, r3
+ 3114 0218 0F305BE5 		ldrb	r3, [fp, #-15]	@ zero_extendqisi2
+ 3115 021c 0200A0E1 		mov	r0, r2
+ 3116 0220 0310A0E1 		mov	r1, r3
+ 3117 0224 75FFFFEB 		bl	celda_eliminar_candidato
+  38:../sudoku_2025.c ****         for (j = init_j; j < init_j + 3; j++) {
+ 3118              		.loc 1 38 0 discriminator 2
+ 3119 0228 0D305BE5 		ldrb	r3, [fp, #-13]
+ 3120 022c 013083E2 		add	r3, r3, #1
+ 3121 0230 0D304BE5 		strb	r3, [fp, #-13]
+ 3122              	.L9:
+  38:../sudoku_2025.c ****         for (j = init_j; j < init_j + 3; j++) {
+ 3123              		.loc 1 38 0 is_stmt 0 discriminator 1
+ 3124 0234 0D205BE5 		ldrb	r2, [fp, #-13]	@ zero_extendqisi2
+ 3125 0238 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3126 023c 033083E2 		add	r3, r3, #3
+ 3127 0240 030052E1 		cmp	r2, r3
+ 3128 0244 ECFFFFBA 		blt	.L10
+  37:../sudoku_2025.c ****     for (i = init_i; i < init_i + 3; i++) {
+ 3129              		.loc 1 37 0 is_stmt 1
+ 3130 0248 0E305BE5 		ldrb	r3, [fp, #-14]
+ 3131 024c 013083E2 		add	r3, r3, #1
+ 3132 0250 0E304BE5 		strb	r3, [fp, #-14]
+ 3133              	.L8:
+  37:../sudoku_2025.c ****     for (i = init_i; i < init_i + 3; i++) {
+ 3134              		.loc 1 37 0 is_stmt 0 discriminator 1
+ 3135 0254 0E205BE5 		ldrb	r2, [fp, #-14]	@ zero_extendqisi2
+ 3136 0258 10305BE5 		ldrb	r3, [fp, #-16]	@ zero_extendqisi2
+ 3137 025c 033083E2 		add	r3, r3, #3
+ 3138 0260 030052E1 		cmp	r2, r3
+ 3139 0264 E1FFFFBA 		blt	.L11
+  40:../sudoku_2025.c ****         }
+  41:../sudoku_2025.c ****     }
+  42:../sudoku_2025.c **** }
+ 3140              		.loc 1 42 0 is_stmt 1
+ 3141 0268 0CD04BE2 		sub	sp, fp, #12
+ 3142 026c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3143 0270 1EFF2FE1 		bx	lr
+ 3144              	.L13:
+ 3145              		.align	2
+ 3146              	.L12:
+ 3147 0274 00000000 		.word	C.0.4985
+ 3148              		.cfi_endproc
+ 3149              	.LFE7:
+ 3151              		.align	2
+ 3152              		.global	candidatos_actualizar_c
+ 3154              	candidatos_actualizar_c:
+ 3155              	.LFB8:
+  43:../sudoku_2025.c **** 
+  44:../sudoku_2025.c **** /* *****************************************************************************
+  45:../sudoku_2025.c ****  * calcula todas las listas de candidatos (9x9)
+  46:../sudoku_2025.c ****  * necesario tras borrar o cambiar un valor (listas corrompidas)
+  47:../sudoku_2025.c ****  * retorna el numero de celdas vac�as
+  48:../sudoku_2025.c ****  */
+  49:../sudoku_2025.c **** 
+  50:../sudoku_2025.c **** int candidatos_actualizar_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS])
+  51:../sudoku_2025.c **** {
+ 3156              		.loc 1 51 0
+ 3157              		.cfi_startproc
+ 3158              		@ Function supports interworking.
+ 3159              		@ args = 0, pretend = 0, frame = 16
+ 3160              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3161 0278 0DC0A0E1 		mov	ip, sp
+ 3162              	.LCFI6:
+ 3163              		.cfi_def_cfa_register 12
+ 3164 027c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3165 0280 04B04CE2 		sub	fp, ip, #4
+ 3166              		.cfi_offset 14, -8
+ 3167              		.cfi_offset 13, -12
+ 3168              		.cfi_offset 11, -16
+ 3169              	.LCFI7:
+ 3170              		.cfi_def_cfa 11, 4
+ 3171 0284 10D04DE2 		sub	sp, sp, #16
+ 3172 0288 18000BE5 		str	r0, [fp, #-24]
+  52:../sudoku_2025.c ****     int celdas_vacias = 0;
+ 3173              		.loc 1 52 0
+ 3174 028c 0030A0E3 		mov	r3, #0
+ 3175 0290 10300BE5 		str	r3, [fp, #-16]
+  53:../sudoku_2025.c ****     uint8_t i, j;
+  54:../sudoku_2025.c **** 
+  55:../sudoku_2025.c ****     //borrar todos los candidatos de TODAS las celdas y contar las vacías
+  56:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3176              		.loc 1 56 0
+ 3177 0294 0030A0E3 		mov	r3, #0
+ 3178 0298 11304BE5 		strb	r3, [fp, #-17]
+ 3179 029c 2E0000EA 		b	.L15
+ 3180              	.L19:
+  57:../sudoku_2025.c ****         for (j = 0; j < NUM_FILAS; j++) {
+ 3181              		.loc 1 57 0
+ 3182 02a0 0030A0E3 		mov	r3, #0
+ 3183 02a4 12304BE5 		strb	r3, [fp, #-18]
+ 3184 02a8 250000EA 		b	.L16
+ 3185              	.L18:
+  58:../sudoku_2025.c ****             // Resetear candidatos para TODAS las celdas (poner todos a 0, es decir, todos son cand
+  59:../sudoku_2025.c ****             cuadricula[i][j] = cuadricula[i][j] & 0x007F; // Limpiar bits de candidatos [15,7]
+ 3186              		.loc 1 59 0
+ 3187 02ac 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3188 02b0 8332A0E1 		mov	r3, r3, asl #5
+ 3189 02b4 18201BE5 		ldr	r2, [fp, #-24]
+ 3190 02b8 031082E0 		add	r1, r2, r3
+ 3191 02bc 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3192 02c0 11205BE5 		ldrb	r2, [fp, #-17]	@ zero_extendqisi2
+ 3193 02c4 8222A0E1 		mov	r2, r2, asl #5
+ 3194 02c8 18001BE5 		ldr	r0, [fp, #-24]
+ 3195 02cc 020080E0 		add	r0, r0, r2
+ 3196 02d0 12205BE5 		ldrb	r2, [fp, #-18]	@ zero_extendqisi2
+ 3197 02d4 8220A0E1 		mov	r2, r2, asl #1
+ 3198 02d8 022080E0 		add	r2, r0, r2
+ 3199 02dc B020D2E1 		ldrh	r2, [r2, #0]
+ 3200 02e0 7F2002E2 		and	r2, r2, #127
+ 3201 02e4 0228A0E1 		mov	r2, r2, asl #16
+ 3202 02e8 2228A0E1 		mov	r2, r2, lsr #16
+ 3203 02ec 8330A0E1 		mov	r3, r3, asl #1
+ 3204 02f0 033081E0 		add	r3, r1, r3
+ 3205 02f4 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+  60:../sudoku_2025.c ****             
+  61:../sudoku_2025.c ****             if (celda_leer_valor(cuadricula[i][j]) == 0) {
+ 3206              		.loc 1 61 0
+ 3207 02f8 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3208 02fc 8332A0E1 		mov	r3, r3, asl #5
+ 3209 0300 18201BE5 		ldr	r2, [fp, #-24]
+ 3210 0304 032082E0 		add	r2, r2, r3
+ 3211 0308 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3212 030c 8330A0E1 		mov	r3, r3, asl #1
+ 3213 0310 033082E0 		add	r3, r2, r3
+ 3214 0314 B030D3E1 		ldrh	r3, [r3, #0]
+ 3215 0318 0300A0E1 		mov	r0, r3
+ 3216 031c 52FFFFEB 		bl	celda_leer_valor
+ 3217 0320 0030A0E1 		mov	r3, r0
+ 3218 0324 000053E3 		cmp	r3, #0
+ 3219 0328 0200001A 		bne	.L17
+  62:../sudoku_2025.c ****                 celdas_vacias++;
+ 3220              		.loc 1 62 0
+ 3221 032c 10301BE5 		ldr	r3, [fp, #-16]
+ 3222 0330 013083E2 		add	r3, r3, #1
+ 3223 0334 10300BE5 		str	r3, [fp, #-16]
+ 3224              	.L17:
+  57:../sudoku_2025.c ****         for (j = 0; j < NUM_FILAS; j++) {
+ 3225              		.loc 1 57 0
+ 3226 0338 12305BE5 		ldrb	r3, [fp, #-18]
+ 3227 033c 013083E2 		add	r3, r3, #1
+ 3228 0340 12304BE5 		strb	r3, [fp, #-18]
+ 3229              	.L16:
+  57:../sudoku_2025.c ****         for (j = 0; j < NUM_FILAS; j++) {
+ 3230              		.loc 1 57 0 is_stmt 0 discriminator 1
+ 3231 0344 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3232 0348 080053E3 		cmp	r3, #8
+ 3233 034c D6FFFF9A 		bls	.L18
+  56:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3234              		.loc 1 56 0 is_stmt 1
+ 3235 0350 11305BE5 		ldrb	r3, [fp, #-17]
+ 3236 0354 013083E2 		add	r3, r3, #1
+ 3237 0358 11304BE5 		strb	r3, [fp, #-17]
+ 3238              	.L15:
+  56:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3239              		.loc 1 56 0 is_stmt 0 discriminator 1
+ 3240 035c 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3241 0360 080053E3 		cmp	r3, #8
+ 3242 0364 CDFFFF9A 		bls	.L19
+  63:../sudoku_2025.c ****             }
+  64:../sudoku_2025.c ****         }
+  65:../sudoku_2025.c ****     }
+  66:../sudoku_2025.c ****     
+  67:../sudoku_2025.c **** 
+  68:../sudoku_2025.c ****     //recalcular candidatos usando candidatos_propagar_c
+  69:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3243              		.loc 1 69 0 is_stmt 1
+ 3244 0368 0030A0E3 		mov	r3, #0
+ 3245 036c 11304BE5 		strb	r3, [fp, #-17]
+ 3246 0370 1E0000EA 		b	.L20
+ 3247              	.L24:
+  70:../sudoku_2025.c ****         for (j = 0; j < NUM_FILAS; j++) {
+ 3248              		.loc 1 70 0
+ 3249 0374 0030A0E3 		mov	r3, #0
+ 3250 0378 12304BE5 		strb	r3, [fp, #-18]
+ 3251 037c 150000EA 		b	.L21
+ 3252              	.L23:
+  71:../sudoku_2025.c ****             if (celda_leer_valor(cuadricula[i][j]) != 0) {
+ 3253              		.loc 1 71 0
+ 3254 0380 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3255 0384 8332A0E1 		mov	r3, r3, asl #5
+ 3256 0388 18201BE5 		ldr	r2, [fp, #-24]
+ 3257 038c 032082E0 		add	r2, r2, r3
+ 3258 0390 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3259 0394 8330A0E1 		mov	r3, r3, asl #1
+ 3260 0398 033082E0 		add	r3, r2, r3
+ 3261 039c B030D3E1 		ldrh	r3, [r3, #0]
+ 3262 03a0 0300A0E1 		mov	r0, r3
+ 3263 03a4 30FFFFEB 		bl	celda_leer_valor
+ 3264 03a8 0030A0E1 		mov	r3, r0
+ 3265 03ac 000053E3 		cmp	r3, #0
+ 3266 03b0 0500000A 		beq	.L22
+  72:../sudoku_2025.c ****                 // Celda con valor - propagar su valor para eliminar candidatos
+  73:../sudoku_2025.c ****                 candidatos_propagar_c(cuadricula, i, j);
+ 3267              		.loc 1 73 0
+ 3268 03b4 11205BE5 		ldrb	r2, [fp, #-17]	@ zero_extendqisi2
+ 3269 03b8 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3270 03bc 18001BE5 		ldr	r0, [fp, #-24]
+ 3271 03c0 0210A0E1 		mov	r1, r2
+ 3272 03c4 0320A0E1 		mov	r2, r3
+ 3273 03c8 FEFFFFEB 		bl	candidatos_propagar_c
+ 3274              	.L22:
+  70:../sudoku_2025.c ****         for (j = 0; j < NUM_FILAS; j++) {
+ 3275              		.loc 1 70 0
+ 3276 03cc 12305BE5 		ldrb	r3, [fp, #-18]
+ 3277 03d0 013083E2 		add	r3, r3, #1
+ 3278 03d4 12304BE5 		strb	r3, [fp, #-18]
+ 3279              	.L21:
+  70:../sudoku_2025.c ****         for (j = 0; j < NUM_FILAS; j++) {
+ 3280              		.loc 1 70 0 is_stmt 0 discriminator 1
+ 3281 03d8 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3282 03dc 080053E3 		cmp	r3, #8
+ 3283 03e0 E6FFFF9A 		bls	.L23
+  69:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3284              		.loc 1 69 0 is_stmt 1
+ 3285 03e4 11305BE5 		ldrb	r3, [fp, #-17]
+ 3286 03e8 013083E2 		add	r3, r3, #1
+ 3287 03ec 11304BE5 		strb	r3, [fp, #-17]
+ 3288              	.L20:
+  69:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS; i++) {
+ 3289              		.loc 1 69 0 is_stmt 0 discriminator 1
+ 3290 03f0 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3291 03f4 080053E3 		cmp	r3, #8
+ 3292 03f8 DDFFFF9A 		bls	.L24
+  74:../sudoku_2025.c ****             }
+  75:../sudoku_2025.c ****         }
+  76:../sudoku_2025.c ****     }
+  77:../sudoku_2025.c ****     
+  78:../sudoku_2025.c ****     //retornar el numero de celdas vacías
+  79:../sudoku_2025.c ****     return celdas_vacias;
+ 3293              		.loc 1 79 0 is_stmt 1
+ 3294 03fc 10301BE5 		ldr	r3, [fp, #-16]
+  80:../sudoku_2025.c **** }
+ 3295              		.loc 1 80 0
+ 3296 0400 0300A0E1 		mov	r0, r3
+ 3297 0404 0CD04BE2 		sub	sp, fp, #12
+ 3298 0408 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3299 040c 1EFF2FE1 		bx	lr
+ 3300              		.cfi_endproc
+ 3301              	.LFE8:
+ 3303              		.align	2
+ 3304              		.global	candidatos_actualizar_c_arm
+ 3306              	candidatos_actualizar_c_arm:
+ 3307              	.LFB9:
+  81:../sudoku_2025.c **** 
+  82:../sudoku_2025.c **** 
+  83:../sudoku_2025.c **** /* Init del sudoku en c�digo C invocando a propagar en arm
+  84:../sudoku_2025.c ****  * Recibe la cuadr�cula como primer par�metro
+  85:../sudoku_2025.c ****  * y devuelve en celdas_vacias el n�mero de celdas vac�as
+  86:../sudoku_2025.c ****  */
+  87:../sudoku_2025.c **** 
+  88:../sudoku_2025.c **** int candidatos_actualizar_c_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS])
+  89:../sudoku_2025.c **** {
+ 3308              		.loc 1 89 0
+ 3309              		.cfi_startproc
+ 3310              		@ Function supports interworking.
+ 3311              		@ args = 0, pretend = 0, frame = 16
+ 3312              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3313 0410 0DC0A0E1 		mov	ip, sp
+ 3314              	.LCFI8:
+ 3315              		.cfi_def_cfa_register 12
+ 3316 0414 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3317 0418 04B04CE2 		sub	fp, ip, #4
+ 3318              		.cfi_offset 14, -8
+ 3319              		.cfi_offset 13, -12
+ 3320              		.cfi_offset 11, -16
+ 3321              	.LCFI9:
+ 3322              		.cfi_def_cfa 11, 4
+ 3323 041c 10D04DE2 		sub	sp, sp, #16
+ 3324 0420 18000BE5 		str	r0, [fp, #-24]
+  90:../sudoku_2025.c **** 	int celdas_vacias = 0;
+ 3325              		.loc 1 90 0
+ 3326 0424 0030A0E3 		mov	r3, #0
+ 3327 0428 10300BE5 		str	r3, [fp, #-16]
+  91:../sudoku_2025.c **** 	uint8_t i, j;
+  92:../sudoku_2025.c **** 
+  93:../sudoku_2025.c **** 	//borrar todos los candidatos de TODAS las celdas y contar las vacías
+  94:../sudoku_2025.c **** 	for (i = 0; i < NUM_FILAS; i++) {
+ 3328              		.loc 1 94 0
+ 3329 042c 0030A0E3 		mov	r3, #0
+ 3330 0430 11304BE5 		strb	r3, [fp, #-17]
+ 3331 0434 2E0000EA 		b	.L26
+ 3332              	.L30:
+  95:../sudoku_2025.c **** 		for (j = 0; j < NUM_FILAS; j++) {
+ 3333              		.loc 1 95 0
+ 3334 0438 0030A0E3 		mov	r3, #0
+ 3335 043c 12304BE5 		strb	r3, [fp, #-18]
+ 3336 0440 250000EA 		b	.L27
+ 3337              	.L29:
+  96:../sudoku_2025.c **** 			// Resetear candidatos para TODAS las celdas (poner todos a 0, es decir, todos son candidatos)
+  97:../sudoku_2025.c **** 			cuadricula[i][j] = cuadricula[i][j] & 0x007F; // Limpiar bits de candidatos [15,7]
+ 3338              		.loc 1 97 0
+ 3339 0444 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3340 0448 8332A0E1 		mov	r3, r3, asl #5
+ 3341 044c 18201BE5 		ldr	r2, [fp, #-24]
+ 3342 0450 031082E0 		add	r1, r2, r3
+ 3343 0454 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3344 0458 11205BE5 		ldrb	r2, [fp, #-17]	@ zero_extendqisi2
+ 3345 045c 8222A0E1 		mov	r2, r2, asl #5
+ 3346 0460 18001BE5 		ldr	r0, [fp, #-24]
+ 3347 0464 020080E0 		add	r0, r0, r2
+ 3348 0468 12205BE5 		ldrb	r2, [fp, #-18]	@ zero_extendqisi2
+ 3349 046c 8220A0E1 		mov	r2, r2, asl #1
+ 3350 0470 022080E0 		add	r2, r0, r2
+ 3351 0474 B020D2E1 		ldrh	r2, [r2, #0]
+ 3352 0478 7F2002E2 		and	r2, r2, #127
+ 3353 047c 0228A0E1 		mov	r2, r2, asl #16
+ 3354 0480 2228A0E1 		mov	r2, r2, lsr #16
+ 3355 0484 8330A0E1 		mov	r3, r3, asl #1
+ 3356 0488 033081E0 		add	r3, r1, r3
+ 3357 048c B020C3E1 		strh	r2, [r3, #0]	@ movhi
+  98:../sudoku_2025.c **** 			
+  99:../sudoku_2025.c **** 			if (celda_leer_valor(cuadricula[i][j]) == 0) {
+ 3358              		.loc 1 99 0
+ 3359 0490 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3360 0494 8332A0E1 		mov	r3, r3, asl #5
+ 3361 0498 18201BE5 		ldr	r2, [fp, #-24]
+ 3362 049c 032082E0 		add	r2, r2, r3
+ 3363 04a0 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3364 04a4 8330A0E1 		mov	r3, r3, asl #1
+ 3365 04a8 033082E0 		add	r3, r2, r3
+ 3366 04ac B030D3E1 		ldrh	r3, [r3, #0]
+ 3367 04b0 0300A0E1 		mov	r0, r3
+ 3368 04b4 ECFEFFEB 		bl	celda_leer_valor
+ 3369 04b8 0030A0E1 		mov	r3, r0
+ 3370 04bc 000053E3 		cmp	r3, #0
+ 3371 04c0 0200001A 		bne	.L28
+ 100:../sudoku_2025.c **** 				celdas_vacias++;
+ 3372              		.loc 1 100 0
+ 3373 04c4 10301BE5 		ldr	r3, [fp, #-16]
+ 3374 04c8 013083E2 		add	r3, r3, #1
+ 3375 04cc 10300BE5 		str	r3, [fp, #-16]
+ 3376              	.L28:
+  95:../sudoku_2025.c **** 		for (j = 0; j < NUM_FILAS; j++) {
+ 3377              		.loc 1 95 0
+ 3378 04d0 12305BE5 		ldrb	r3, [fp, #-18]
+ 3379 04d4 013083E2 		add	r3, r3, #1
+ 3380 04d8 12304BE5 		strb	r3, [fp, #-18]
+ 3381              	.L27:
+  95:../sudoku_2025.c **** 		for (j = 0; j < NUM_FILAS; j++) {
+ 3382              		.loc 1 95 0 is_stmt 0 discriminator 1
+ 3383 04dc 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3384 04e0 080053E3 		cmp	r3, #8
+ 3385 04e4 D6FFFF9A 		bls	.L29
+  94:../sudoku_2025.c **** 	for (i = 0; i < NUM_FILAS; i++) {
+ 3386              		.loc 1 94 0 is_stmt 1
+ 3387 04e8 11305BE5 		ldrb	r3, [fp, #-17]
+ 3388 04ec 013083E2 		add	r3, r3, #1
+ 3389 04f0 11304BE5 		strb	r3, [fp, #-17]
+ 3390              	.L26:
+  94:../sudoku_2025.c **** 	for (i = 0; i < NUM_FILAS; i++) {
+ 3391              		.loc 1 94 0 is_stmt 0 discriminator 1
+ 3392 04f4 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3393 04f8 080053E3 		cmp	r3, #8
+ 3394 04fc CDFFFF9A 		bls	.L30
+ 101:../sudoku_2025.c **** 			}
+ 102:../sudoku_2025.c **** 		}
+ 103:../sudoku_2025.c **** 	}
+ 104:../sudoku_2025.c **** 
+ 105:../sudoku_2025.c **** 	//recalcular candidatos usando la función ARM
+ 106:../sudoku_2025.c **** 	for (i = 0; i < NUM_FILAS; i++) {
+ 3395              		.loc 1 106 0 is_stmt 1
+ 3396 0500 0030A0E3 		mov	r3, #0
+ 3397 0504 11304BE5 		strb	r3, [fp, #-17]
+ 3398 0508 1E0000EA 		b	.L31
+ 3399              	.L35:
+ 107:../sudoku_2025.c **** 		for (j = 0; j < NUM_FILAS; j++) {
+ 3400              		.loc 1 107 0
+ 3401 050c 0030A0E3 		mov	r3, #0
+ 3402 0510 12304BE5 		strb	r3, [fp, #-18]
+ 3403 0514 150000EA 		b	.L32
+ 3404              	.L34:
+ 108:../sudoku_2025.c **** 			if (celda_leer_valor(cuadricula[i][j]) != 0) {
+ 3405              		.loc 1 108 0
+ 3406 0518 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3407 051c 8332A0E1 		mov	r3, r3, asl #5
+ 3408 0520 18201BE5 		ldr	r2, [fp, #-24]
+ 3409 0524 032082E0 		add	r2, r2, r3
+ 3410 0528 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3411 052c 8330A0E1 		mov	r3, r3, asl #1
+ 3412 0530 033082E0 		add	r3, r2, r3
+ 3413 0534 B030D3E1 		ldrh	r3, [r3, #0]
+ 3414 0538 0300A0E1 		mov	r0, r3
+ 3415 053c CAFEFFEB 		bl	celda_leer_valor
+ 3416 0540 0030A0E1 		mov	r3, r0
+ 3417 0544 000053E3 		cmp	r3, #0
+ 3418 0548 0500000A 		beq	.L33
+ 109:../sudoku_2025.c **** 				// Celda con valor - propagar usando función ARM optimizada
+ 110:../sudoku_2025.c **** 				candidatos_propagar_arm(cuadricula, i, j);
+ 3419              		.loc 1 110 0
+ 3420 054c 11205BE5 		ldrb	r2, [fp, #-17]	@ zero_extendqisi2
+ 3421 0550 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3422 0554 18001BE5 		ldr	r0, [fp, #-24]
+ 3423 0558 0210A0E1 		mov	r1, r2
+ 3424 055c 0320A0E1 		mov	r2, r3
+ 3425 0560 FEFFFFEB 		bl	candidatos_propagar_arm
+ 3426              	.L33:
+ 107:../sudoku_2025.c **** 		for (j = 0; j < NUM_FILAS; j++) {
+ 3427              		.loc 1 107 0
+ 3428 0564 12305BE5 		ldrb	r3, [fp, #-18]
+ 3429 0568 013083E2 		add	r3, r3, #1
+ 3430 056c 12304BE5 		strb	r3, [fp, #-18]
+ 3431              	.L32:
+ 107:../sudoku_2025.c **** 		for (j = 0; j < NUM_FILAS; j++) {
+ 3432              		.loc 1 107 0 is_stmt 0 discriminator 1
+ 3433 0570 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3434 0574 080053E3 		cmp	r3, #8
+ 3435 0578 E6FFFF9A 		bls	.L34
+ 106:../sudoku_2025.c **** 	for (i = 0; i < NUM_FILAS; i++) {
+ 3436              		.loc 1 106 0 is_stmt 1
+ 3437 057c 11305BE5 		ldrb	r3, [fp, #-17]
+ 3438 0580 013083E2 		add	r3, r3, #1
+ 3439 0584 11304BE5 		strb	r3, [fp, #-17]
+ 3440              	.L31:
+ 106:../sudoku_2025.c **** 	for (i = 0; i < NUM_FILAS; i++) {
+ 3441              		.loc 1 106 0 is_stmt 0 discriminator 1
+ 3442 0588 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3443 058c 080053E3 		cmp	r3, #8
+ 3444 0590 DDFFFF9A 		bls	.L35
+ 111:../sudoku_2025.c **** 			}
+ 112:../sudoku_2025.c **** 		}
+ 113:../sudoku_2025.c **** 	}
+ 114:../sudoku_2025.c **** 
+ 115:../sudoku_2025.c **** 	//retornar el numero de celdas vacías
+ 116:../sudoku_2025.c **** 	return celdas_vacias;
+ 3445              		.loc 1 116 0 is_stmt 1
+ 3446 0594 10301BE5 		ldr	r3, [fp, #-16]
+ 117:../sudoku_2025.c **** }
+ 3447              		.loc 1 117 0
+ 3448 0598 0300A0E1 		mov	r0, r3
+ 3449 059c 0CD04BE2 		sub	sp, fp, #12
+ 3450 05a0 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3451 05a4 1EFF2FE1 		bx	lr
+ 3452              		.cfi_endproc
+ 3453              	.LFE9:
+ 3455              		.align	2
+ 3457              	cuadricula_candidatos_verificar:
+ 3458              	.LFB10:
+ 118:../sudoku_2025.c **** 
+ 119:../sudoku_2025.c **** static int
+ 120:../sudoku_2025.c **** cuadricula_candidatos_verificar(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
+ 121:../sudoku_2025.c **** 	 CELDA solucion[NUM_FILAS][NUM_COLUMNAS])
+ 122:../sudoku_2025.c **** {
+ 3459              		.loc 1 122 0
+ 3460              		.cfi_startproc
+ 3461              		@ Function supports interworking.
+ 3462              		@ args = 0, pretend = 0, frame = 24
+ 3463              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3464 05a8 0DC0A0E1 		mov	ip, sp
+ 3465              	.LCFI10:
+ 3466              		.cfi_def_cfa_register 12
+ 3467 05ac 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3468 05b0 04B04CE2 		sub	fp, ip, #4
+ 3469              		.cfi_offset 14, -8
+ 3470              		.cfi_offset 13, -12
+ 3471              		.cfi_offset 11, -16
+ 3472              	.LCFI11:
+ 3473              		.cfi_def_cfa 11, 4
+ 3474 05b4 18D04DE2 		sub	sp, sp, #24
+ 3475 05b8 20000BE5 		str	r0, [fp, #-32]
+ 3476 05bc 24100BE5 		str	r1, [fp, #-36]
+ 123:../sudoku_2025.c ****     int correcto = TRUE;
+ 3477              		.loc 1 123 0
+ 3478 05c0 0130A0E3 		mov	r3, #1
+ 3479 05c4 10300BE5 		str	r3, [fp, #-16]
+ 124:../sudoku_2025.c ****     uint8_t i;
+ 125:../sudoku_2025.c ****     uint8_t j;
+ 126:../sudoku_2025.c **** 
+ 127:../sudoku_2025.c ****     // Verificar que los candidatos coincidan con la solución
+ 128:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS && correcto; i++) {
+ 3480              		.loc 1 128 0
+ 3481 05c8 0030A0E3 		mov	r3, #0
+ 3482 05cc 11304BE5 		strb	r3, [fp, #-17]
+ 3483 05d0 260000EA 		b	.L37
+ 3484              	.L43:
+ 129:../sudoku_2025.c **** 
+ 130:../sudoku_2025.c ****     	for (j = 0; j < NUM_COLUMNAS && correcto; j++) {
+ 3485              		.loc 1 130 0
+ 3486 05d4 0030A0E3 		mov	r3, #0
+ 3487 05d8 12304BE5 		strb	r3, [fp, #-18]
+ 3488 05dc 1A0000EA 		b	.L38
+ 3489              	.L41:
+ 3490              	.LBB2:
+ 131:../sudoku_2025.c ****             // Compara candidatos con solución
+ 132:../sudoku_2025.c **** 			// Extraer bits de candidatos [15,7] de ambas celdas
+ 133:../sudoku_2025.c **** 			uint16_t valor_cuadricula = cuadricula[i][j];
+ 3491              		.loc 1 133 0
+ 3492 05e0 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3493 05e4 8332A0E1 		mov	r3, r3, asl #5
+ 3494 05e8 20201BE5 		ldr	r2, [fp, #-32]
+ 3495 05ec 032082E0 		add	r2, r2, r3
+ 3496 05f0 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3497 05f4 8330A0E1 		mov	r3, r3, asl #1
+ 3498 05f8 033082E0 		add	r3, r2, r3
+ 3499 05fc B030D3E1 		ldrh	r3, [r3, #0]	@ movhi
+ 3500 0600 B4314BE1 		strh	r3, [fp, #-20]	@ movhi
+ 134:../sudoku_2025.c **** 			uint16_t valor_solucion = solucion[i][j];
+ 3501              		.loc 1 134 0
+ 3502 0604 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3503 0608 8332A0E1 		mov	r3, r3, asl #5
+ 3504 060c 24201BE5 		ldr	r2, [fp, #-36]
+ 3505 0610 032082E0 		add	r2, r2, r3
+ 3506 0614 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3507 0618 8330A0E1 		mov	r3, r3, asl #1
+ 3508 061c 033082E0 		add	r3, r2, r3
+ 3509 0620 B030D3E1 		ldrh	r3, [r3, #0]	@ movhi
+ 3510 0624 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
+ 135:../sudoku_2025.c ****                 
+ 136:../sudoku_2025.c **** 			// Los candidatos deben coincidir exactamente
+ 137:../sudoku_2025.c **** 			if (valor_cuadricula != valor_solucion) {
+ 3511              		.loc 1 137 0
+ 3512 0628 B4215BE1 		ldrh	r2, [fp, #-20]
+ 3513 062c B6315BE1 		ldrh	r3, [fp, #-22]
+ 3514 0630 030052E1 		cmp	r2, r3
+ 3515 0634 0100000A 		beq	.L39
+ 138:../sudoku_2025.c **** 				correcto = FALSE;
+ 3516              		.loc 1 138 0
+ 3517 0638 0030A0E3 		mov	r3, #0
+ 3518 063c 10300BE5 		str	r3, [fp, #-16]
+ 3519              	.L39:
+ 3520              	.LBE2:
+ 130:../sudoku_2025.c ****     	for (j = 0; j < NUM_COLUMNAS && correcto; j++) {
+ 3521              		.loc 1 130 0
+ 3522 0640 12305BE5 		ldrb	r3, [fp, #-18]
+ 3523 0644 013083E2 		add	r3, r3, #1
+ 3524 0648 12304BE5 		strb	r3, [fp, #-18]
+ 3525              	.L38:
+ 130:../sudoku_2025.c ****     	for (j = 0; j < NUM_COLUMNAS && correcto; j++) {
+ 3526              		.loc 1 130 0 is_stmt 0 discriminator 1
+ 3527 064c 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 3528 0650 0F0053E3 		cmp	r3, #15
+ 3529 0654 0200008A 		bhi	.L40
+ 130:../sudoku_2025.c ****     	for (j = 0; j < NUM_COLUMNAS && correcto; j++) {
+ 3530              		.loc 1 130 0 discriminator 2
+ 3531 0658 10301BE5 		ldr	r3, [fp, #-16]
+ 3532 065c 000053E3 		cmp	r3, #0
+ 3533 0660 DEFFFF1A 		bne	.L41
+ 3534              	.L40:
+ 128:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS && correcto; i++) {
+ 3535              		.loc 1 128 0 is_stmt 1
+ 3536 0664 11305BE5 		ldrb	r3, [fp, #-17]
+ 3537 0668 013083E2 		add	r3, r3, #1
+ 3538 066c 11304BE5 		strb	r3, [fp, #-17]
+ 3539              	.L37:
+ 128:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS && correcto; i++) {
+ 3540              		.loc 1 128 0 is_stmt 0 discriminator 1
+ 3541 0670 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 3542 0674 080053E3 		cmp	r3, #8
+ 3543 0678 0200008A 		bhi	.L42
+ 128:../sudoku_2025.c ****     for (i = 0; i < NUM_FILAS && correcto; i++) {
+ 3544              		.loc 1 128 0 discriminator 2
+ 3545 067c 10301BE5 		ldr	r3, [fp, #-16]
+ 3546 0680 000053E3 		cmp	r3, #0
+ 3547 0684 D2FFFF1A 		bne	.L43
+ 3548              	.L42:
+ 139:../sudoku_2025.c **** 			}
+ 140:../sudoku_2025.c ****         }
+ 141:../sudoku_2025.c ****     }
+ 142:../sudoku_2025.c **** 
+ 143:../sudoku_2025.c ****     return correcto;
+ 3549              		.loc 1 143 0 is_stmt 1
+ 3550 0688 10301BE5 		ldr	r3, [fp, #-16]
+ 144:../sudoku_2025.c **** }
+ 3551              		.loc 1 144 0
+ 3552 068c 0300A0E1 		mov	r0, r3
+ 3553 0690 0CD04BE2 		sub	sp, fp, #12
+ 3554 0694 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3555 0698 1EFF2FE1 		bx	lr
+ 3556              		.cfi_endproc
+ 3557              	.LFE10:
+ 3559              		.align	2
+ 3560              		.global	sudoku9x9
+ 3562              	sudoku9x9:
+ 3563              	.LFB11:
+ 145:../sudoku_2025.c **** 
+ 146:../sudoku_2025.c **** 
+ 147:../sudoku_2025.c **** /* *****************************************************************************
+ 148:../sudoku_2025.c ****  * Funciones p�blicas
+ 149:../sudoku_2025.c ****  * (pueden ser invocadas desde otro fichero) */
+ 150:../sudoku_2025.c **** 
+ 151:../sudoku_2025.c **** /* *****************************************************************************
+ 152:../sudoku_2025.c ****  * programa principal del juego que recibe el tablero */
+ 153:../sudoku_2025.c **** 
+ 154:../sudoku_2025.c **** int
+ 155:../sudoku_2025.c **** sudoku9x9(CELDA cuadricula_C_C[NUM_FILAS][NUM_COLUMNAS],
+ 156:../sudoku_2025.c **** 	CELDA cuadricula_C_ARM[NUM_FILAS][NUM_COLUMNAS],
+ 157:../sudoku_2025.c **** 	CELDA cuadricula_ARM_ARM[NUM_FILAS][NUM_COLUMNAS],
+ 158:../sudoku_2025.c **** 	CELDA cuadricula_ARM_ARM_ALL[NUM_FILAS][NUM_COLUMNAS],
+ 159:../sudoku_2025.c **** 	CELDA cuadricula_ARM_C[NUM_FILAS][NUM_COLUMNAS],
+ 160:../sudoku_2025.c **** 	CELDA solucion[NUM_FILAS][NUM_COLUMNAS])
+ 161:../sudoku_2025.c **** {
+ 3564              		.loc 1 161 0
+ 3565              		.cfi_startproc
+ 3566              		@ Function supports interworking.
+ 3567              		@ args = 8, pretend = 0, frame = 48
+ 3568              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3569 069c 0DC0A0E1 		mov	ip, sp
+ 3570              	.LCFI12:
+ 3571              		.cfi_def_cfa_register 12
+ 3572 06a0 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3573 06a4 04B04CE2 		sub	fp, ip, #4
+ 3574              		.cfi_offset 14, -8
+ 3575              		.cfi_offset 13, -12
+ 3576              		.cfi_offset 11, -16
+ 3577              	.LCFI13:
+ 3578              		.cfi_def_cfa 11, 4
+ 3579 06a8 30D04DE2 		sub	sp, sp, #48
+ 3580 06ac 30000BE5 		str	r0, [fp, #-48]
+ 3581 06b0 34100BE5 		str	r1, [fp, #-52]
+ 3582 06b4 38200BE5 		str	r2, [fp, #-56]
+ 3583 06b8 3C300BE5 		str	r3, [fp, #-60]
+ 162:../sudoku_2025.c ****     int celdas_vacias[5];    //numero de celdas aun vacías
+ 163:../sudoku_2025.c ****     int correcto = 0;
+ 3584              		.loc 1 163 0
+ 3585 06bc 0030A0E3 		mov	r3, #0
+ 3586 06c0 14300BE5 		str	r3, [fp, #-20]
+ 164:../sudoku_2025.c ****     size_t i;
+ 165:../sudoku_2025.c **** 
+ 166:../sudoku_2025.c ****     /* calcula lista de candidatos, versión C */
+ 167:../sudoku_2025.c ****     celdas_vacias[0] = candidatos_actualizar_c(cuadricula_C_C);
+ 3587              		.loc 1 167 0
+ 3588 06c4 30001BE5 		ldr	r0, [fp, #-48]
+ 3589 06c8 FEFFFFEB 		bl	candidatos_actualizar_c
+ 3590 06cc 0030A0E1 		mov	r3, r0
+ 3591 06d0 28300BE5 		str	r3, [fp, #-40]
+ 168:../sudoku_2025.c **** 
+ 169:../sudoku_2025.c ****     /* Calcular candidatos para las otras versiones */
+ 170:../sudoku_2025.c ****     celdas_vacias[1] = candidatos_actualizar_c_arm(cuadricula_C_ARM);
+ 3592              		.loc 1 170 0
+ 3593 06d4 34001BE5 		ldr	r0, [fp, #-52]
+ 3594 06d8 FEFFFFEB 		bl	candidatos_actualizar_c_arm
+ 3595 06dc 0030A0E1 		mov	r3, r0
+ 3596 06e0 24300BE5 		str	r3, [fp, #-36]
+ 171:../sudoku_2025.c ****     celdas_vacias[2] = candidatos_actualizar_arm_arm(cuadricula_ARM_ARM);
+ 3597              		.loc 1 171 0
+ 3598 06e4 38001BE5 		ldr	r0, [fp, #-56]
+ 3599 06e8 FEFFFFEB 		bl	candidatos_actualizar_arm_arm
+ 3600 06ec 0030A0E1 		mov	r3, r0
+ 3601 06f0 20300BE5 		str	r3, [fp, #-32]
+ 172:../sudoku_2025.c ****     celdas_vacias[3] = candidatos_actualizar_all(cuadricula_ARM_ARM_ALL);
+ 3602              		.loc 1 172 0
+ 3603 06f4 3C001BE5 		ldr	r0, [fp, #-60]
+ 3604 06f8 FEFFFFEB 		bl	candidatos_actualizar_all
+ 3605 06fc 0030A0E1 		mov	r3, r0
+ 3606 0700 1C300BE5 		str	r3, [fp, #-28]
+ 173:../sudoku_2025.c ****     celdas_vacias[4] = candidatos_actualizar_arm_c(cuadricula_ARM_C);
+ 3607              		.loc 1 173 0
+ 3608 0704 04009BE5 		ldr	r0, [fp, #4]
+ 3609 0708 FEFFFFEB 		bl	candidatos_actualizar_arm_c
+ 3610 070c 0030A0E1 		mov	r3, r0
+ 3611 0710 18300BE5 		str	r3, [fp, #-24]
+ 174:../sudoku_2025.c **** 
+ 175:../sudoku_2025.c ****  	for (i=1; i < 5; ++i) {
+ 3612              		.loc 1 175 0
+ 3613 0714 0130A0E3 		mov	r3, #1
+ 3614 0718 10300BE5 		str	r3, [fp, #-16]
+ 3615 071c 0E0000EA 		b	.L45
+ 3616              	.L48:
+ 176:../sudoku_2025.c **** 		if (celdas_vacias[i] != celdas_vacias[0]) {
+ 3617              		.loc 1 176 0
+ 3618 0720 10201BE5 		ldr	r2, [fp, #-16]
+ 3619 0724 1B30E0E3 		mvn	r3, #27
+ 3620 0728 0221A0E1 		mov	r2, r2, asl #2
+ 3621 072c 0C104BE2 		sub	r1, fp, #12
+ 3622 0730 022081E0 		add	r2, r1, r2
+ 3623 0734 033082E0 		add	r3, r2, r3
+ 3624 0738 002093E5 		ldr	r2, [r3, #0]
+ 3625 073c 28301BE5 		ldr	r3, [fp, #-40]
+ 3626 0740 030052E1 		cmp	r2, r3
+ 3627 0744 0100000A 		beq	.L46
+ 177:../sudoku_2025.c **** 		return -1;
+ 3628              		.loc 1 177 0
+ 3629 0748 0030E0E3 		mvn	r3, #0
+ 3630 074c 330000EA 		b	.L47
+ 3631              	.L46:
+ 175:../sudoku_2025.c ****  	for (i=1; i < 5; ++i) {
+ 3632              		.loc 1 175 0
+ 3633 0750 10301BE5 		ldr	r3, [fp, #-16]
+ 3634 0754 013083E2 		add	r3, r3, #1
+ 3635 0758 10300BE5 		str	r3, [fp, #-16]
+ 3636              	.L45:
+ 175:../sudoku_2025.c ****  	for (i=1; i < 5; ++i) {
+ 3637              		.loc 1 175 0 is_stmt 0 discriminator 1
+ 3638 075c 10301BE5 		ldr	r3, [fp, #-16]
+ 3639 0760 040053E3 		cmp	r3, #4
+ 3640 0764 EDFFFF9A 		bls	.L48
+ 178:../sudoku_2025.c **** 		}
+ 179:../sudoku_2025.c **** 	}
+ 180:../sudoku_2025.c **** 
+ 181:../sudoku_2025.c ****     /* verificar que la lista de candidatos calculada es correcta */
+ 182:../sudoku_2025.c ****  	// cuadricula_C_C
+ 183:../sudoku_2025.c ****     correcto = cuadricula_candidatos_verificar(cuadricula_C_C, solucion);
+ 3641              		.loc 1 183 0 is_stmt 1
+ 3642 0768 30001BE5 		ldr	r0, [fp, #-48]
+ 3643 076c 08109BE5 		ldr	r1, [fp, #8]
+ 3644 0770 8CFFFFEB 		bl	cuadricula_candidatos_verificar
+ 3645 0774 14000BE5 		str	r0, [fp, #-20]
+ 184:../sudoku_2025.c ****     if (correcto == FALSE) {
+ 3646              		.loc 1 184 0
+ 3647 0778 14301BE5 		ldr	r3, [fp, #-20]
+ 3648 077c 000053E3 		cmp	r3, #0
+ 3649 0780 0100001A 		bne	.L49
+ 185:../sudoku_2025.c ****         return -2;
+ 3650              		.loc 1 185 0
+ 3651 0784 0130E0E3 		mvn	r3, #1
+ 3652 0788 240000EA 		b	.L47
+ 3653              	.L49:
+ 186:../sudoku_2025.c ****     }
+ 187:../sudoku_2025.c **** 
+ 188:../sudoku_2025.c ****     // cuadricula_C_ARM
+ 189:../sudoku_2025.c ****     correcto = cuadricula_candidatos_verificar(cuadricula_C_ARM, solucion);
+ 3654              		.loc 1 189 0
+ 3655 078c 34001BE5 		ldr	r0, [fp, #-52]
+ 3656 0790 08109BE5 		ldr	r1, [fp, #8]
+ 3657 0794 83FFFFEB 		bl	cuadricula_candidatos_verificar
+ 3658 0798 14000BE5 		str	r0, [fp, #-20]
+ 190:../sudoku_2025.c ****     if (correcto == FALSE) {
+ 3659              		.loc 1 190 0
+ 3660 079c 14301BE5 		ldr	r3, [fp, #-20]
+ 3661 07a0 000053E3 		cmp	r3, #0
+ 3662 07a4 0100001A 		bne	.L50
+ 191:../sudoku_2025.c ****     	return -3;
+ 3663              		.loc 1 191 0
+ 3664 07a8 0230E0E3 		mvn	r3, #2
+ 3665 07ac 1B0000EA 		b	.L47
+ 3666              	.L50:
+ 192:../sudoku_2025.c ****     }
+ 193:../sudoku_2025.c **** 
+ 194:../sudoku_2025.c ****     // cuadricula_ARM_ARM
+ 195:../sudoku_2025.c ****     correcto = cuadricula_candidatos_verificar(cuadricula_ARM_ARM, solucion);
+ 3667              		.loc 1 195 0
+ 3668 07b0 38001BE5 		ldr	r0, [fp, #-56]
+ 3669 07b4 08109BE5 		ldr	r1, [fp, #8]
+ 3670 07b8 7AFFFFEB 		bl	cuadricula_candidatos_verificar
+ 3671 07bc 14000BE5 		str	r0, [fp, #-20]
+ 196:../sudoku_2025.c **** 	if (correcto == FALSE) {
+ 3672              		.loc 1 196 0
+ 3673 07c0 14301BE5 		ldr	r3, [fp, #-20]
+ 3674 07c4 000053E3 		cmp	r3, #0
+ 3675 07c8 0100001A 		bne	.L51
+ 197:../sudoku_2025.c **** 		return -4;
+ 3676              		.loc 1 197 0
+ 3677 07cc 0330E0E3 		mvn	r3, #3
+ 3678 07d0 120000EA 		b	.L47
+ 3679              	.L51:
+ 198:../sudoku_2025.c **** 	}
+ 199:../sudoku_2025.c **** 
+ 200:../sudoku_2025.c **** 	// cuadricula_ARM_ARM_ALL
+ 201:../sudoku_2025.c ****     correcto = cuadricula_candidatos_verificar(cuadricula_ARM_ARM_ALL, solucion);
+ 3680              		.loc 1 201 0
+ 3681 07d4 3C001BE5 		ldr	r0, [fp, #-60]
+ 3682 07d8 08109BE5 		ldr	r1, [fp, #8]
+ 3683 07dc 71FFFFEB 		bl	cuadricula_candidatos_verificar
+ 3684 07e0 14000BE5 		str	r0, [fp, #-20]
+ 202:../sudoku_2025.c **** 	if (correcto == FALSE) {
+ 3685              		.loc 1 202 0
+ 3686 07e4 14301BE5 		ldr	r3, [fp, #-20]
+ 3687 07e8 000053E3 		cmp	r3, #0
+ 3688 07ec 0100001A 		bne	.L52
+ 203:../sudoku_2025.c **** 		return -5;
+ 3689              		.loc 1 203 0
+ 3690 07f0 0430E0E3 		mvn	r3, #4
+ 3691 07f4 090000EA 		b	.L47
+ 3692              	.L52:
+ 204:../sudoku_2025.c **** 	}
+ 205:../sudoku_2025.c **** 
+ 206:../sudoku_2025.c **** 	// cuadricula_ARM_C
+ 207:../sudoku_2025.c ****     correcto = cuadricula_candidatos_verificar(cuadricula_ARM_C, solucion);
+ 3693              		.loc 1 207 0
+ 3694 07f8 04009BE5 		ldr	r0, [fp, #4]
+ 3695 07fc 08109BE5 		ldr	r1, [fp, #8]
+ 3696 0800 68FFFFEB 		bl	cuadricula_candidatos_verificar
+ 3697 0804 14000BE5 		str	r0, [fp, #-20]
+ 208:../sudoku_2025.c **** 	if (correcto == FALSE) {
+ 3698              		.loc 1 208 0
+ 3699 0808 14301BE5 		ldr	r3, [fp, #-20]
+ 3700 080c 000053E3 		cmp	r3, #0
+ 3701 0810 0100001A 		bne	.L53
+ 209:../sudoku_2025.c **** 		return -6;
+ 3702              		.loc 1 209 0
+ 3703 0814 0530E0E3 		mvn	r3, #5
+ 3704 0818 000000EA 		b	.L47
+ 3705              	.L53:
+ 210:../sudoku_2025.c **** 	}
+ 211:../sudoku_2025.c **** 
+ 212:../sudoku_2025.c **** 	return 0; // Todo correcto
+ 3706              		.loc 1 212 0
+ 3707 081c 0030A0E3 		mov	r3, #0
+ 3708              	.L47:
+ 213:../sudoku_2025.c **** }
+ 3709              		.loc 1 213 0
+ 3710 0820 0300A0E1 		mov	r0, r3
+ 3711 0824 0CD04BE2 		sub	sp, fp, #12
+ 3712 0828 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3713 082c 1EFF2FE1 		bx	lr
+ 3714              		.cfi_endproc
+ 3715              	.LFE11:
+ 3717              		.align	2
+ 3718              		.global	main
+ 3720              	main:
+ 3721              	.LFB12:
+ 214:../sudoku_2025.c **** 
+ 215:../sudoku_2025.c **** int main(int argc, char const *argv[])
+ 216:../sudoku_2025.c **** {
+ 3722              		.loc 1 216 0
+ 3723              		.cfi_startproc
+ 3724              		@ Function supports interworking.
+ 3725              		@ args = 0, pretend = 0, frame = 8
+ 3726              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3727 0830 0DC0A0E1 		mov	ip, sp
+ 3728              	.LCFI14:
+ 3729              		.cfi_def_cfa_register 12
+ 3730 0834 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3731 0838 04B04CE2 		sub	fp, ip, #4
+ 3732              		.cfi_offset 14, -8
+ 3733              		.cfi_offset 13, -12
+ 3734              		.cfi_offset 11, -16
+ 3735              	.LCFI15:
+ 3736              		.cfi_def_cfa 11, 4
+ 3737 083c 10D04DE2 		sub	sp, sp, #16
+ 3738 0840 10000BE5 		str	r0, [fp, #-16]
+ 3739 0844 14100BE5 		str	r1, [fp, #-20]
+ 217:../sudoku_2025.c ****     sudoku9x9(cuadricula_C_C, cuadricula_C_ARM, cuadricula_ARM_ARM, cuadricula_ARM_ARM_ALL, cuadric
+ 3740              		.loc 1 217 0
+ 3741 0848 30309FE5 		ldr	r3, .L55
+ 3742 084c 00308DE5 		str	r3, [sp, #0]
+ 3743 0850 2C309FE5 		ldr	r3, .L55+4
+ 3744 0854 04308DE5 		str	r3, [sp, #4]
+ 3745 0858 28009FE5 		ldr	r0, .L55+8
+ 3746 085c 28109FE5 		ldr	r1, .L55+12
+ 3747 0860 28209FE5 		ldr	r2, .L55+16
+ 3748 0864 28309FE5 		ldr	r3, .L55+20
+ 3749 0868 FEFFFFEB 		bl	sudoku9x9
+ 218:../sudoku_2025.c ****     return 0;
+ 3750              		.loc 1 218 0
+ 3751 086c 0030A0E3 		mov	r3, #0
+ 219:../sudoku_2025.c **** }
+ 3752              		.loc 1 219 0
+ 3753 0870 0300A0E1 		mov	r0, r3
+ 3754 0874 0CD04BE2 		sub	sp, fp, #12
+ 3755 0878 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3756 087c 1EFF2FE1 		bx	lr
+ 3757              	.L56:
+ 3758              		.align	2
+ 3759              	.L55:
+ 3760 0880 40020000 		.word	cuadricula_ARM_C
+ 3761 0884 A0050000 		.word	solucion
+ 3762 0888 00000000 		.word	cuadricula_C_C
+ 3763 088c 20010000 		.word	cuadricula_C_ARM
+ 3764 0890 60030000 		.word	cuadricula_ARM_ARM
+ 3765 0894 80040000 		.word	cuadricula_ARM_ARM_ALL
+ 3766              		.cfi_endproc
+ 3767              	.LFE12:
+ 3769              		.section	.rodata
+ 3770              		.align	2
+ 3773              	C.0.4985:
+ 3774 0000 00       		.byte	0
+ 3775 0001 00       		.byte	0
+ 3776 0002 00       		.byte	0
+ 3777 0003 03       		.byte	3
+ 3778 0004 03       		.byte	3
+ 3779 0005 03       		.byte	3
+ 3780 0006 06       		.byte	6
+ 3781 0007 06       		.byte	6
+ 3782 0008 06       		.byte	6
+ 3783 0009 000000   		.text
+ 3784              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 sudoku_2025.c
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2010   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2012   .text:00000000 celda_eliminar_candidato
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2060   .text:0000006c celda_leer_valor
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2094   .data:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2097   .data:00000000 cuadricula_C_C
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2245   .data:00000120 cuadricula_C_ARM
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2393   .data:00000240 cuadricula_ARM_C
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2541   .data:00000360 cuadricula_ARM_ARM
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2689   .data:00000480 cuadricula_ARM_ARM_ALL
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2837   .data:000005a0 solucion
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:2986   .text:000000a4 candidatos_propagar_c
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3147   .text:00000274 $d
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3773   .rodata:00000000 C.0.4985
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3151   .text:00000278 $a
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3154   .text:00000278 candidatos_actualizar_c
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3306   .text:00000410 candidatos_actualizar_c_arm
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3457   .text:000005a8 cuadricula_candidatos_verificar
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3562   .text:0000069c sudoku9x9
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3720   .text:00000830 main
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3760   .text:00000880 $d
+C:\Users\jaime\AppData\Local\Temp\cckhXo0O.s:3770   .rodata:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+candidatos_propagar_arm
+candidatos_actualizar_arm_arm
+candidatos_actualizar_all
+candidatos_actualizar_arm_c
