@@ -1,26 +1,27 @@
 /*********************************************************************************************
-<<<<<<< HEAD
-* File��	tp.c
+* File:	tp.c
 * Author:	embest	
-* Desc��	LCD touch screen control function
-=======
-static volatile INT16U ts_x = 0;
-static volatile INT16U ts_y = 0;
-static volatile int ts_evento_pendiente = 0;
-
-* File£º	tp.c
-* Author:	embest	
-* Desc£º	LCD touch screen control function
->>>>>>> 2f6425bf6f4485e3e7aa3b8aaf2aba382a574797
+* Desc:	LCD touch screen control function
 * History:	
 *********************************************************************************************/
 
 /*--- include files ---*/
-#include <string.h>
 #include "tp.h"
 #include "lcd.h"
 
 void TSInt(void) __attribute__((interrupt("IRQ")));
+
+static volatile INT16U ts_x = 0;
+static volatile INT16U ts_y = 0;
+static volatile int ts_evento_pendiente = 0;
+static volatile int CheckTSP = 0;
+static volatile int oneTouch = 0;
+static unsigned int Vx = 0;
+static unsigned int Vy = 0;
+static unsigned int Xmax = 0;
+static unsigned int Ymax = 0;
+static unsigned int Xmin = 0;
+static unsigned int Ymin = 0;
 
 void TS_Test(void)
 {
@@ -43,7 +44,6 @@ void TS_Test(void)
 void TSInt(void)
 {
     int   i;
-    char fail = 0;
     ULONG tmp;
     ULONG Pt[6];
 
@@ -141,7 +141,7 @@ void TS_init(void)
     DelayTime(100); 
     
     rEXTINT |= 0x200;                // falling edge trigger
-    pISR_EINT2=(unsigned *)TSInt;       // set interrupt handler
+    pISR_EINT2=(unsigned)TSInt;       // set interrupt handler
     
     rCLKCON = 0x7ff8;                // enable clock
     rADCPSR = 0x1;//0x4;             // A/D prescaler

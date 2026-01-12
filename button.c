@@ -317,6 +317,12 @@ static void boton_confirmado(uint8_t boton_id) // MODIFICAR FUNCIONES ACTUALIZAR
                         }
                         break;
                 
+                case BORRAR_VALOR:
+                        estado_juego = INTRODUCIR_FILA;
+                        int_count = 9;  /* Iniciar en 9 para que al incrementar vaya a 0 */
+                        D8Led_symbol(15);  /* Mostrar 'F' de Fila */
+                        break;
+                
                 case PARTIDA_TERMINADA:
                         /* Mostrar pantalla de despedida solo una vez */
                         if (!pantalla_mostrada)
