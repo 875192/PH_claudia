@@ -6,6 +6,8 @@
 *********************************************************************************************/
 
 /*--- ficheros de cabecera ---*/
+#include <stdlib.h>
+#include <string.h>
 #include "def.h"
 #include "44b.h"
 #include "44blib.h"
@@ -341,7 +343,7 @@ void Lcd_Draw_VLine (INT16 usY0, INT16 usY1, INT16 usX0, INT8U ucColor, INT16U u
     }
 }
 
-void Lcd_DisplayString(INT16U usX0, INT16U usY0, INT8U *pucStr){
+void Lcd_DisplayString(INT16U usX0, INT16U usY0, const char *pucStr){
 
 }
 
@@ -355,14 +357,14 @@ void Lcd_DisplayString(INT16U usX0, INT16U usY0, INT8U *pucStr){
 * modify:
 * comment:		
 *********************************************************************************************/
-void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s)
+void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, const char *s)
 {
 	INT16 i,j,k,x,y,xx;
 	INT8U qm;
 	INT32U ulOffset;
 	INT8 ywbuf[16],temp[2];
     
-	for( i = 0; i < strlen((const char*)s); i++ )
+	for( i = 0; i < (INT16)strlen(s); i++ )
 	{
 		if( (INT8U)*(s+i) >= 161 )
 		{
@@ -405,7 +407,7 @@ void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s)
 * modify:
 * comment:
 *********************************************************************************************/
-void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0,INT8U ForeColor, INT8U* pucChar)
+void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0, INT8U ForeColor, const char *pucChar)
 {
 	INT32U i,j;
 	INT8U  ucTemp;
@@ -414,7 +416,7 @@ void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0,INT8U ForeColor, INT8U* pucChar)
 	{
 		for( i=0; i < 8; i++ )
 		{
-  			ucTemp = g_auc_Ascii6x8[(*pucChar) * 8 + i];
+  			ucTemp = g_auc_Ascii6x8[((INT8U)*pucChar) * 8 + i];
   			for( j = 0; j < 8; j++ )
   			{
   				if( (ucTemp & (0x80 >> j)) != 0 )
@@ -478,8 +480,6 @@ void Zdma0Done(void)
 *********************************************************************************************/
 void Lcd_Dma_Trans(void)
 {
-	INT8U err;
-	
 	ucZdma0Done=1;
 	//#define LCD_VIRTUAL_BUFFER	(0xc400000)
 	//#define LCD_ACTIVE_BUFFER	(LCD_VIRTUAL_BUFFER+(SCR_XSIZE*SCR_YSIZE/2))	//DMA ON
@@ -627,7 +627,7 @@ void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U
 	/* Si hay un número, dibujarlo */
 	if (numero >= 1 && numero <= 9)
 	{
-		INT8U num_str[2];
+		char num_str[2];
 		num_str[0] = '0' + numero;
 		num_str[1] = '\0';
 		
@@ -786,7 +786,7 @@ void Sudoku_Actualizar_Tiempo(INT32U tiempo_us)
 	INT16U segundos = segundos_totales % 60;
 	
 	/* Crear string en formato MM:SS */
-	INT8U tiempo_str[15];
+	char tiempo_str[15];
 	tiempo_str[0] = 'T';
 	tiempo_str[1] = 'i';
 	tiempo_str[2] = 'e';
@@ -831,7 +831,7 @@ void Sudoku_Pantalla_Final(INT32U tiempo_us)
 	INT16U segundos = segundos_totales % 60;
 	
 	/* Crear string en formato MM:SS */
-	INT8U tiempo_str[10];
+	char tiempo_str[10];
 	tiempo_str[0] = '0' + (minutos / 10);    /* Decenas de minutos */
 	tiempo_str[1] = '0' + (minutos % 10);    /* Unidades de minutos */
 	tiempo_str[2] = ':';
@@ -869,7 +869,7 @@ void Sudoku_Dibujar_Teclado_Tactil(void)
 
 	INT16U fila;
 	INT16U col;
-	INT8U num_str[2] = "0";
+	char num_str[2] = "0";
 
 	Lcd_Draw_Box(TECLADO_X, TECLADO_Y, TECLADO_X + TECLADO_W, TECLADO_Y + TECLADO_H, BLACK);
 
@@ -930,9 +930,9 @@ void Sudoku_Resaltar_Celda(INT16U fila, INT16U col, INT8U color)
 *********************************************************************************************/
 void Sudoku_Dibujar_Tablero(void)
 {
-	INT16U i, j;
-	INT8U fila_str[2] = "1";
-	INT8U col_str[2] = "1";
+	INT16U i;
+	char fila_str[2] = "1";
+	char col_str[2] = "1";
 	
 	/* Constantes del tablero */
 	#define MARGEN_IZQ 20

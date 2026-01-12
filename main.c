@@ -23,9 +23,6 @@
 #include "sudoku_2025.h"
 #include "lcd.h"
 
-/*--- variables globales ---*/
-char yn;
-
 /* Variables globales del Sudoku */
 #include "tableros.h"
 
@@ -119,9 +116,6 @@ static void procesar_toque_tactil(INT16U x, INT16U y)
 		}
 	}
 }
-
-/*--- extern function ---*/
-extern void Lcd_Test();
 
 /*--- function code ---*/
 /*********************************************************************************************

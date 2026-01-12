@@ -94,17 +94,17 @@ extern "C" {
 #define LCD_ACTIVE_BUFFER (0xc300000)
 #define LCD_VIRTUAL_BUFFER (0xc300000 + LCD_BUF_SIZE)
 
-#define LCD_PutPixel(x, y, c)                                                  \
-  (*(INT32U *)(LCD_VIRTUAL_BUFFER + (y)*SCR_XSIZE / 2 + ((x)) / 8 * 4)) =      \
-      (*(INT32U *)(LCD_VIRTUAL_BUFFER + (y)*SCR_XSIZE / 2 + ((x)) / 8 * 4)) &  \
-          (~(0xf0000000 >> ((((x)) % 8) * 4))) |                               \
-      ((c) << (7 - ((x)) % 8) * 4)
-#define LCD_Active_PutPixel(x, y, c)                                           \
-  (*(INT32U *)(LCD_ACTIVE_BUFFER + (y)*SCR_XSIZE / 2 + (319 - (x)) / 8 * 4)) = \
-      (*(INT32U *)(LCD_ACTIVE_BUFFER + (y)*SCR_XSIZE / 2 +                     \
-                   (319 - (x)) / 8 * 4)) &                                     \
-          (~(0xf0000000 >> (((319 - (x)) % 8) * 4))) |                         \
-      ((c) << (7 - (319 - (x)) % 8) * 4)
+#define LCD_PutPixel(x, y, c)                                                     \
+  (*(INT32U *)(LCD_VIRTUAL_BUFFER + (y)*SCR_XSIZE / 2 + ((x)) / 8 * 4)) =         \
+      ((*(INT32U *)(LCD_VIRTUAL_BUFFER + (y)*SCR_XSIZE / 2 + ((x)) / 8 * 4)) &    \
+       (~(0xf0000000 >> ((((x)) % 8) * 4)))) |                                   \
+      ((INT32U)(c) << ((7 - ((x)) % 8) * 4))
+#define LCD_Active_PutPixel(x, y, c)                                              \
+  (*(INT32U *)(LCD_ACTIVE_BUFFER + (y)*SCR_XSIZE / 2 + (319 - (x)) / 8 * 4)) =    \
+      ((*(INT32U *)(LCD_ACTIVE_BUFFER + (y)*SCR_XSIZE / 2 +                       \
+                    (319 - (x)) / 8 * 4)) &                                       \
+       (~(0xf0000000 >> (((319 - (x)) % 8) * 4)))) |                              \
+      ((INT32U)(c) << ((7 - (319 - (x)) % 8) * 4))
 
 #define GUISWAP(a, b)                                                          \
   {                                                                            \
@@ -134,11 +134,11 @@ void Lcd_Draw_VLine(INT16 usY0, INT16 usY1, INT16 usX0, INT8U ucColor,
                     INT16U usWidth);
 void Lcd_Anti_Disp(INT16U usX0, INT16U usY0, INT16U usX1, INT16U usY1);
 void Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ucChar);
-void Lcd_DisplayString(INT16U usX0, INT16U usY0, INT8U *pucStr);
+void Lcd_DisplayString(INT16U usX0, INT16U usY0, const char *pucStr);
 void Lcd_DisplayShort(INT16 sX, INT16 sY, INT16U usInt);
 void Zdma0Done(void) __attribute__((interrupt("IRQ")));
-void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U *pucChar);
-void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U *s);
+void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0, INT8U ForeColor, const char *pucChar);
+void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, const char *s);
 void Lcd_DspHz16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U *s);
 void ReverseLine(INT32U ulHeight, INT32U ulY);
 INT8U LCD_GetPixel(INT16U usX, INT16U usY);
