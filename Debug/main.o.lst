@@ -943,21 +943,105 @@
   36:../main.c     **** /*--- function declare ---*/
   37:../main.c     **** void Main(void);
   38:../main.c     **** 
-  39:../main.c     **** /*--- extern function ---*/
-  40:../main.c     **** extern void Lcd_Test();
+  39:../main.c     **** 
+  40:../main.c     **** 
   41:../main.c     **** 
-  42:../main.c     **** /*--- function code ---*/
-  43:../main.c     **** /*********************************************************************************************
-  44:../main.c     **** * name:		Main
-  45:../main.c     **** * func:		c code entry - VERSIÓN INTEGRADA: Touchscreen + Sudoku
-  46:../main.c     **** * para:		none
-  47:../main.c     **** * ret:		none
-  48:../main.c     **** * modify:
-  49:../main.c     **** * comment:	Descomenta el bloque que quieras ejecutar (TOUCHSCREEN o SUDOKU)
-  50:../main.c     **** *********************************************************************************************/
-  51:../main.c     **** void Main(void)
-  52:../main.c     **** {
- 3927              		.loc 1 52 0
+  42:../main.c     **** 
+  43:../main.c     **** 
+  44:../main.c     **** 
+  45:../main.c     **** 
+  46:../main.c     **** 
+  47:../main.c     **** 
+  48:../main.c     **** 
+  49:../main.c     **** 
+  50:../main.c     **** 
+  51:../main.c     **** 
+  52:../main.c     **** 
+  53:../main.c     **** 
+  54:../main.c     **** 
+  55:../main.c     **** 
+  56:../main.c     **** 
+  57:../main.c     **** 
+  58:../main.c     **** 
+  59:../main.c     **** 
+  60:../main.c     **** 
+  61:../main.c     **** 
+  62:../main.c     **** 
+  63:../main.c     **** 
+  64:../main.c     **** 
+  65:../main.c     **** 
+  66:../main.c     **** 
+  67:../main.c     **** 
+  68:../main.c     **** 
+  69:../main.c     **** 
+  70:../main.c     **** 
+  71:../main.c     **** 
+  72:../main.c     **** 
+  73:../main.c     **** 
+  74:../main.c     **** 
+  75:../main.c     **** 
+  76:../main.c     **** 
+  77:../main.c     **** 
+  78:../main.c     **** 
+  79:../main.c     **** 
+  80:../main.c     **** 
+  81:../main.c     **** 
+  82:../main.c     **** 
+  83:../main.c     **** 
+  84:../main.c     **** 
+  85:../main.c     **** 
+  86:../main.c     **** 
+  87:../main.c     **** 
+  88:../main.c     **** 
+  89:../main.c     **** 
+  90:../main.c     **** 
+  91:../main.c     **** 
+  92:../main.c     **** 
+  93:../main.c     **** 
+  94:../main.c     **** 
+  95:../main.c     **** 
+  96:../main.c     **** 
+  97:../main.c     **** 
+  98:../main.c     **** 
+  99:../main.c     **** 
+ 100:../main.c     **** 
+ 101:../main.c     **** 
+ 102:../main.c     **** 
+ 103:../main.c     **** 
+ 104:../main.c     **** 
+ 105:../main.c     **** 
+ 106:../main.c     **** 
+ 107:../main.c     **** 
+ 108:../main.c     **** 
+ 109:../main.c     **** 
+ 110:../main.c     **** 
+ 111:../main.c     **** 
+ 112:../main.c     **** 
+ 113:../main.c     **** 
+ 114:../main.c     **** 
+ 115:../main.c     **** 
+ 116:../main.c     **** 
+ 117:../main.c     **** 
+ 118:../main.c     **** 
+ 119:../main.c     **** 
+ 120:../main.c     **** 
+ 121:../main.c     **** 
+ 122:../main.c     **** 
+ 123:../main.c     **** /*--- extern function ---*/
+ 124:../main.c     **** extern void Lcd_Test();
+ 125:../main.c     **** 
+ 126:../main.c     **** /*--- function code ---*/
+ 127:../main.c     **** /*********************************************************************************************
+ 128:../main.c     **** * name:		Main
+ 129:../main.c     **** * func:		c code entry - VERSIÓN INTEGRADA: Touchscreen + Sudoku
+ 130:../main.c     **** * para:		none
+ 131:../main.c     **** * ret:		none
+ 132:../main.c     **** * modify:
+ 133:../main.c     **** * comment:	Descomenta el bloque que quieras ejecutar (TOUCHSCREEN o SUDOKU)
+ 134:../main.c     **** *********************************************************************************************/
+ 135:../main.c     **** void Main(void)
+ 136:../main.c     **** {
+ 3927              		.loc 1 136 0
  3928              		.cfi_startproc
  3929              		@ Function supports interworking.
  3930              		@ args = 0, pretend = 0, frame = 16
@@ -973,158 +1057,176 @@
  3940              	.LCFI1:
  3941              		.cfi_def_cfa 11, 4
  3942 000c 10D04DE2 		sub	sp, sp, #16
-  53:../main.c     ****     sys_init();        /* Initial 44B0X's Interrupt, Port and UART */
- 3943              		.loc 1 53 0
+ 137:../main.c     ****     sys_init();        /* Initial 44B0X's Interrupt, Port and UART */
+ 3943              		.loc 1 137 0
  3944 0010 FEFFFFEB 		bl	sys_init
-  54:../main.c     ****     //_Link();           /* Print Misc info */
-  55:../main.c     ****     
-  56:../main.c     ****     /* ======================================================================
-  57:../main.c     ****      * OPCIÓN 1: CÓDIGO TOUCHSCREEN Y LCD (ORIGINAL)
-  58:../main.c     ****      * Descomenta este bloque para ejecutar el código del touchscreen
-  59:../main.c     ****      * ====================================================================== */
-  60:../main.c     ****     /*
-  61:../main.c     ****     Lcd_Test();
-  62:../main.c     ****     TS_Test();
-  63:../main.c     ****     
-  64:../main.c     ****     while(1)
-  65:../main.c     ****     {
-  66:../main.c     ****        //yn = Uart_Getch();
-  67:../main.c     ****        
-  68:../main.c     ****        //if(yn == 0x52) TS_Test();// R to reset the XY REC
-  69:../main.c     ****        //else break;
-  70:../main.c     ****     }
-  71:../main.c     ****     
-  72:../main.c     ****     TS_close();
-  73:../main.c     ****     */
-  74:../main.c     ****     
-  75:../main.c     ****     /* ======================================================================
-  76:../main.c     ****      * OPCIÓN 2: CÓDIGO SUDOKU (desde main_sudoku.c)
-  77:../main.c     ****      * Este bloque está activo por defecto
-  78:../main.c     ****      * ====================================================================== */
-  79:../main.c     ****     
-  80:../main.c     ****     /* Variables para observar la cola durante la depuración */
-  81:../main.c     ****     ColaDebug* p_cola;              // Puntero a la estructura completa de la cola
-  82:../main.c     ****     
-  83:../main.c     ****     /* Inicializa controladores del Sudoku */
-  84:../main.c     ****     timer2_init();      // Inicializacion del timer2 para medicion de tiempo
- 3945              		.loc 1 84 0
+ 138:../main.c     ****     //_Link();           /* Print Misc info */
+ 139:../main.c     **** 
+ 140:../main.c     ****     /* ======================================================================
+ 141:../main.c     ****      * OPCIÓN 1: CÓDIGO TOUCHSCREEN Y LCD (ORIGINAL)
+ 142:../main.c     ****      * Descomenta este bloque para ejecutar el código del touchscreen
+ 143:../main.c     ****      * ====================================================================== */
+ 144:../main.c     ****     /*
+ 145:../main.c     ****     Lcd_Test();
+ 146:../main.c     ****     TS_Test();
+ 147:../main.c     ****     
+ 148:../main.c     ****     while(1)
+ 149:../main.c     ****     {
+ 150:../main.c     ****        //yn = Uart_Getch();
+ 151:../main.c     ****        
+ 152:../main.c     ****        //if(yn == 0x52) TS_Test();// R to reset the XY REC
+ 153:../main.c     ****        //else break;
+ 154:../main.c     ****     }
+ 155:../main.c     ****     
+ 156:../main.c     ****     TS_close();
+ 157:../main.c     ****     */
+ 158:../main.c     **** 
+ 159:../main.c     ****     /* ======================================================================
+ 160:../main.c     ****      * OPCIÓN 2: CÓDIGO SUDOKU (desde main_sudoku.c)
+ 161:../main.c     ****      * Este bloque está activo por defecto
+ 162:../main.c     ****      * ====================================================================== */
+ 163:../main.c     **** 
+ 164:../main.c     ****     /* Variables para observar la cola durante la depuración */
+ 165:../main.c     ****     ColaDebug* p_cola;              // Puntero a la estructura completa de la cola
+ 166:../main.c     **** 
+ 167:../main.c     ****     /* Inicializa controladores del Sudoku */
+ 168:../main.c     ****     timer2_init();      // Inicializacion del timer2 para medicion de tiempo
+ 3945              		.loc 1 168 0
  3946 0014 FEFFFFEB 		bl	timer2_init
-  85:../main.c     ****     timer1_init();      // Inicializacion del timer1 para latido (heartbeat) - Paso 6
- 3947              		.loc 1 85 0
+ 169:../main.c     ****     timer1_init();      // Inicializacion del timer1 para latido (heartbeat) - Paso 6
+ 3947              		.loc 1 169 0
  3948 0018 FEFFFFEB 		bl	timer1_init
-  86:../main.c     ****     cola_init();        // Inicializacion de la cola de depuracion (Paso 4)
- 3949              		.loc 1 86 0
+ 170:../main.c     ****     cola_init();        // Inicializacion de la cola de depuracion (Paso 4)
+ 3949              		.loc 1 170 0
  3950 001c FEFFFFEB 		bl	cola_init
-  87:../main.c     ****     Eint4567_init();    // inicializamos los pulsadores. Cada vez que se pulse se verá reflejado e
- 3951              		.loc 1 87 0
+ 171:../main.c     ****     Eint4567_init();    // inicializamos los pulsadores. Cada vez que se pulse se verá reflejado e
+ 3951              		.loc 1 171 0
  3952 0020 FEFFFFEB 		bl	Eint4567_init
-  88:../main.c     ****     D8Led_init();       // inicializamos el 8led
- 3953              		.loc 1 88 0
+ 172:../main.c     ****     D8Led_init();       // inicializamos el 8led
+ 3953              		.loc 1 172 0
  3954 0024 FEFFFFEB 		bl	D8Led_init
-  89:../main.c     **** 
-  90:../main.c     ****     /* Inicializar LCD y mostrar pantalla inicial */
-  91:../main.c     ****     Lcd_Init();
- 3955              		.loc 1 91 0
+ 173:../main.c     **** 
+ 174:../main.c     ****     /* Inicializar LCD y mostrar pantalla inicial */
+ 175:../main.c     ****     Lcd_Init();
+ 3955              		.loc 1 175 0
  3956 0028 FEFFFFEB 		bl	Lcd_Init
-  92:../main.c     ****     Sudoku_Pantalla_Inicial();
- 3957              		.loc 1 92 0
- 3958 002c FEFFFFEB 		bl	Sudoku_Pantalla_Inicial
-  93:../main.c     **** 
-  94:../main.c     ****     /* Valor inicial de los leds */
-  95:../main.c     ****     leds_off();
- 3959              		.loc 1 95 0
- 3960 0030 FEFFFFEB 		bl	leds_off
-  96:../main.c     ****     
-  97:../main.c     ****     /* Apuntar a la cola para poder observarla en el depurador */
-  98:../main.c     ****     p_cola = cola_global;
- 3961              		.loc 1 98 0
- 3962 0034 74309FE5 		ldr	r3, .L6
- 3963 0038 003093E5 		ldr	r3, [r3, #0]
- 3964 003c 14300BE5 		str	r3, [fp, #-20]
-  99:../main.c     ****     
- 100:../main.c     ****     /* Variable para controlar actualización del tiempo */
- 101:../main.c     ****     unsigned int tiempo_anterior = 0;
- 3965              		.loc 1 101 0
- 3966 0040 0030A0E3 		mov	r3, #0
- 3967 0044 10300BE5 		str	r3, [fp, #-16]
- 102:../main.c     ****     unsigned int tiempo_actual = 0;
- 3968              		.loc 1 102 0
- 3969 0048 0030A0E3 		mov	r3, #0
- 3970 004c 18300BE5 		str	r3, [fp, #-24]
- 3971 0050 000000EA 		b	.L4
- 3972              	.L5:
- 103:../main.c     ****     
- 104:../main.c     ****     /* Bucle principal */
- 105:../main.c     ****     while (1)
- 106:../main.c     ****     {
- 107:../main.c     ****         /* El latido (LED2 parpadeando) se gestiona automáticamente por timer1 */
- 108:../main.c     ****         /* El programa está vivo mientras el LED2 parpadee a 6 Hz */
- 109:../main.c     ****         
- 110:../main.c     ****         /* Actualizar el tiempo en pantalla cada segundo */
- 111:../main.c     ****         tiempo_actual = timer2_count();
- 112:../main.c     ****         
- 113:../main.c     ****         /* Actualizar cada 1 segundo (1000000 microsegundos) */
- 114:../main.c     ****         if ((tiempo_actual - tiempo_anterior) >= 1000000)
- 115:../main.c     ****         {
- 116:../main.c     ****             /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) 
- 117:../main.c     ****             if (Sudoku_Juego_En_Progreso())
- 118:../main.c     ****             {
- 119:../main.c     ****                 /* Calcular tiempo transcurrido desde el inicio de la partida */
- 120:../main.c     ****                 unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
- 121:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
- 122:../main.c     ****             }
- 123:../main.c     ****             tiempo_anterior = tiempo_actual;
- 124:../main.c     ****         }
- 125:../main.c     ****     }
- 3973              		.loc 1 125 0
- 3974 0054 0000A0E1 		mov	r0, r0	@ nop
- 3975              	.L4:
- 111:../main.c     ****         tiempo_actual = timer2_count();
- 3976              		.loc 1 111 0
- 3977 0058 FEFFFFEB 		bl	timer2_count
- 3978 005c 18000BE5 		str	r0, [fp, #-24]
- 114:../main.c     ****         if ((tiempo_actual - tiempo_anterior) >= 1000000)
- 3979              		.loc 1 114 0
- 3980 0060 18201BE5 		ldr	r2, [fp, #-24]
- 3981 0064 10301BE5 		ldr	r3, [fp, #-16]
- 3982 0068 022063E0 		rsb	r2, r3, r2
- 3983 006c 40309FE5 		ldr	r3, .L6+4
- 3984 0070 030052E1 		cmp	r2, r3
- 3985 0074 F6FFFF9A 		bls	.L5
- 117:../main.c     ****             if (Sudoku_Juego_En_Progreso())
- 3986              		.loc 1 117 0
- 3987 0078 FEFFFFEB 		bl	Sudoku_Juego_En_Progreso
- 3988 007c 0030A0E1 		mov	r3, r0
- 3989 0080 000053E3 		cmp	r3, #0
- 3990 0084 0600000A 		beq	.L3
- 3991              	.LBB2:
- 120:../main.c     ****                 unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
- 3992              		.loc 1 120 0
- 3993 0088 FEFFFFEB 		bl	Sudoku_Obtener_Tiempo_Inicio
- 3994 008c 0030A0E1 		mov	r3, r0
- 3995 0090 18201BE5 		ldr	r2, [fp, #-24]
- 3996 0094 023063E0 		rsb	r3, r3, r2
- 3997 0098 1C300BE5 		str	r3, [fp, #-28]
- 121:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
- 3998              		.loc 1 121 0
- 3999 009c 1C001BE5 		ldr	r0, [fp, #-28]
- 4000 00a0 FEFFFFEB 		bl	Sudoku_Actualizar_Tiempo
- 4001              	.L3:
- 4002              	.LBE2:
- 123:../main.c     ****             tiempo_anterior = tiempo_actual;
- 4003              		.loc 1 123 0
- 4004 00a4 18301BE5 		ldr	r3, [fp, #-24]
- 4005 00a8 10300BE5 		str	r3, [fp, #-16]
- 4006              		.loc 1 125 0
- 4007 00ac E9FFFFEA 		b	.L4
- 4008              	.L7:
- 4009              		.align	2
- 4010              	.L6:
- 4011 00b0 00000000 		.word	cola_global
- 4012 00b4 3F420F00 		.word	999999
- 4013              		.cfi_endproc
- 4014              	.LFE7:
- 4016              	.Letext0:
+ 176:../main.c     **** 
+ 177:../main.c     ****     /* Inicializar y calibrar el touchscreen */
+ 178:../main.c     ****     TS_init();
+ 3957              		.loc 1 178 0
+ 3958 002c FEFFFFEB 		bl	TS_init
+ 179:../main.c     ****     TS_Calibrar();
+ 3959              		.loc 1 179 0
+ 3960 0030 FEFFFFEB 		bl	TS_Calibrar
+ 180:../main.c     **** 
+ 181:../main.c     ****     Sudoku_Pantalla_Inicial();
+ 3961              		.loc 1 181 0
+ 3962 0034 FEFFFFEB 		bl	Sudoku_Pantalla_Inicial
+ 182:../main.c     **** 
+ 183:../main.c     ****     /* Valor inicial de los leds */
+ 184:../main.c     ****     leds_off();
+ 3963              		.loc 1 184 0
+ 3964 0038 FEFFFFEB 		bl	leds_off
+ 185:../main.c     **** 
+ 186:../main.c     ****     /* Apuntar a la cola para poder observarla en el depurador */
+ 187:../main.c     ****     p_cola = cola_global;
+ 3965              		.loc 1 187 0
+ 3966 003c 74309FE5 		ldr	r3, .L6
+ 3967 0040 003093E5 		ldr	r3, [r3, #0]
+ 3968 0044 14300BE5 		str	r3, [fp, #-20]
+ 188:../main.c     **** 
+ 189:../main.c     ****     /* Variable para controlar actualización del tiempo */
+ 190:../main.c     ****     unsigned int tiempo_anterior = 0;
+ 3969              		.loc 1 190 0
+ 3970 0048 0030A0E3 		mov	r3, #0
+ 3971 004c 10300BE5 		str	r3, [fp, #-16]
+ 191:../main.c     ****     unsigned int tiempo_actual = 0;
+ 3972              		.loc 1 191 0
+ 3973 0050 0030A0E3 		mov	r3, #0
+ 3974 0054 18300BE5 		str	r3, [fp, #-24]
+ 3975 0058 000000EA 		b	.L4
+ 3976              	.L5:
+ 192:../main.c     **** 
+ 193:../main.c     ****     /* Bucle principal */
+ 194:../main.c     ****     while (1)
+ 195:../main.c     ****     {
+ 196:../main.c     **** 
+ 197:../main.c     **** 
+ 198:../main.c     **** 
+ 199:../main.c     **** 
+ 200:../main.c     **** 
+ 201:../main.c     **** 
+ 202:../main.c     **** 
+ 203:../main.c     **** 
+ 204:../main.c     **** 
+ 205:../main.c     ****         /* El latido (LED2 parpadeando) se gestiona automáticamente por timer1 */
+ 206:../main.c     ****         /* El programa está vivo mientras el LED2 parpadee a 6 Hz */
+ 207:../main.c     **** 
+ 208:../main.c     ****         /* Actualizar el tiempo en pantalla cada segundo */
+ 209:../main.c     ****         tiempo_actual = timer2_count();
+ 210:../main.c     **** 
+ 211:../main.c     ****         /* Actualizar cada 1 segundo (1000000 microsegundos) */
+ 212:../main.c     ****         if ((tiempo_actual - tiempo_anterior) >= 1000000)
+ 213:../main.c     ****         {
+ 214:../main.c     ****             /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) 
+ 215:../main.c     ****             if (Sudoku_Juego_En_Progreso())
+ 216:../main.c     ****             {
+ 217:../main.c     ****                 /* Calcular tiempo transcurrido desde el inicio de la partida */
+ 218:../main.c     ****                 unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
+ 219:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+ 220:../main.c     ****             }
+ 221:../main.c     ****             tiempo_anterior = tiempo_actual;
+ 222:../main.c     ****         }
+ 223:../main.c     ****     }
+ 3977              		.loc 1 223 0
+ 3978 005c 0000A0E1 		mov	r0, r0	@ nop
+ 3979              	.L4:
+ 209:../main.c     ****         tiempo_actual = timer2_count();
+ 3980              		.loc 1 209 0
+ 3981 0060 FEFFFFEB 		bl	timer2_count
+ 3982 0064 18000BE5 		str	r0, [fp, #-24]
+ 212:../main.c     ****         if ((tiempo_actual - tiempo_anterior) >= 1000000)
+ 3983              		.loc 1 212 0
+ 3984 0068 18201BE5 		ldr	r2, [fp, #-24]
+ 3985 006c 10301BE5 		ldr	r3, [fp, #-16]
+ 3986 0070 022063E0 		rsb	r2, r3, r2
+ 3987 0074 40309FE5 		ldr	r3, .L6+4
+ 3988 0078 030052E1 		cmp	r2, r3
+ 3989 007c F6FFFF9A 		bls	.L5
+ 215:../main.c     ****             if (Sudoku_Juego_En_Progreso())
+ 3990              		.loc 1 215 0
+ 3991 0080 FEFFFFEB 		bl	Sudoku_Juego_En_Progreso
+ 3992 0084 0030A0E1 		mov	r3, r0
+ 3993 0088 000053E3 		cmp	r3, #0
+ 3994 008c 0600000A 		beq	.L3
+ 3995              	.LBB2:
+ 218:../main.c     ****                 unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
+ 3996              		.loc 1 218 0
+ 3997 0090 FEFFFFEB 		bl	Sudoku_Obtener_Tiempo_Inicio
+ 3998 0094 0030A0E1 		mov	r3, r0
+ 3999 0098 18201BE5 		ldr	r2, [fp, #-24]
+ 4000 009c 023063E0 		rsb	r3, r3, r2
+ 4001 00a0 1C300BE5 		str	r3, [fp, #-28]
+ 219:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+ 4002              		.loc 1 219 0
+ 4003 00a4 1C001BE5 		ldr	r0, [fp, #-28]
+ 4004 00a8 FEFFFFEB 		bl	Sudoku_Actualizar_Tiempo
+ 4005              	.L3:
+ 4006              	.LBE2:
+ 221:../main.c     ****             tiempo_anterior = tiempo_actual;
+ 4007              		.loc 1 221 0
+ 4008 00ac 18301BE5 		ldr	r3, [fp, #-24]
+ 4009 00b0 10300BE5 		str	r3, [fp, #-16]
+ 4010              		.loc 1 223 0
+ 4011 00b4 E9FFFFEA 		b	.L4
+ 4012              	.L7:
+ 4013              		.align	2
+ 4014              	.L6:
+ 4015 00b8 00000000 		.word	cola_global
+ 4016 00bc 3F420F00 		.word	999999
+ 4017              		.cfi_endproc
+ 4018              	.LFE7:
+ 4020              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
                             *COM*:00000004 CheckTSP
@@ -1136,19 +1238,19 @@ DEFINED SYMBOLS
                             *COM*:00000004 Xmin
                             *COM*:00000004 Ymin
                             *COM*:00000001 yn
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3020   .data:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3023   .data:00000000 cuadricula_C_C
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3171   .data:00000120 cuadricula_C_ARM
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3319   .data:00000240 cuadricula_ARM_C
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3467   .data:00000360 cuadricula_ARM_ARM
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3615   .data:00000480 cuadricula_ARM_ARM_ALL
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3763   .data:000005a0 solucion
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3912   .data:000006c0 cuadricula
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3919   .bss:00000000 celdas_vacias
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3916   .bss:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3922   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:3925   .text:00000000 Main
-C:\Users\jaime\AppData\Local\Temp\ccThs56H.s:4011   .text:000000b0 $d
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3020   .data:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3023   .data:00000000 cuadricula_C_C
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3171   .data:00000120 cuadricula_C_ARM
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3319   .data:00000240 cuadricula_ARM_C
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3467   .data:00000360 cuadricula_ARM_ARM
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3615   .data:00000480 cuadricula_ARM_ARM_ALL
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3763   .data:000005a0 solucion
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3912   .data:000006c0 cuadricula
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3919   .bss:00000000 celdas_vacias
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3916   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3922   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:3925   .text:00000000 Main
+C:\Users\jaime\AppData\Local\Temp\ccoZRmv0.s:4015   .text:000000b8 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
@@ -1159,6 +1261,8 @@ cola_init
 Eint4567_init
 D8Led_init
 Lcd_Init
+TS_init
+TS_Calibrar
 Sudoku_Pantalla_Inicial
 leds_off
 timer2_count

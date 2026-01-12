@@ -6,8 +6,6 @@
 *********************************************************************************************/
 
 /*--- ficheros de cabecera ---*/
-#include <stdlib.h>
-#include <string.h>
 #include "def.h"
 #include "44b.h"
 #include "44blib.h"
@@ -21,7 +19,7 @@
 #define DMA_HW    (1)
 #define DMA_Word  (2)
 #define DW 		  DMA_Byte		//configura  ZDMA0 como media palabras
-	
+
 /*--- variables externas ---*/
 extern INT8U g_auc_Ascii8x16[];
 extern INT8U g_auc_Ascii6x8[];
@@ -50,7 +48,7 @@ void Lcd_Init(void)
 	rBLUELUT=0xfa40;
 	//Enable LCD Logic and EL back-light.
 	rPDATE=rPDATE&0x0e;
-	
+
 	//DMA ISR
 	rINTMSK &= ~(BIT_GLOBAL|BIT_ZDMA0);
     pISR_ZDMA0=(int)Zdma0Done;
@@ -68,7 +66,7 @@ void Lcd_Active_Clr(void)
 {
 	INT32U i;
 	INT32U *pDisp = (INT32U *)LCD_ACTIVE_BUFFER;
-	
+
 	for( i = 0; i < (SCR_XSIZE*SCR_YSIZE/2/4); i++ )
 	{
 		*pDisp++ = WHITE;
@@ -104,7 +102,7 @@ void Lcd_Clr(void)
 {
 	INT32U i;
 	INT32U *pDisp = (INT32U *)LCD_VIRTUAL_BUFFER;
-	
+
 	for( i = 0; i < (SCR_XSIZE*SCR_YSIZE/2/4); i++ )
 	{
 		*pDisp++ = WHITE;
@@ -123,7 +121,7 @@ void Lcd_Clr(void)
 void LcdClrRect(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor)
 {
 	INT16 i,k,l,m;
-	
+
 	INT32U ulColor = (ucColor << 28) | (ucColor << 24) | (ucColor << 20) | (ucColor << 16) | 
 				     (ucColor << 12) | (ucColor << 8) | (ucColor << 4) | ucColor;
 
@@ -343,7 +341,7 @@ void Lcd_Draw_VLine (INT16 usY0, INT16 usY1, INT16 usX0, INT8U ucColor, INT16U u
     }
 }
 
-void Lcd_DisplayString(INT16U usX0, INT16U usY0, const char *pucStr){
+void Lcd_DisplayString(INT16U usX0, INT16U usY0, INT8U *pucStr){
 
 }
 
@@ -357,14 +355,14 @@ void Lcd_DisplayString(INT16U usX0, INT16U usY0, const char *pucStr){
 * modify:
 * comment:		
 *********************************************************************************************/
-void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, const char *s)
+void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s)
 {
 	INT16 i,j,k,x,y,xx;
 	INT8U qm;
 	INT32U ulOffset;
 	INT8 ywbuf[16],temp[2];
-    
-	for( i = 0; i < (INT16)strlen(s); i++ )
+
+	for( i = 0; i < strlen((const char*)s); i++ )
 	{
 		if( (INT8U)*(s+i) >= 161 )
 		{
@@ -407,7 +405,7 @@ void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, const char *s)
 * modify:
 * comment:
 *********************************************************************************************/
-void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0, INT8U ForeColor, const char *pucChar)
+void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0,INT8U ForeColor, INT8U* pucChar)
 {
 	INT32U i,j;
 	INT8U  ucTemp;
@@ -416,7 +414,7 @@ void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0, INT8U ForeColor, const char *pucC
 	{
 		for( i=0; i < 8; i++ )
 		{
-  			ucTemp = g_auc_Ascii6x8[((INT8U)*pucChar) * 8 + i];
+  			ucTemp = g_auc_Ascii6x8[(*pucChar) * 8 + i];
   			for( j = 0; j < 8; j++ )
   			{
   				if( (ucTemp & (0x80 >> j)) != 0 )
@@ -443,7 +441,7 @@ void Lcd_DspAscII6x8(INT16U usX0, INT16U usY0, INT8U ForeColor, const char *pucC
 void ReverseLine(INT32U ulHeight, INT32U ulY)
 {
 	INT32U i, j, temp;
-	
+
 	for( i = 0; i < ulHeight; i++ )
 	{
 		for( j = 0; j < (SCR_XSIZE/4/2) ; j++ )
@@ -480,6 +478,8 @@ void Zdma0Done(void)
 *********************************************************************************************/
 void Lcd_Dma_Trans(void)
 {
+	INT8U err;
+
 	ucZdma0Done=1;
 	//#define LCD_VIRTUAL_BUFFER	(0xc400000)
 	//#define LCD_ACTIVE_BUFFER	(LCD_VIRTUAL_BUFFER+(SCR_XSIZE*SCR_YSIZE/2))	//DMA ON
@@ -563,26 +563,26 @@ void Sudoku_Pantalla_Inicial(void)
 {
 	/* Limpiar pantalla */
 	Lcd_Clr();
-	
+
 	/* Título */
 	Lcd_DspAscII8x16(85, 10, BLACK, "SUDOKU 9x9");
-	
+
 	/* Instrucciones */
 	Lcd_DspAscII6x8(20, 40, DARKGRAY, "INSTRUCCIONES:");
 	Lcd_DspAscII6x8(10, 55, BLACK, "1. Boton Derecho: cambia valor");
 	Lcd_DspAscII6x8(10, 70, BLACK, "2. Boton Izquierdo: confirma");
 	Lcd_DspAscII6x8(10, 85, BLACK, "3. Introducir valor 0: borrar");
 	Lcd_DspAscII6x8(10, 100, BLACK, "4. Fila 0: terminar partida");
-	
+
 	/* Leyenda de símbolos en pantalla */
 	Lcd_DspAscII6x8(20, 125, DARKGRAY, "LEYENDA:");
 	Lcd_DspAscII6x8(10, 140, BLACK, "F = Fila    C = Columna");
 	Lcd_DspAscII6x8(10, 155, BLACK, "E = Error detectado");
-	
+
 	/* Mensaje para iniciar */
 	Lcd_Draw_Box(40, 190, 280, 220, BLACK);
 	Lcd_DspAscII8x16(60, 198, BLACK, "Pulse un boton para jugar");
-	
+
 	/* Transferir a pantalla */
 	Lcd_Dma_Trans();
 }
@@ -604,14 +604,14 @@ void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U
 	#define MARGEN_IZQ 20
 	#define MARGEN_SUP 10
 	#define TAM_CELDA 23
-	
+
 	INT16U tablero_inicio_x = MARGEN_IZQ + 10;
 	INT16U tablero_inicio_y = MARGEN_SUP + 10;
-	
+
 	/* Calcular posición de la celda en píxeles */
 	INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
 	INT16U celda_y = tablero_inicio_y + fila * TAM_CELDA;
-	
+
 	/* Si tiene error, rellenar la celda con negro */
 	if (tiene_error)
 	{
@@ -623,14 +623,14 @@ void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U
 		/* Limpiar el interior de la celda (dejar márgenes para las líneas) */
 		LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
 	}
-	
+
 	/* Si hay un número, dibujarlo */
 	if (numero >= 1 && numero <= 9)
 	{
-		char num_str[2];
+		INT8U num_str[2];
 		num_str[0] = '0' + numero;
 		num_str[1] = '\0';
-		
+
 		/* Color del número */
 		INT8U color;
 		if (tiene_error)
@@ -648,12 +648,12 @@ void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U
 			/* Valor del usuario: negro */
 			color = BLACK;
 		}
-		
+
 		/* Centrar el número en la celda */
 		/* La fuente 8x16 ocupa 8 píxeles de ancho */
 		INT16U texto_x = celda_x + (TAM_CELDA - 8) / 2;
 		INT16U texto_y = celda_y + (TAM_CELDA - 16) / 2;
-		
+
 		Lcd_DspAscII8x16(texto_x, texto_y, color, num_str);
 	}
 }
@@ -677,21 +677,21 @@ void Sudoku_Dibujar_Candidatos_En_Celda(INT16U fila, INT16U col, CELDA celda)
 	#define MARGEN_IZQ 20
 	#define MARGEN_SUP 10
 	#define TAM_CELDA 23
-	
+
 	INT16U tablero_inicio_x = MARGEN_IZQ + 10;
 	INT16U tablero_inicio_y = MARGEN_SUP + 10;
-	
+
 	/* Calcular posición de la celda en píxeles */
 	INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
 	INT16U celda_y = tablero_inicio_y + fila * TAM_CELDA;
-	
+
 	/* Limpiar el interior de la celda */
 	LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
-	
+
 	/* Dibujar grid de candidatos */
 	/* Cada subcelda del grid 3x3 tiene aproximadamente 7 píxeles */
 	#define TAM_SUBCELDA 7
-	
+
 	INT8U numero;
 	for (numero = 1; numero <= 9; numero++)
 	{
@@ -702,11 +702,11 @@ void Sudoku_Dibujar_Candidatos_En_Celda(INT16U fila, INT16U col, CELDA celda)
 			/* Grid: 1 2 3 / 4 5 6 / 7 8 9 */
 			INT8U grid_fila = (numero - 1) / 3;  /* 0, 1, 2 */
 			INT8U grid_col = (numero - 1) % 3;   /* 0, 1, 2 */
-			
+
 			/* Calcular centro de la subcelda */
 			INT16U centro_x = celda_x + 3 + grid_col * TAM_SUBCELDA + TAM_SUBCELDA / 2;
 			INT16U centro_y = celda_y + 3 + grid_fila * TAM_SUBCELDA + TAM_SUBCELDA / 2;
-			
+
 			/* Dibujar un círculo más grande (3x3 píxeles en forma circular) */
 			LCD_PutPixel(centro_x, centro_y, BLACK);           /* Centro */
 			LCD_PutPixel(centro_x - 1, centro_y, BLACK);       /* Izquierda */
@@ -733,7 +733,7 @@ void Sudoku_Actualizar_Tablero_Completo(void* cuadricula_ptr)
 {
 	CELDA (*cuadricula)[NUM_COLUMNAS] = (CELDA (*)[NUM_COLUMNAS])cuadricula_ptr;
 	INT16U fila, col;
-	
+
 	/* Recorrer todas las celdas del tablero */
 	for (fila = 0; fila < NUM_FILAS; fila++)
 	{
@@ -743,7 +743,7 @@ void Sudoku_Actualizar_Tablero_Completo(void* cuadricula_ptr)
 			INT8U valor = celda_leer_valor(celda_actual);
 			INT8U es_pista = celda_es_pista(celda_actual);
 			INT8U tiene_error = (celda_actual & (1 << BIT_ERROR)) != 0;
-			
+
 			if (valor != 0)
 			{
 				/* Hay un valor: dibujarlo */
@@ -756,7 +756,7 @@ void Sudoku_Actualizar_Tablero_Completo(void* cuadricula_ptr)
 			}
 		}
 	}
-	
+
 	/* Transferir todo a la pantalla */
 	Lcd_Dma_Trans();
 }
@@ -774,19 +774,19 @@ void Sudoku_Actualizar_Tiempo(INT32U tiempo_us)
 	#define MARGEN_IZQ 20
 	#define MARGEN_SUP 10
 	#define TAM_CELDA 23
-	
+
 	INT16U tablero_inicio_y = MARGEN_SUP + 10;
 	INT16U tablero_tam = TAM_CELDA * 9;
-	
+
 	/* Convertir microsegundos a segundos */
 	INT32U segundos_totales = tiempo_us / 1000000;
-	
+
 	/* Calcular minutos y segundos */
 	INT16U minutos = segundos_totales / 60;
 	INT16U segundos = segundos_totales % 60;
-	
+
 	/* Crear string en formato MM:SS */
-	char tiempo_str[15];
+	INT8U tiempo_str[15];
 	tiempo_str[0] = 'T';
 	tiempo_str[1] = 'i';
 	tiempo_str[2] = 'e';
@@ -801,14 +801,14 @@ void Sudoku_Actualizar_Tiempo(INT32U tiempo_us)
 	tiempo_str[11] = '0' + (segundos / 10);  /* Decenas de segundos */
 	tiempo_str[12] = '0' + (segundos % 10);  /* Unidades de segundos */
 	tiempo_str[13] = '\0';
-	
+
 	/* Limpiar el área del tiempo (aproximadamente 90 píxeles de ancho) */
 	LcdClrRect(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, 
 	           MARGEN_IZQ + 90, tablero_inicio_y + tablero_tam + 15, WHITE);
-	
+
 	/* Dibujar el nuevo tiempo */
 	Lcd_DspAscII6x8(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, BLACK, tiempo_str);
-	
+
 	/* Transferir solo esta actualización a pantalla */
 	Lcd_Dma_Trans();
 }
@@ -825,101 +825,38 @@ void Sudoku_Pantalla_Final(INT32U tiempo_us)
 {
 	/* Convertir microsegundos a segundos */
 	INT32U segundos_totales = tiempo_us / 1000000;
-	
+
 	/* Calcular minutos y segundos */
 	INT16U minutos = segundos_totales / 60;
 	INT16U segundos = segundos_totales % 60;
-	
+
 	/* Crear string en formato MM:SS */
-	char tiempo_str[10];
+	INT8U tiempo_str[10];
 	tiempo_str[0] = '0' + (minutos / 10);    /* Decenas de minutos */
 	tiempo_str[1] = '0' + (minutos % 10);    /* Unidades de minutos */
 	tiempo_str[2] = ':';
 	tiempo_str[3] = '0' + (segundos / 10);  /* Decenas de segundos */
 	tiempo_str[4] = '0' + (segundos % 10);  /* Unidades de segundos */
 	tiempo_str[5] = '\0';
-	
+
 	/* Limpiar pantalla */
 	Lcd_Clr();
-	
+
 	/* Título */
 	Lcd_DspAscII8x16(80, 40, BLACK, "PARTIDA TERMINADA");
-	
+
 	/* Mostrar tiempo final */
 	Lcd_DspAscII8x16(90, 80, BLACK, "Tiempo final:");
 	Lcd_DspAscII8x16(130, 100, BLACK, tiempo_str);
-	
+
 	/* Mensaje para reiniciar */
 	Lcd_DspAscII8x16(30, 158, BLACK, "Pulse un boton para reiniciar");
-	
+
 	/* Transferir a pantalla */
 	Lcd_Dma_Trans();
 }
 
-void Sudoku_Dibujar_Teclado_Tactil(void)
-{
-	#define TECLADO_X 245
-	#define TECLADO_Y 20
-	#define TECLADO_W 70
-	#define TECLADO_H 207
-	#define TECLADO_COLS 3
-	#define TECLADO_ROWS 4
-	#define TECLADO_CELDA_W (TECLADO_W / TECLADO_COLS)
-	#define TECLADO_CELDA_H (TECLADO_H / TECLADO_ROWS)
 
-	INT16U fila;
-	INT16U col;
-	char num_str[2] = "0";
-
-	Lcd_Draw_Box(TECLADO_X, TECLADO_Y, TECLADO_X + TECLADO_W, TECLADO_Y + TECLADO_H, BLACK);
-
-	for (col = 1; col < TECLADO_COLS; col++)
-	{
-		INT16U x = TECLADO_X + col * TECLADO_CELDA_W;
-		Lcd_Draw_VLine(TECLADO_Y, TECLADO_Y + TECLADO_H, x, BLACK, 1);
-	}
-
-	for (fila = 1; fila < TECLADO_ROWS; fila++)
-	{
-		INT16U y = TECLADO_Y + fila * TECLADO_CELDA_H;
-		Lcd_Draw_HLine(TECLADO_X, TECLADO_X + TECLADO_W, y, BLACK, 1);
-	}
-
-	for (fila = 0; fila < 3; fila++)
-	{
-		for (col = 0; col < 3; col++)
-		{
-			INT16U valor = fila * 3 + col + 1;
-			num_str[0] = '0' + valor;
-			Lcd_DspAscII6x8(TECLADO_X + col * TECLADO_CELDA_W + TECLADO_CELDA_W / 2 - 3,
-			                TECLADO_Y + fila * TECLADO_CELDA_H + TECLADO_CELDA_H / 2 - 4,
-			                BLACK, num_str);
-		}
-	}
-
-	Lcd_DspAscII6x8(TECLADO_X + TECLADO_CELDA_W / 2 - 3,
-	                TECLADO_Y + 3 * TECLADO_CELDA_H + TECLADO_CELDA_H / 2 - 4,
-	                BLACK, "0");
-
-	Lcd_DspAscII6x8(TECLADO_X + TECLADO_CELDA_W + (TECLADO_CELDA_W - 18) / 2,
-	                TECLADO_Y + 3 * TECLADO_CELDA_H + TECLADO_CELDA_H / 2 - 4,
-	                BLACK, "FIN");
-}
-
-void Sudoku_Resaltar_Celda(INT16U fila, INT16U col, INT8U color)
-{
-	#define MARGEN_IZQ 20
-	#define MARGEN_SUP 10
-	#define TAM_CELDA 23
-
-	INT16U tablero_inicio_x = MARGEN_IZQ + 10;
-	INT16U tablero_inicio_y = MARGEN_SUP + 10;
-	INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
-	INT16U celda_y = tablero_inicio_y + fila * TAM_CELDA;
-
-	Lcd_Draw_Box(celda_x + 1, celda_y + 1, celda_x + TAM_CELDA - 1, celda_y + TAM_CELDA - 1, color);
-	Lcd_Dma_Trans();
-}
 /*********************************************************************************************
 * name:		Sudoku_Dibujar_Tablero()
 * func:		Dibuja el tablero de Sudoku 9x9 con numeración
@@ -930,24 +867,24 @@ void Sudoku_Resaltar_Celda(INT16U fila, INT16U col, INT8U color)
 *********************************************************************************************/
 void Sudoku_Dibujar_Tablero(void)
 {
-	INT16U i;
-	char fila_str[2] = "1";
-	char col_str[2] = "1";
-	
+	INT16U i, j;
+	INT8U fila_str[2] = "1";
+	INT8U col_str[2] = "1";
+
 	/* Constantes del tablero */
 	#define MARGEN_IZQ 20
 	#define MARGEN_SUP 10
 	#define TAM_CELDA 23
 	#define GROSOR_FINO 1
 	#define GROSOR_GRUESO 2
-	
+
 	INT16U tablero_inicio_x = MARGEN_IZQ + 10;  /* Espacio para números de fila */
 	INT16U tablero_inicio_y = MARGEN_SUP + 10;  /* Espacio para números de columna */
 	INT16U tablero_tam = TAM_CELDA * 9;         /* 207 píxeles */
-	
+
 	/* Limpiar pantalla */
 	Lcd_Clr();
-	
+
 	/* Dibujar números de columnas (1-9) en la parte superior */
 	for (i = 0; i < 9; i++)
 	{
@@ -955,7 +892,7 @@ void Sudoku_Dibujar_Tablero(void)
 		Lcd_DspAscII6x8(tablero_inicio_x + i * TAM_CELDA + TAM_CELDA/2 - 3, 
 		                MARGEN_SUP + 2, BLACK, col_str);
 	}
-	
+
 	/* Dibujar números de filas (1-9) en el lado izquierdo */
 	for (i = 0; i < 9; i++)
 	{
@@ -964,7 +901,7 @@ void Sudoku_Dibujar_Tablero(void)
 		                tablero_inicio_y + i * TAM_CELDA + TAM_CELDA/2 - 4, 
 		                BLACK, fila_str);
 	}
-	
+
 	/* Dibujar líneas horizontales */
 	for (i = 0; i <= 9; i++)
 	{
@@ -972,7 +909,7 @@ void Sudoku_Dibujar_Tablero(void)
 		INT16U y = tablero_inicio_y + i * TAM_CELDA;
 		Lcd_Draw_HLine(tablero_inicio_x, tablero_inicio_x + tablero_tam, y, BLACK, grosor);
 	}
-	
+
 	/* Dibujar líneas verticales */
 	for (i = 0; i <= 9; i++)
 	{
@@ -980,17 +917,17 @@ void Sudoku_Dibujar_Tablero(void)
 		INT16U x = tablero_inicio_x + i * TAM_CELDA;
 		Lcd_Draw_VLine(tablero_inicio_y, tablero_inicio_y + tablero_tam, x, BLACK, grosor);
 	}
-	
+
 	/* Mostrar tiempo en la parte inferior */
 	Lcd_DspAscII6x8(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, 
 	                BLACK, "Tiempo: 00:00");
-	
+
 	/* Mensaje de ayuda */
 	Lcd_DspAscII6x8(MARGEN_IZQ + 100, tablero_inicio_y + tablero_tam + 5, 
 	                DARKGRAY, "Fila 0: Salir");
 
-	Sudoku_Dibujar_Teclado_Tactil();
-	
+
+
 	/* Transferir a pantalla */
 	Lcd_Dma_Trans();
 }

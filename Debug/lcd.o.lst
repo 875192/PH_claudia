@@ -200,7 +200,7 @@
   19:../lcd.c      **** #define DMA_HW    (1)
   20:../lcd.c      **** #define DMA_Word  (2)
   21:../lcd.c      **** #define DW 		  DMA_Byte		//configura  ZDMA0 como media palabras
-  22:../lcd.c      **** 	
+  22:../lcd.c      **** 
   23:../lcd.c      **** /*--- variables externas ---*/
   24:../lcd.c      **** extern INT8U g_auc_Ascii8x16[];
   25:../lcd.c      **** extern INT8U g_auc_Ascii6x8[];
@@ -314,7 +314,7 @@
  3204 0198 002092E5 		ldr	r2, [r2, #0]
  3205 019c 0E2002E2 		and	r2, r2, #14
  3206 01a0 002083E5 		str	r2, [r3, #0]
-  51:../lcd.c      **** 	
+  51:../lcd.c      **** 
   52:../lcd.c      **** 	//DMA ISR
   53:../lcd.c      **** 	rINTMSK &= ~(BIT_GLOBAL|BIT_ZDMA0);
  3207              		.loc 1 53 0
@@ -408,7 +408,7 @@
  3282              		.loc 1 68 0
  3283 0268 C336A0E3 		mov	r3, #204472320
  3284 026c 14300BE5 		str	r3, [fp, #-20]
-  69:../lcd.c      **** 	
+  69:../lcd.c      **** 
   70:../lcd.c      **** 	for( i = 0; i < (SCR_XSIZE*SCR_YSIZE/2/4); i++ )
  3285              		.loc 1 70 0
  3286 0270 0030A0E3 		mov	r3, #0
@@ -580,7 +580,7 @@
  3420              		.loc 1 104 0
  3421 03a0 4C309FE5 		ldr	r3, .L18
  3422 03a4 14300BE5 		str	r3, [fp, #-20]
- 105:../lcd.c      **** 	
+ 105:../lcd.c      **** 
  106:../lcd.c      **** 	for( i = 0; i < (SCR_XSIZE*SCR_YSIZE/2/4); i++ )
  3423              		.loc 1 106 0
  3424 03a8 0030A0E3 		mov	r3, #0
@@ -658,7 +658,7 @@
  3480 0414 B2224BE1 		strh	r2, [fp, #-34]	@ movhi
  3481 0418 B4324BE1 		strh	r3, [fp, #-36]	@ movhi
  123:../lcd.c      **** 	INT16 i,k,l,m;
- 124:../lcd.c      **** 	
+ 124:../lcd.c      **** 
  125:../lcd.c      **** 	INT32U ulColor = (ucColor << 28) | (ucColor << 24) | (ucColor << 20) | (ucColor << 16) | 
  3482              		.loc 1 125 0
  3483 041c 0430DBE5 		ldrb	r3, [fp, #4]	@ zero_extendqisi2
@@ -2543,7 +2543,7 @@
  361:../lcd.c      **** 	INT8U qm;
  362:../lcd.c      **** 	INT32U ulOffset;
  363:../lcd.c      **** 	INT8 ywbuf[16],temp[2];
- 364:../lcd.c      ****     
+ 364:../lcd.c      **** 
  365:../lcd.c      **** 	for( i = 0; i < strlen((const char*)s); i++ )
  5100              		.loc 1 365 0
  5101 18d0 0030A0E3 		mov	r3, #0
@@ -3041,7 +3041,7 @@
  5507 1d94 20000BE5 		str	r0, [fp, #-32]
  5508 1d98 24100BE5 		str	r1, [fp, #-36]
  443:../lcd.c      **** 	INT32U i, j, temp;
- 444:../lcd.c      **** 	
+ 444:../lcd.c      **** 
  445:../lcd.c      **** 	for( i = 0; i < ulHeight; i++ )
  5509              		.loc 1 445 0
  5510 1d9c 0030A0E3 		mov	r3, #0
@@ -3220,7 +3220,7 @@
  5650              		.cfi_def_cfa 11, 4
  5651 1ec4 08D04DE2 		sub	sp, sp, #8
  481:../lcd.c      **** 	INT8U err;
- 482:../lcd.c      **** 	
+ 482:../lcd.c      **** 
  483:../lcd.c      **** 	ucZdma0Done=1;
  5652              		.loc 1 483 0
  5653 1ec8 98309FE5 		ldr	r3, .L113
@@ -3639,7 +3639,7 @@
  565:../lcd.c      **** 	Lcd_Clr();
  5948              		.loc 1 565 0
  5949 2184 FEFFFFEB 		bl	Lcd_Clr
- 566:../lcd.c      **** 	
+ 566:../lcd.c      **** 
  567:../lcd.c      **** 	/* Título */
  568:../lcd.c      **** 	Lcd_DspAscII8x16(85, 10, BLACK, "SUDOKU 9x9");
  5950              		.loc 1 568 0
@@ -3648,7 +3648,7 @@
  5953 2190 0F20A0E3 		mov	r2, #15
  5954 2194 E0309FE5 		ldr	r3, .L119
  5955 2198 FEFFFFEB 		bl	Lcd_DspAscII8x16
- 569:../lcd.c      **** 	
+ 569:../lcd.c      **** 
  570:../lcd.c      **** 	/* Instrucciones */
  571:../lcd.c      **** 	Lcd_DspAscII6x8(20, 40, DARKGRAY, "INSTRUCCIONES:");
  5956              		.loc 1 571 0
@@ -3685,7 +3685,7 @@
  5983 21f4 0F20A0E3 		mov	r2, #15
  5984 21f8 90309FE5 		ldr	r3, .L119+20
  5985 21fc FEFFFFEB 		bl	Lcd_DspAscII6x8
- 576:../lcd.c      **** 	
+ 576:../lcd.c      **** 
  577:../lcd.c      **** 	/* Leyenda de símbolos en pantalla */
  578:../lcd.c      **** 	Lcd_DspAscII6x8(20, 125, DARKGRAY, "LEYENDA:");
  5986              		.loc 1 578 0
@@ -3708,7 +3708,7 @@
  6001 2230 0F20A0E3 		mov	r2, #15
  6002 2234 60309FE5 		ldr	r3, .L119+32
  6003 2238 FEFFFFEB 		bl	Lcd_DspAscII6x8
- 581:../lcd.c      **** 	
+ 581:../lcd.c      **** 
  582:../lcd.c      **** 	/* Mensaje para iniciar */
  583:../lcd.c      **** 	Lcd_Draw_Box(40, 190, 280, 220, BLACK);
  6004              		.loc 1 583 0
@@ -3726,7 +3726,7 @@
  6015 2260 0F20A0E3 		mov	r2, #15
  6016 2264 34309FE5 		ldr	r3, .L119+36
  6017 2268 FEFFFFEB 		bl	Lcd_DspAscII8x16
- 585:../lcd.c      **** 	
+ 585:../lcd.c      **** 
  586:../lcd.c      **** 	/* Transferir a pantalla */
  587:../lcd.c      **** 	Lcd_Dma_Trans();
  6018              		.loc 1 587 0
@@ -3793,7 +3793,7 @@
  604:../lcd.c      **** 	#define MARGEN_IZQ 20
  605:../lcd.c      **** 	#define MARGEN_SUP 10
  606:../lcd.c      **** 	#define TAM_CELDA 23
- 607:../lcd.c      **** 	
+ 607:../lcd.c      **** 
  608:../lcd.c      **** 	INT16U tablero_inicio_x = MARGEN_IZQ + 10;
  6065              		.loc 1 608 0
  6066 22c4 1E30A0E3 		mov	r3, #30
@@ -3802,7 +3802,7 @@
  6068              		.loc 1 609 0
  6069 22cc 1430A0E3 		mov	r3, #20
  6070 22d0 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
- 610:../lcd.c      **** 	
+ 610:../lcd.c      **** 
  611:../lcd.c      **** 	/* Calcular posición de la celda en píxeles */
  612:../lcd.c      **** 	INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
  6071              		.loc 1 612 0
@@ -3830,7 +3830,7 @@
  6092 2320 B2315BE1 		ldrh	r3, [fp, #-18]	@ movhi
  6093 2324 033082E0 		add	r3, r2, r3
  6094 2328 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
- 614:../lcd.c      **** 	
+ 614:../lcd.c      **** 
  615:../lcd.c      **** 	/* Si tiene error, rellenar la celda con negro */
  616:../lcd.c      **** 	if (tiene_error)
  6095              		.loc 1 616 0
@@ -3921,7 +3921,7 @@
  6172 2450 FEFFFFEB 		bl	LcdClrRect
  6173              	.L123:
  625:../lcd.c      **** 	}
- 626:../lcd.c      **** 	
+ 626:../lcd.c      **** 
  627:../lcd.c      **** 	/* Si hay un número, dibujarlo */
  628:../lcd.c      **** 	if (numero >= 1 && numero <= 9)
  6174              		.loc 1 628 0
@@ -3945,7 +3945,7 @@
  6188              		.loc 1 632 0
  6189 247c 0030A0E3 		mov	r3, #0
  6190 2480 1B304BE5 		strb	r3, [fp, #-27]
- 633:../lcd.c      **** 		
+ 633:../lcd.c      **** 
  634:../lcd.c      **** 		/* Color del número */
  635:../lcd.c      **** 		INT8U color;
  636:../lcd.c      **** 		if (tiene_error)
@@ -3985,7 +3985,7 @@
  6211 24b8 0D304BE5 		strb	r3, [fp, #-13]
  6212              	.L126:
  650:../lcd.c      **** 		}
- 651:../lcd.c      **** 		
+ 651:../lcd.c      **** 
  652:../lcd.c      **** 		/* Centrar el número en la celda */
  653:../lcd.c      **** 		/* La fuente 8x16 ocupa 8 píxeles de ancho */
  654:../lcd.c      **** 		INT16U texto_x = celda_x + (TAM_CELDA - 8) / 2;
@@ -3998,7 +3998,7 @@
  6218 24c8 B6315BE1 		ldrh	r3, [fp, #-22]	@ movhi
  6219 24cc 033083E2 		add	r3, r3, #3
  6220 24d0 BA314BE1 		strh	r3, [fp, #-26]	@ movhi
- 656:../lcd.c      **** 		
+ 656:../lcd.c      **** 
  657:../lcd.c      **** 		Lcd_DspAscII8x16(texto_x, texto_y, color, num_str);
  6221              		.loc 1 657 0
  6222 24d4 B8015BE1 		ldrh	r0, [fp, #-24]
@@ -4060,7 +4060,7 @@
  677:../lcd.c      **** 	#define MARGEN_IZQ 20
  678:../lcd.c      **** 	#define MARGEN_SUP 10
  679:../lcd.c      **** 	#define TAM_CELDA 23
- 680:../lcd.c      **** 	
+ 680:../lcd.c      **** 
  681:../lcd.c      **** 	INT16U tablero_inicio_x = MARGEN_IZQ + 10;
  6261              		.loc 1 681 0
  6262 2514 1E30A0E3 		mov	r3, #30
@@ -4069,7 +4069,7 @@
  6264              		.loc 1 682 0
  6265 251c 1430A0E3 		mov	r3, #20
  6266 2520 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
- 683:../lcd.c      **** 	
+ 683:../lcd.c      **** 
  684:../lcd.c      **** 	/* Calcular posición de la celda en píxeles */
  685:../lcd.c      **** 	INT16U celda_x = tablero_inicio_x + col * TAM_CELDA;
  6267              		.loc 1 685 0
@@ -4097,7 +4097,7 @@
  6288 2570 B2315BE1 		ldrh	r3, [fp, #-18]	@ movhi
  6289 2574 033082E0 		add	r3, r2, r3
  6290 2578 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
- 687:../lcd.c      **** 	
+ 687:../lcd.c      **** 
  688:../lcd.c      **** 	/* Limpiar el interior de la celda */
  689:../lcd.c      **** 	LcdClrRect(celda_x + 2, celda_y + 2, celda_x + TAM_CELDA - 2, celda_y + TAM_CELDA - 2, WHITE);
  6291              		.loc 1 689 0
@@ -4136,11 +4136,11 @@
  6324 25fc 00C0A0E3 		mov	ip, #0
  6325 2600 00C08DE5 		str	ip, [sp, #0]
  6326 2604 FEFFFFEB 		bl	LcdClrRect
- 690:../lcd.c      **** 	
+ 690:../lcd.c      **** 
  691:../lcd.c      **** 	/* Dibujar grid de candidatos */
  692:../lcd.c      **** 	/* Cada subcelda del grid 3x3 tiene aproximadamente 7 píxeles */
  693:../lcd.c      **** 	#define TAM_SUBCELDA 7
- 694:../lcd.c      **** 	
+ 694:../lcd.c      **** 
  695:../lcd.c      **** 	INT8U numero;
  696:../lcd.c      **** 	for (numero = 1; numero <= 9; numero++)
  6327              		.loc 1 696 0
@@ -4187,7 +4187,7 @@
  6360 2674 012063E0 		rsb	r2, r3, r1
  6361 2678 0230A0E1 		mov	r3, r2
  6362 267c 18304BE5 		strb	r3, [fp, #-24]
- 705:../lcd.c      **** 			
+ 705:../lcd.c      **** 
  706:../lcd.c      **** 			/* Calcular centro de la subcelda */
  707:../lcd.c      **** 			INT16U centro_x = celda_x + 3 + grid_col * TAM_SUBCELDA + TAM_SUBCELDA / 2;
  6363              		.loc 1 707 0
@@ -4221,7 +4221,7 @@
  6390 26e4 2338A0E1 		mov	r3, r3, lsr #16
  6391 26e8 063083E2 		add	r3, r3, #6
  6392 26ec BC314BE1 		strh	r3, [fp, #-28]	@ movhi
- 709:../lcd.c      **** 			
+ 709:../lcd.c      **** 
  710:../lcd.c      **** 			/* Dibujar un círculo más grande (3x3 píxeles en forma circular) */
  711:../lcd.c      **** 			LCD_PutPixel(centro_x, centro_y, BLACK);           /* Centro */
  6393              		.loc 1 711 0
@@ -4841,7 +4841,7 @@
  6984 2f90 20301BE5 		ldr	r3, [fp, #-32]
  6985 2f94 14300BE5 		str	r3, [fp, #-20]
  735:../lcd.c      **** 	INT16U fila, col;
- 736:../lcd.c      **** 	
+ 736:../lcd.c      **** 
  737:../lcd.c      **** 	/* Recorrer todas las celdas del tablero */
  738:../lcd.c      **** 	for (fila = 0; fila < NUM_FILAS; fila++)
  6986              		.loc 1 738 0
@@ -4891,7 +4891,7 @@
  7023 3008 0030A003 		moveq	r3, #0
  7024 300c 0130A013 		movne	r3, #1
  7025 3010 19304BE5 		strb	r3, [fp, #-25]
- 746:../lcd.c      **** 			
+ 746:../lcd.c      **** 
  747:../lcd.c      **** 			if (valor != 0)
  7026              		.loc 1 747 0
  7027 3014 17305BE5 		ldrb	r3, [fp, #-23]	@ zero_extendqisi2
@@ -4950,7 +4950,7 @@
  756:../lcd.c      **** 			}
  757:../lcd.c      **** 		}
  758:../lcd.c      **** 	}
- 759:../lcd.c      **** 	
+ 759:../lcd.c      **** 
  760:../lcd.c      **** 	/* Transferir todo a la pantalla */
  761:../lcd.c      **** 	Lcd_Dma_Trans();
  7068              		.loc 1 761 0 is_stmt 1
@@ -4997,7 +4997,7 @@
  774:../lcd.c      **** 	#define MARGEN_IZQ 20
  775:../lcd.c      **** 	#define MARGEN_SUP 10
  776:../lcd.c      **** 	#define TAM_CELDA 23
- 777:../lcd.c      **** 	
+ 777:../lcd.c      **** 
  778:../lcd.c      **** 	INT16U tablero_inicio_y = MARGEN_SUP + 10;
  7099              		.loc 1 778 0
  7100 30b0 1430A0E3 		mov	r3, #20
@@ -5006,7 +5006,7 @@
  7102              		.loc 1 779 0
  7103 30b8 CF30A0E3 		mov	r3, #207
  7104 30bc B0314BE1 		strh	r3, [fp, #-16]	@ movhi
- 780:../lcd.c      **** 	
+ 780:../lcd.c      **** 
  781:../lcd.c      **** 	/* Convertir microsegundos a segundos */
  782:../lcd.c      **** 	INT32U segundos_totales = tiempo_us / 1000000;
  7105              		.loc 1 782 0
@@ -5015,7 +5015,7 @@
  7108 30c8 921383E0 		umull	r1, r3, r2, r3
  7109 30cc 2339A0E1 		mov	r3, r3, lsr #18
  7110 30d0 14300BE5 		str	r3, [fp, #-20]
- 783:../lcd.c      **** 	
+ 783:../lcd.c      **** 
  784:../lcd.c      **** 	/* Calcular minutos y segundos */
  785:../lcd.c      **** 	INT16U minutos = segundos_totales / 60;
  7111              		.loc 1 785 0
@@ -5036,7 +5036,7 @@
  7125 3104 0331A0E1 		mov	r3, r3, asl #2
  7126 3108 012063E0 		rsb	r2, r3, r1
  7127 310c B8214BE1 		strh	r2, [fp, #-24]	@ movhi
- 787:../lcd.c      **** 	
+ 787:../lcd.c      **** 
  788:../lcd.c      **** 	/* Crear string en formato MM:SS */
  789:../lcd.c      **** 	INT8U tiempo_str[15];
  790:../lcd.c      **** 	tiempo_str[0] = 'T';
@@ -5137,7 +5137,7 @@
  7209              		.loc 1 803 0
  7210 3220 0030A0E3 		mov	r3, #0
  7211 3224 1B304BE5 		strb	r3, [fp, #-27]
- 804:../lcd.c      **** 	
+ 804:../lcd.c      **** 
  805:../lcd.c      **** 	/* Limpiar el área del tiempo (aproximadamente 90 píxeles de ancho) */
  806:../lcd.c      **** 	LcdClrRect(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, 
  7212              		.loc 1 806 0
@@ -5172,7 +5172,7 @@
  7241 3298 6E20A0E3 		mov	r2, #110
  7242 329c FEFFFFEB 		bl	LcdClrRect
  807:../lcd.c      **** 	           MARGEN_IZQ + 90, tablero_inicio_y + tablero_tam + 15, WHITE);
- 808:../lcd.c      **** 	
+ 808:../lcd.c      **** 
  809:../lcd.c      **** 	/* Dibujar el nuevo tiempo */
  810:../lcd.c      **** 	Lcd_DspAscII6x8(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, BLACK, tiempo_str);
  7243              		.loc 1 810 0
@@ -5189,7 +5189,7 @@
  7254 32c8 0210A0E1 		mov	r1, r2
  7255 32cc 0F20A0E3 		mov	r2, #15
  7256 32d0 FEFFFFEB 		bl	Lcd_DspAscII6x8
- 811:../lcd.c      **** 	
+ 811:../lcd.c      **** 
  812:../lcd.c      **** 	/* Transferir solo esta actualización a pantalla */
  813:../lcd.c      **** 	Lcd_Dma_Trans();
  7257              		.loc 1 813 0
@@ -5269,7 +5269,7 @@
  7308 330c 921383E0 		umull	r1, r3, r2, r3
  7309 3310 2339A0E1 		mov	r3, r3, lsr #18
  7310 3314 10300BE5 		str	r3, [fp, #-16]
- 828:../lcd.c      **** 	
+ 828:../lcd.c      **** 
  829:../lcd.c      **** 	/* Calcular minutos y segundos */
  830:../lcd.c      **** 	INT16U minutos = segundos_totales / 60;
  7311              		.loc 1 830 0
@@ -5290,7 +5290,7 @@
  7325 3348 0331A0E1 		mov	r3, r3, asl #2
  7326 334c 012063E0 		rsb	r2, r3, r1
  7327 3350 B4214BE1 		strh	r2, [fp, #-20]	@ movhi
- 832:../lcd.c      **** 	
+ 832:../lcd.c      **** 
  833:../lcd.c      **** 	/* Crear string en formato MM:SS */
  834:../lcd.c      **** 	INT8U tiempo_str[10];
  835:../lcd.c      **** 	tiempo_str[0] = '0' + (minutos / 10);    /* Decenas de minutos */
@@ -5359,12 +5359,12 @@
  7385              		.loc 1 840 0
  7386 3424 0030A0E3 		mov	r3, #0
  7387 3428 1B304BE5 		strb	r3, [fp, #-27]
- 841:../lcd.c      **** 	
+ 841:../lcd.c      **** 
  842:../lcd.c      **** 	/* Limpiar pantalla */
  843:../lcd.c      **** 	Lcd_Clr();
  7388              		.loc 1 843 0
  7389 342c FEFFFFEB 		bl	Lcd_Clr
- 844:../lcd.c      **** 	
+ 844:../lcd.c      **** 
  845:../lcd.c      **** 	/* Título */
  846:../lcd.c      **** 	Lcd_DspAscII8x16(80, 40, BLACK, "PARTIDA TERMINADA");
  7390              		.loc 1 846 0
@@ -5373,7 +5373,7 @@
  7393 3438 0F20A0E3 		mov	r2, #15
  7394 343c 58309FE5 		ldr	r3, .L145+12
  7395 3440 FEFFFFEB 		bl	Lcd_DspAscII8x16
- 847:../lcd.c      **** 	
+ 847:../lcd.c      **** 
  848:../lcd.c      **** 	/* Mostrar tiempo final */
  849:../lcd.c      **** 	Lcd_DspAscII8x16(90, 80, BLACK, "Tiempo final:");
  7396              		.loc 1 849 0
@@ -5389,7 +5389,7 @@
  7405 3460 6410A0E3 		mov	r1, #100
  7406 3464 0F20A0E3 		mov	r2, #15
  7407 3468 FEFFFFEB 		bl	Lcd_DspAscII8x16
- 851:../lcd.c      **** 	
+ 851:../lcd.c      **** 
  852:../lcd.c      **** 	/* Mensaje para reiniciar */
  853:../lcd.c      **** 	Lcd_DspAscII8x16(30, 158, BLACK, "Pulse un boton para reiniciar");
  7408              		.loc 1 853 0
@@ -5398,7 +5398,7 @@
  7411 3474 0F20A0E3 		mov	r2, #15
  7412 3478 24309FE5 		ldr	r3, .L145+20
  7413 347c FEFFFFEB 		bl	Lcd_DspAscII8x16
- 854:../lcd.c      **** 	
+ 854:../lcd.c      **** 
  855:../lcd.c      **** 	/* Transferir a pantalla */
  856:../lcd.c      **** 	Lcd_Dma_Trans();
  7414              		.loc 1 856 0
@@ -5437,17 +5437,19 @@
  7441              		.global	Sudoku_Dibujar_Tablero
  7443              	Sudoku_Dibujar_Tablero:
  7444              	.LFB29:
- 858:../lcd.c      **** /*********************************************************************************************
- 859:../lcd.c      **** * name:		Sudoku_Dibujar_Tablero()
- 860:../lcd.c      **** * func:		Dibuja el tablero de Sudoku 9x9 con numeración
- 861:../lcd.c      **** * para:		none
- 862:../lcd.c      **** * ret:		none
- 863:../lcd.c      **** * modify:
- 864:../lcd.c      **** * comment:	Tamaño de celda: 23x23 píxeles, tablero total: 207x207
- 865:../lcd.c      **** *********************************************************************************************/
- 866:../lcd.c      **** void Sudoku_Dibujar_Tablero(void)
- 867:../lcd.c      **** {
- 7445              		.loc 1 867 0
+ 858:../lcd.c      **** 
+ 859:../lcd.c      **** 
+ 860:../lcd.c      **** /*********************************************************************************************
+ 861:../lcd.c      **** * name:		Sudoku_Dibujar_Tablero()
+ 862:../lcd.c      **** * func:		Dibuja el tablero de Sudoku 9x9 con numeración
+ 863:../lcd.c      **** * para:		none
+ 864:../lcd.c      **** * ret:		none
+ 865:../lcd.c      **** * modify:
+ 866:../lcd.c      **** * comment:	Tamaño de celda: 23x23 píxeles, tablero total: 207x207
+ 867:../lcd.c      **** *********************************************************************************************/
+ 868:../lcd.c      **** void Sudoku_Dibujar_Tablero(void)
+ 869:../lcd.c      **** {
+ 7445              		.loc 1 869 0
  7446              		.cfi_startproc
  7447              		@ Function supports interworking.
  7448              		@ args = 0, pretend = 0, frame = 24
@@ -5463,58 +5465,58 @@
  7458              	.LCFI51:
  7459              		.cfi_def_cfa 11, 4
  7460 34b4 20D04DE2 		sub	sp, sp, #32
- 868:../lcd.c      **** 	INT16U i, j;
- 869:../lcd.c      **** 	INT8U fila_str[2] = "1";
- 7461              		.loc 1 869 0
+ 870:../lcd.c      **** 	INT16U i, j;
+ 871:../lcd.c      **** 	INT8U fila_str[2] = "1";
+ 7461              		.loc 1 871 0
  7462 34b8 3130A0E3 		mov	r3, #49
  7463 34bc B0324BE1 		strh	r3, [fp, #-32]	@ movhi
- 870:../lcd.c      **** 	INT8U col_str[2] = "1";
- 7464              		.loc 1 870 0
+ 872:../lcd.c      **** 	INT8U col_str[2] = "1";
+ 7464              		.loc 1 872 0
  7465 34c0 3130A0E3 		mov	r3, #49
  7466 34c4 B4324BE1 		strh	r3, [fp, #-36]	@ movhi
- 871:../lcd.c      **** 	
- 872:../lcd.c      **** 	/* Constantes del tablero */
- 873:../lcd.c      **** 	#define MARGEN_IZQ 20
- 874:../lcd.c      **** 	#define MARGEN_SUP 10
- 875:../lcd.c      **** 	#define TAM_CELDA 23
- 876:../lcd.c      **** 	#define GROSOR_FINO 1
- 877:../lcd.c      **** 	#define GROSOR_GRUESO 2
- 878:../lcd.c      **** 	
- 879:../lcd.c      **** 	INT16U tablero_inicio_x = MARGEN_IZQ + 10;  /* Espacio para números de fila */
- 7467              		.loc 1 879 0
+ 873:../lcd.c      **** 
+ 874:../lcd.c      **** 	/* Constantes del tablero */
+ 875:../lcd.c      **** 	#define MARGEN_IZQ 20
+ 876:../lcd.c      **** 	#define MARGEN_SUP 10
+ 877:../lcd.c      **** 	#define TAM_CELDA 23
+ 878:../lcd.c      **** 	#define GROSOR_FINO 1
+ 879:../lcd.c      **** 	#define GROSOR_GRUESO 2
+ 880:../lcd.c      **** 
+ 881:../lcd.c      **** 	INT16U tablero_inicio_x = MARGEN_IZQ + 10;  /* Espacio para números de fila */
+ 7467              		.loc 1 881 0
  7468 34c8 1E30A0E3 		mov	r3, #30
  7469 34cc B0314BE1 		strh	r3, [fp, #-16]	@ movhi
- 880:../lcd.c      **** 	INT16U tablero_inicio_y = MARGEN_SUP + 10;  /* Espacio para números de columna */
- 7470              		.loc 1 880 0
+ 882:../lcd.c      **** 	INT16U tablero_inicio_y = MARGEN_SUP + 10;  /* Espacio para números de columna */
+ 7470              		.loc 1 882 0
  7471 34d0 1430A0E3 		mov	r3, #20
  7472 34d4 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
- 881:../lcd.c      **** 	INT16U tablero_tam = TAM_CELDA * 9;         /* 207 píxeles */
- 7473              		.loc 1 881 0
+ 883:../lcd.c      **** 	INT16U tablero_tam = TAM_CELDA * 9;         /* 207 píxeles */
+ 7473              		.loc 1 883 0
  7474 34d8 CF30A0E3 		mov	r3, #207
  7475 34dc B4314BE1 		strh	r3, [fp, #-20]	@ movhi
- 882:../lcd.c      **** 	
- 883:../lcd.c      **** 	/* Limpiar pantalla */
- 884:../lcd.c      **** 	Lcd_Clr();
- 7476              		.loc 1 884 0
+ 884:../lcd.c      **** 
+ 885:../lcd.c      **** 	/* Limpiar pantalla */
+ 886:../lcd.c      **** 	Lcd_Clr();
+ 7476              		.loc 1 886 0
  7477 34e0 FEFFFFEB 		bl	Lcd_Clr
- 885:../lcd.c      **** 	
- 886:../lcd.c      **** 	/* Dibujar números de columnas (1-9) en la parte superior */
- 887:../lcd.c      **** 	for (i = 0; i < 9; i++)
- 7478              		.loc 1 887 0
+ 887:../lcd.c      **** 
+ 888:../lcd.c      **** 	/* Dibujar números de columnas (1-9) en la parte superior */
+ 889:../lcd.c      **** 	for (i = 0; i < 9; i++)
+ 7478              		.loc 1 889 0
  7479 34e4 0030A0E3 		mov	r3, #0
  7480 34e8 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
  7481 34ec 1B0000EA 		b	.L148
  7482              	.L149:
- 888:../lcd.c      **** 	{
- 889:../lcd.c      **** 		col_str[0] = '1' + i;
- 7483              		.loc 1 889 0 discriminator 2
+ 890:../lcd.c      **** 	{
+ 891:../lcd.c      **** 		col_str[0] = '1' + i;
+ 7483              		.loc 1 891 0 discriminator 2
  7484 34f0 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7485 34f4 FF3003E2 		and	r3, r3, #255
  7486 34f8 313083E2 		add	r3, r3, #49
  7487 34fc FF3003E2 		and	r3, r3, #255
  7488 3500 24304BE5 		strb	r3, [fp, #-36]
- 890:../lcd.c      **** 		Lcd_DspAscII6x8(tablero_inicio_x + i * TAM_CELDA + TAM_CELDA/2 - 3, 
- 7489              		.loc 1 890 0 discriminator 2
+ 892:../lcd.c      **** 		Lcd_DspAscII6x8(tablero_inicio_x + i * TAM_CELDA + TAM_CELDA/2 - 3, 
+ 7489              		.loc 1 892 0 discriminator 2
  7490 3504 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7491 3508 0320A0E1 		mov	r2, r3	@ movhi
  7492 350c 8220A0E1 		mov	r2, r2, asl #1
@@ -5535,37 +5537,37 @@
  7507 3548 0C10A0E3 		mov	r1, #12
  7508 354c 0F20A0E3 		mov	r2, #15
  7509 3550 FEFFFFEB 		bl	Lcd_DspAscII6x8
- 887:../lcd.c      **** 	for (i = 0; i < 9; i++)
- 7510              		.loc 1 887 0 discriminator 2
+ 889:../lcd.c      **** 	for (i = 0; i < 9; i++)
+ 7510              		.loc 1 889 0 discriminator 2
  7511 3554 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7512 3558 013083E2 		add	r3, r3, #1
  7513 355c BE304BE1 		strh	r3, [fp, #-14]	@ movhi
  7514              	.L148:
- 887:../lcd.c      **** 	for (i = 0; i < 9; i++)
- 7515              		.loc 1 887 0 is_stmt 0 discriminator 1
+ 889:../lcd.c      **** 	for (i = 0; i < 9; i++)
+ 7515              		.loc 1 889 0 is_stmt 0 discriminator 1
  7516 3560 BE305BE1 		ldrh	r3, [fp, #-14]
  7517 3564 080053E3 		cmp	r3, #8
  7518 3568 E0FFFF9A 		bls	.L149
- 891:../lcd.c      **** 		                MARGEN_SUP + 2, BLACK, col_str);
- 892:../lcd.c      **** 	}
- 893:../lcd.c      **** 	
- 894:../lcd.c      **** 	/* Dibujar números de filas (1-9) en el lado izquierdo */
- 895:../lcd.c      **** 	for (i = 0; i < 9; i++)
- 7519              		.loc 1 895 0 is_stmt 1
+ 893:../lcd.c      **** 		                MARGEN_SUP + 2, BLACK, col_str);
+ 894:../lcd.c      **** 	}
+ 895:../lcd.c      **** 
+ 896:../lcd.c      **** 	/* Dibujar números de filas (1-9) en el lado izquierdo */
+ 897:../lcd.c      **** 	for (i = 0; i < 9; i++)
+ 7519              		.loc 1 897 0 is_stmt 1
  7520 356c 0030A0E3 		mov	r3, #0
  7521 3570 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
  7522 3574 1B0000EA 		b	.L150
  7523              	.L151:
- 896:../lcd.c      **** 	{
- 897:../lcd.c      **** 		fila_str[0] = '1' + i;
- 7524              		.loc 1 897 0 discriminator 2
+ 898:../lcd.c      **** 	{
+ 899:../lcd.c      **** 		fila_str[0] = '1' + i;
+ 7524              		.loc 1 899 0 discriminator 2
  7525 3578 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7526 357c FF3003E2 		and	r3, r3, #255
  7527 3580 313083E2 		add	r3, r3, #49
  7528 3584 FF3003E2 		and	r3, r3, #255
  7529 3588 20304BE5 		strb	r3, [fp, #-32]
- 898:../lcd.c      **** 		Lcd_DspAscII6x8(MARGEN_IZQ + 2, 
- 7530              		.loc 1 898 0 discriminator 2
+ 900:../lcd.c      **** 		Lcd_DspAscII6x8(MARGEN_IZQ + 2, 
+ 7530              		.loc 1 900 0 discriminator 2
  7531 358c BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7532 3590 0320A0E1 		mov	r2, r3	@ movhi
  7533 3594 8220A0E1 		mov	r2, r2, asl #1
@@ -5586,32 +5588,32 @@
  7548 35d0 0210A0E1 		mov	r1, r2
  7549 35d4 0F20A0E3 		mov	r2, #15
  7550 35d8 FEFFFFEB 		bl	Lcd_DspAscII6x8
- 895:../lcd.c      **** 	for (i = 0; i < 9; i++)
- 7551              		.loc 1 895 0 discriminator 2
+ 897:../lcd.c      **** 	for (i = 0; i < 9; i++)
+ 7551              		.loc 1 897 0 discriminator 2
  7552 35dc BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7553 35e0 013083E2 		add	r3, r3, #1
  7554 35e4 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
  7555              	.L150:
- 895:../lcd.c      **** 	for (i = 0; i < 9; i++)
- 7556              		.loc 1 895 0 is_stmt 0 discriminator 1
+ 897:../lcd.c      **** 	for (i = 0; i < 9; i++)
+ 7556              		.loc 1 897 0 is_stmt 0 discriminator 1
  7557 35e8 BE305BE1 		ldrh	r3, [fp, #-14]
  7558 35ec 080053E3 		cmp	r3, #8
  7559 35f0 E0FFFF9A 		bls	.L151
- 899:../lcd.c      **** 		                tablero_inicio_y + i * TAM_CELDA + TAM_CELDA/2 - 4, 
- 900:../lcd.c      **** 		                BLACK, fila_str);
- 901:../lcd.c      **** 	}
- 902:../lcd.c      **** 	
- 903:../lcd.c      **** 	/* Dibujar líneas horizontales */
- 904:../lcd.c      **** 	for (i = 0; i <= 9; i++)
- 7560              		.loc 1 904 0 is_stmt 1
+ 901:../lcd.c      **** 		                tablero_inicio_y + i * TAM_CELDA + TAM_CELDA/2 - 4, 
+ 902:../lcd.c      **** 		                BLACK, fila_str);
+ 903:../lcd.c      **** 	}
+ 904:../lcd.c      **** 
+ 905:../lcd.c      **** 	/* Dibujar líneas horizontales */
+ 906:../lcd.c      **** 	for (i = 0; i <= 9; i++)
+ 7560              		.loc 1 906 0 is_stmt 1
  7561 35f4 0030A0E3 		mov	r3, #0
  7562 35f8 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
  7563 35fc 330000EA 		b	.L152
  7564              	.L155:
  7565              	.LBB6:
- 905:../lcd.c      **** 	{
- 906:../lcd.c      **** 		INT16U grosor = (i % 3 == 0) ? GROSOR_GRUESO : GROSOR_FINO;
- 7566              		.loc 1 906 0
+ 907:../lcd.c      **** 	{
+ 908:../lcd.c      **** 		INT16U grosor = (i % 3 == 0) ? GROSOR_GRUESO : GROSOR_FINO;
+ 7566              		.loc 1 908 0
  7567 3600 BE205BE1 		ldrh	r2, [fp, #-14]
  7568 3604 30329FE5 		ldr	r3, .L160
  7569 3608 921383E0 		umull	r1, r3, r2, r3
@@ -5624,17 +5626,17 @@
  7576 3624 2338A0E1 		mov	r3, r3, lsr #16
  7577 3628 000053E3 		cmp	r3, #0
  7578 362c 0100001A 		bne	.L153
- 7579              		.loc 1 906 0 is_stmt 0 discriminator 1
+ 7579              		.loc 1 908 0 is_stmt 0 discriminator 1
  7580 3630 0230A0E3 		mov	r3, #2
  7581 3634 000000EA 		b	.L154
  7582              	.L153:
- 7583              		.loc 1 906 0 discriminator 2
+ 7583              		.loc 1 908 0 discriminator 2
  7584 3638 0130A0E3 		mov	r3, #1
  7585              	.L154:
- 7586              		.loc 1 906 0 discriminator 3
+ 7586              		.loc 1 908 0 discriminator 3
  7587 363c B6314BE1 		strh	r3, [fp, #-22]	@ movhi
- 907:../lcd.c      **** 		INT16U y = tablero_inicio_y + i * TAM_CELDA;
- 7588              		.loc 1 907 0 is_stmt 1 discriminator 3
+ 909:../lcd.c      **** 		INT16U y = tablero_inicio_y + i * TAM_CELDA;
+ 7588              		.loc 1 909 0 is_stmt 1 discriminator 3
  7589 3640 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7590 3644 0320A0E1 		mov	r2, r3	@ movhi
  7591 3648 8220A0E1 		mov	r2, r2, asl #1
@@ -5646,8 +5648,8 @@
  7597 3660 B2315BE1 		ldrh	r3, [fp, #-18]	@ movhi
  7598 3664 033082E0 		add	r3, r2, r3
  7599 3668 B8314BE1 		strh	r3, [fp, #-24]	@ movhi
- 908:../lcd.c      **** 		Lcd_Draw_HLine(tablero_inicio_x, tablero_inicio_x + tablero_tam, y, BLACK, grosor);
- 7600              		.loc 1 908 0 discriminator 3
+ 910:../lcd.c      **** 		Lcd_Draw_HLine(tablero_inicio_x, tablero_inicio_x + tablero_tam, y, BLACK, grosor);
+ 7600              		.loc 1 910 0 discriminator 3
  7601 366c B0115BE1 		ldrh	r1, [fp, #-16]
  7602 3670 B0215BE1 		ldrh	r2, [fp, #-16]	@ movhi
  7603 3674 B4315BE1 		ldrh	r3, [fp, #-20]	@ movhi
@@ -5671,30 +5673,30 @@
  7621 36bc 0F30A0E3 		mov	r3, #15
  7622 36c0 FEFFFFEB 		bl	Lcd_Draw_HLine
  7623              	.LBE6:
- 904:../lcd.c      **** 	for (i = 0; i <= 9; i++)
- 7624              		.loc 1 904 0 discriminator 3
+ 906:../lcd.c      **** 	for (i = 0; i <= 9; i++)
+ 7624              		.loc 1 906 0 discriminator 3
  7625 36c4 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7626 36c8 013083E2 		add	r3, r3, #1
  7627 36cc BE304BE1 		strh	r3, [fp, #-14]	@ movhi
  7628              	.L152:
- 904:../lcd.c      **** 	for (i = 0; i <= 9; i++)
- 7629              		.loc 1 904 0 is_stmt 0 discriminator 1
+ 906:../lcd.c      **** 	for (i = 0; i <= 9; i++)
+ 7629              		.loc 1 906 0 is_stmt 0 discriminator 1
  7630 36d0 BE305BE1 		ldrh	r3, [fp, #-14]
  7631 36d4 090053E3 		cmp	r3, #9
  7632 36d8 C8FFFF9A 		bls	.L155
- 909:../lcd.c      **** 	}
- 910:../lcd.c      **** 	
- 911:../lcd.c      **** 	/* Dibujar líneas verticales */
- 912:../lcd.c      **** 	for (i = 0; i <= 9; i++)
- 7633              		.loc 1 912 0 is_stmt 1
+ 911:../lcd.c      **** 	}
+ 912:../lcd.c      **** 
+ 913:../lcd.c      **** 	/* Dibujar líneas verticales */
+ 914:../lcd.c      **** 	for (i = 0; i <= 9; i++)
+ 7633              		.loc 1 914 0 is_stmt 1
  7634 36dc 0030A0E3 		mov	r3, #0
  7635 36e0 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
  7636 36e4 330000EA 		b	.L156
  7637              	.L159:
  7638              	.LBB7:
- 913:../lcd.c      **** 	{
- 914:../lcd.c      **** 		INT16U grosor = (i % 3 == 0) ? GROSOR_GRUESO : GROSOR_FINO;
- 7639              		.loc 1 914 0
+ 915:../lcd.c      **** 	{
+ 916:../lcd.c      **** 		INT16U grosor = (i % 3 == 0) ? GROSOR_GRUESO : GROSOR_FINO;
+ 7639              		.loc 1 916 0
  7640 36e8 BE205BE1 		ldrh	r2, [fp, #-14]
  7641 36ec 48319FE5 		ldr	r3, .L160
  7642 36f0 921383E0 		umull	r1, r3, r2, r3
@@ -5707,17 +5709,17 @@
  7649 370c 2338A0E1 		mov	r3, r3, lsr #16
  7650 3710 000053E3 		cmp	r3, #0
  7651 3714 0100001A 		bne	.L157
- 7652              		.loc 1 914 0 is_stmt 0 discriminator 1
+ 7652              		.loc 1 916 0 is_stmt 0 discriminator 1
  7653 3718 0230A0E3 		mov	r3, #2
  7654 371c 000000EA 		b	.L158
  7655              	.L157:
- 7656              		.loc 1 914 0 discriminator 2
+ 7656              		.loc 1 916 0 discriminator 2
  7657 3720 0130A0E3 		mov	r3, #1
  7658              	.L158:
- 7659              		.loc 1 914 0 discriminator 3
+ 7659              		.loc 1 916 0 discriminator 3
  7660 3724 BA314BE1 		strh	r3, [fp, #-26]	@ movhi
- 915:../lcd.c      **** 		INT16U x = tablero_inicio_x + i * TAM_CELDA;
- 7661              		.loc 1 915 0 is_stmt 1 discriminator 3
+ 917:../lcd.c      **** 		INT16U x = tablero_inicio_x + i * TAM_CELDA;
+ 7661              		.loc 1 917 0 is_stmt 1 discriminator 3
  7662 3728 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7663 372c 0320A0E1 		mov	r2, r3	@ movhi
  7664 3730 8220A0E1 		mov	r2, r2, asl #1
@@ -5729,8 +5731,8 @@
  7670 3748 B0315BE1 		ldrh	r3, [fp, #-16]	@ movhi
  7671 374c 033082E0 		add	r3, r2, r3
  7672 3750 BC314BE1 		strh	r3, [fp, #-28]	@ movhi
- 916:../lcd.c      **** 		Lcd_Draw_VLine(tablero_inicio_y, tablero_inicio_y + tablero_tam, x, BLACK, grosor);
- 7673              		.loc 1 916 0 discriminator 3
+ 918:../lcd.c      **** 		Lcd_Draw_VLine(tablero_inicio_y, tablero_inicio_y + tablero_tam, x, BLACK, grosor);
+ 7673              		.loc 1 918 0 discriminator 3
  7674 3754 B2115BE1 		ldrh	r1, [fp, #-18]
  7675 3758 B2215BE1 		ldrh	r2, [fp, #-18]	@ movhi
  7676 375c B4315BE1 		ldrh	r3, [fp, #-20]	@ movhi
@@ -5754,22 +5756,22 @@
  7694 37a4 0F30A0E3 		mov	r3, #15
  7695 37a8 FEFFFFEB 		bl	Lcd_Draw_VLine
  7696              	.LBE7:
- 912:../lcd.c      **** 	for (i = 0; i <= 9; i++)
- 7697              		.loc 1 912 0 discriminator 3
+ 914:../lcd.c      **** 	for (i = 0; i <= 9; i++)
+ 7697              		.loc 1 914 0 discriminator 3
  7698 37ac BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
  7699 37b0 013083E2 		add	r3, r3, #1
  7700 37b4 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
  7701              	.L156:
- 912:../lcd.c      **** 	for (i = 0; i <= 9; i++)
- 7702              		.loc 1 912 0 is_stmt 0 discriminator 1
+ 914:../lcd.c      **** 	for (i = 0; i <= 9; i++)
+ 7702              		.loc 1 914 0 is_stmt 0 discriminator 1
  7703 37b8 BE305BE1 		ldrh	r3, [fp, #-14]
  7704 37bc 090053E3 		cmp	r3, #9
  7705 37c0 C8FFFF9A 		bls	.L159
- 917:../lcd.c      **** 	}
- 918:../lcd.c      **** 	
- 919:../lcd.c      **** 	/* Mostrar tiempo en la parte inferior */
- 920:../lcd.c      **** 	Lcd_DspAscII6x8(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, 
- 7706              		.loc 1 920 0 is_stmt 1
+ 919:../lcd.c      **** 	}
+ 920:../lcd.c      **** 
+ 921:../lcd.c      **** 	/* Mostrar tiempo en la parte inferior */
+ 922:../lcd.c      **** 	Lcd_DspAscII6x8(MARGEN_IZQ, tablero_inicio_y + tablero_tam + 5, 
+ 7706              		.loc 1 922 0 is_stmt 1
  7707 37c4 B2215BE1 		ldrh	r2, [fp, #-18]	@ movhi
  7708 37c8 B4315BE1 		ldrh	r3, [fp, #-20]	@ movhi
  7709 37cc 033082E0 		add	r3, r2, r3
@@ -5783,11 +5785,11 @@
  7717 37ec 0F20A0E3 		mov	r2, #15
  7718 37f0 48309FE5 		ldr	r3, .L160+4
  7719 37f4 FEFFFFEB 		bl	Lcd_DspAscII6x8
- 921:../lcd.c      **** 	                BLACK, "Tiempo: 00:00");
- 922:../lcd.c      **** 	
- 923:../lcd.c      **** 	/* Mensaje de ayuda */
- 924:../lcd.c      **** 	Lcd_DspAscII6x8(MARGEN_IZQ + 100, tablero_inicio_y + tablero_tam + 5, 
- 7720              		.loc 1 924 0
+ 923:../lcd.c      **** 	                BLACK, "Tiempo: 00:00");
+ 924:../lcd.c      **** 
+ 925:../lcd.c      **** 	/* Mensaje de ayuda */
+ 926:../lcd.c      **** 	Lcd_DspAscII6x8(MARGEN_IZQ + 100, tablero_inicio_y + tablero_tam + 5, 
+ 7720              		.loc 1 926 0
  7721 37f8 B2215BE1 		ldrh	r2, [fp, #-18]	@ movhi
  7722 37fc B4315BE1 		ldrh	r3, [fp, #-20]	@ movhi
  7723 3800 033082E0 		add	r3, r2, r3
@@ -5801,14 +5803,16 @@
  7731 3820 0A20A0E3 		mov	r2, #10
  7732 3824 18309FE5 		ldr	r3, .L160+8
  7733 3828 FEFFFFEB 		bl	Lcd_DspAscII6x8
- 925:../lcd.c      **** 	                DARKGRAY, "Fila 0: Salir");
- 926:../lcd.c      **** 	
- 927:../lcd.c      **** 	/* Transferir a pantalla */
- 928:../lcd.c      **** 	Lcd_Dma_Trans();
- 7734              		.loc 1 928 0
+ 927:../lcd.c      **** 	                DARKGRAY, "Fila 0: Salir");
+ 928:../lcd.c      **** 
+ 929:../lcd.c      **** 
+ 930:../lcd.c      **** 
+ 931:../lcd.c      **** 	/* Transferir a pantalla */
+ 932:../lcd.c      **** 	Lcd_Dma_Trans();
+ 7734              		.loc 1 932 0
  7735 382c FEFFFFEB 		bl	Lcd_Dma_Trans
- 929:../lcd.c      **** }...
- 7736              		.loc 1 929 0
+ 933:../lcd.c      **** }...
+ 7736              		.loc 1 933 0
  7737 3830 0CD04BE2 		sub	sp, fp, #12
  7738 3834 00689DE8 		ldmfd	sp, {fp, sp, lr}
  7739 3838 1EFF2FE1 		bx	lr
@@ -5823,60 +5827,60 @@
  7749              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 lcd.c
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3005   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3007   .text:00000000 celda_leer_valor
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3042   .text:00000038 celda_es_candidato
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3083   .text:00000088 celda_es_pista
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3120   .text:000000c4 Lcd_Init
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3225   .text:000001d4 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5590   .text:00001e78 Zdma0Done
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3261   .text:00000258 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3264   .text:00000258 Lcd_Active_Clr
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3314   .text:000002bc $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3318   .text:000002c0 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3321   .text:000002c0 LCD_GetPixel
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3402   .text:00000390 Lcd_Clr
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3452   .text:000003f4 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3457   .text:000003fc $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3460   .text:000003fc LcdClrRect
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:3939   .text:00000a4c Lcd_Draw_Box
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:4700   .text:00001440 Lcd_Draw_HLine
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:4866   .text:00001648 Lcd_Draw_VLine
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:4004   .text:00000ae8 Lcd_Draw_Line
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5044   .text:00001880 Lcd_DisplayString
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5076   .text:000018ac Lcd_DspAscII8x16
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5325   .text:00001bbc $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5329   .text:00001bc0 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5332   .text:00001bc0 Lcd_DspAscII6x8
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5482   .text:00001d80 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5486   .text:00001d84 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5489   .text:00001d84 ReverseLine
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5584   .data:00000000 ucZdma0Done
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5626   .text:00001eb0 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5631   .text:00001eb8 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5634   .text:00001eb8 Lcd_Dma_Trans
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5713   .text:00001f68 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5727   .rodata:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5731   .text:00001f90 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5734   .text:00001f90 Lcd_Test
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5887   .text:00002160 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5927   .text:00002174 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:5930   .text:00002174 Sudoku_Pantalla_Inicial
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:6027   .text:0000227c $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:6040   .text:000022a4 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:6043   .text:000022a4 Sudoku_Dibujar_Numero_En_Celda
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:6239   .text:000024f4 Sudoku_Dibujar_Candidatos_En_Celda
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:6957   .text:00002f78 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:6961   .text:00002f7c $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:6964   .text:00002f7c Sudoku_Actualizar_Tablero_Completo
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:7080   .text:0000309c Sudoku_Actualizar_Tiempo
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:7266   .text:000032e4 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:7283   .text:000032f0 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:7286   .text:000032f0 Sudoku_Pantalla_Final
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:7423   .text:00003490 $d
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:7440   .text:000034a8 $a
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:7443   .text:000034a8 Sudoku_Dibujar_Tablero
-C:\Users\jaime\AppData\Local\Temp\ccH79KeJ.s:7743   .text:0000383c $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3005   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3007   .text:00000000 celda_leer_valor
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3042   .text:00000038 celda_es_candidato
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3083   .text:00000088 celda_es_pista
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3120   .text:000000c4 Lcd_Init
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3225   .text:000001d4 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5590   .text:00001e78 Zdma0Done
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3261   .text:00000258 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3264   .text:00000258 Lcd_Active_Clr
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3314   .text:000002bc $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3318   .text:000002c0 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3321   .text:000002c0 LCD_GetPixel
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3402   .text:00000390 Lcd_Clr
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3452   .text:000003f4 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3457   .text:000003fc $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3460   .text:000003fc LcdClrRect
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:3939   .text:00000a4c Lcd_Draw_Box
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:4700   .text:00001440 Lcd_Draw_HLine
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:4866   .text:00001648 Lcd_Draw_VLine
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:4004   .text:00000ae8 Lcd_Draw_Line
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5044   .text:00001880 Lcd_DisplayString
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5076   .text:000018ac Lcd_DspAscII8x16
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5325   .text:00001bbc $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5329   .text:00001bc0 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5332   .text:00001bc0 Lcd_DspAscII6x8
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5482   .text:00001d80 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5486   .text:00001d84 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5489   .text:00001d84 ReverseLine
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5584   .data:00000000 ucZdma0Done
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5626   .text:00001eb0 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5631   .text:00001eb8 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5634   .text:00001eb8 Lcd_Dma_Trans
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5713   .text:00001f68 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5727   .rodata:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5731   .text:00001f90 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5734   .text:00001f90 Lcd_Test
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5887   .text:00002160 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5927   .text:00002174 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:5930   .text:00002174 Sudoku_Pantalla_Inicial
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:6027   .text:0000227c $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:6040   .text:000022a4 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:6043   .text:000022a4 Sudoku_Dibujar_Numero_En_Celda
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:6239   .text:000024f4 Sudoku_Dibujar_Candidatos_En_Celda
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:6957   .text:00002f78 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:6961   .text:00002f7c $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:6964   .text:00002f7c Sudoku_Actualizar_Tablero_Completo
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:7080   .text:0000309c Sudoku_Actualizar_Tiempo
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:7266   .text:000032e4 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:7283   .text:000032f0 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:7286   .text:000032f0 Sudoku_Pantalla_Final
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:7423   .text:00003490 $d
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:7440   .text:000034a8 $a
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:7443   .text:000034a8 Sudoku_Dibujar_Tablero
+C:\Users\jaime\AppData\Local\Temp\cchG9niN.s:7743   .text:0000383c $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
