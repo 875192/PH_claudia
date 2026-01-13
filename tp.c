@@ -9,6 +9,7 @@
 #include <string.h>
 #include "tp.h"
 #include "lcd.h"
+#include "timer2.h"
 
 void TSInt(void) __attribute__((interrupt("IRQ")));
 
@@ -25,6 +26,8 @@ static int g_lcd_yc;                // Centro Y del LCD
 static volatile int g_ts_ready = 0; // Flag para indicar que hay datos del touch
 static int g_ts_raw_x;              // Última lectura X cruda
 static int g_ts_raw_y;              // Última lectura Y cruda
+static unsigned int g_last_touch_time = 0;  // Último tiempo de toque válido (microsegundos)
+#define TOUCH_DEBOUNCE_TIME 300000  // Tiempo mínimo entre toques: 300ms = 300000us
 
 void TS_Test(void)
 {
@@ -46,10 +49,10 @@ void TS_Test(void)
 ********************************************************************************************/
 void TSInt(void)
 {
-    int   i;
-    char fail = 0;
+    int   i, j;
     ULONG tmp;
-    ULONG Pt[6];
+    ULONG Pt[11];  /* Aumentado a 11 para almacenar 10 muestras + promedio */
+    ULONG swap;    /* Variable para ordenamiento */
 
 	// <X-Position Read>
 	// TSPX(GPE4_Q4(+)) TSPY(GPE5_Q3(-)) TSMY(GPE6_Q2(+)) TSMX(GPE7_Q1(-))
@@ -57,18 +60,30 @@ void TSInt(void)
 	rPDATE=0x68;
 	rADCCON=0x1<<2;			// AIN1
 	
-	DelayTime(1000);                // delay to set up the next channel
-	for( i=0; i<5; i++ )
+	DelayTime(2000);                // delay más largo para mejor estabilización
+	for( i=0; i<10; i++ )
 	{
 		rADCCON |= 0x1;				// Start X-position A/D conversion
 	    while( rADCCON & 0x1 );		// Check if Enable_start is low
     	while( !(rADCCON & 0x40) );	// Check ECFLG
 	    Pt[i] = (0x3ff&rADCDAT);
+	    DelayTime(100);             // Pequeño delay entre lecturas
 	}
-	// read X-position average value
-	Pt[5] = (Pt[0]+Pt[1]+Pt[2]+Pt[3]+Pt[4])/5;
 	
-	tmp = Pt[5];	
+	// Ordenar muestras para eliminar extremos (bubble sort simple)
+	for (i = 0; i < 9; i++) {
+	    for (j = 0; j < 9 - i; j++) {
+	        if (Pt[j] > Pt[j + 1]) {
+	            swap = Pt[j];
+	            Pt[j] = Pt[j + 1];
+	            Pt[j + 1] = swap;
+	        }
+	    }
+	}
+	// Promedio de las 6 muestras centrales (descartando 2 máximas y 2 mínimas)
+	Pt[10] = (Pt[2] + Pt[3] + Pt[4] + Pt[5] + Pt[6] + Pt[7]) / 6;
+	
+	tmp = Pt[10];	
 	
     // <Y-Position Read>
 	// TSPX(GPE4_Q4(-)) TSPY(GPE5_Q3(+)) TSMY(GPE6_Q2(-)) TSMX(GPE7_Q1(+))
@@ -76,27 +91,39 @@ void TSInt(void)
 	rPDATE=0x98;
 	rADCCON=0x0<<2;		        	// AIN0
 	
-	DelayTime(1000);                // delay to set up the next channel
-	for( i=0; i<5; i++ )
+	DelayTime(2000);                // delay más largo para mejor estabilización
+	for( i=0; i<10; i++ )
 	{
     	rADCCON |= 0x1;             // Start Y-position conversion
 	    while( rADCCON & 0x1 );     // Check if Enable_start is low
     	while( !(rADCCON & 0x40) ); // Check ECFLG
 	    Pt[i] = (0x3ff&rADCDAT);
+	    DelayTime(100);             // Pequeño delay entre lecturas
 	}
-	// read Y-position average value
-	Pt[5] = (Pt[0]+Pt[1]+Pt[2]+Pt[3]+Pt[4])/5;
+	
+	// Ordenar muestras para eliminar extremos
+	for (i = 0; i < 9; i++) {
+	    for (j = 0; j < 9 - i; j++) {
+	        if (Pt[j] > Pt[j + 1]) {
+	            swap = Pt[j];
+	            Pt[j] = Pt[j + 1];
+	            Pt[j + 1] = swap;
+	        }
+	    }
+	}
+	// Promedio de las 6 muestras centrales (descartando 2 máximas y 2 mínimas)
+	Pt[10] = (Pt[2] + Pt[3] + Pt[4] + Pt[5] + Pt[6] + Pt[7]) / 6;
 	
 	// Reportar coordenadas crudas para calibración
-	report_touch_data(tmp, Pt[5]);
+	report_touch_data(tmp, Pt[10]);
      
-	if(!(CheckTSP|(tmp < Xmin)|(tmp > Xmax)|(Pt[5] < Ymin)|(Pt[5] > Ymax)))   // Is valid value?
+	if(!(CheckTSP || (tmp < Xmin) || (tmp > Xmax) || (Pt[10] < Ymin) || (Pt[10] > Ymax)))   // Is valid value?
 	  {
 		tmp = 320*(tmp - Xmin)/(Xmax - Xmin);   // X - position
 //		Uart_Printf("X-Posion[AIN1] is %04d   ", tmp);
 			
-		Pt[5] = 240*(Pt[5] - Xmin)/(Ymax - Ymin);
-//		Uart_Printf("  Y-Posion[AIN0] is %04d\n", Pt[5]);
+		Pt[10] = 240*(Pt[10] - Xmin)/(Ymax - Ymin);
+//		Uart_Printf("  Y-Posion[AIN0] is %04d\n", Pt[10]);
       }
 
     if(CheckTSP)
@@ -131,7 +158,7 @@ void TS_init(void)
     DelayTime(100); 
     
     rEXTINT |= 0x200;                // falling edge trigger
-    pISR_EINT2=(unsigned *)TSInt;       // set interrupt handler
+    pISR_EINT2=(unsigned)TSInt;       // set interrupt handler
     
     rCLKCON = 0x7ff8;                // enable clock
     rADCPSR = 0x1;//0x4;             // A/D prescaler
@@ -180,22 +207,22 @@ void Lcd_TC(void)
 	Lcd_Draw_Box(160,180,240,240,15);
 	Lcd_Draw_Box(240,180,320,240,15);
 	/* output ASCII symbol */
-	Lcd_DspAscII6x8(37,26,BLACK,"0");
-	Lcd_DspAscII6x8(117,26,BLACK,"1");
-	Lcd_DspAscII6x8(197,26,BLACK,"2");
-	Lcd_DspAscII6x8(277,26,BLACK,"3");
-	Lcd_DspAscII6x8(37,86,BLACK,"4");
-	Lcd_DspAscII6x8(117,86,BLACK,"5");
-	Lcd_DspAscII6x8(197,86,BLACK,"6");
-	Lcd_DspAscII6x8(277,86,BLACK,"7");
-	Lcd_DspAscII6x8(37,146,BLACK,"8");
-	Lcd_DspAscII6x8(117,146,BLACK,"9");
-	Lcd_DspAscII6x8(197,146,BLACK,"A");
-	Lcd_DspAscII6x8(277,146,BLACK,"B");
-	Lcd_DspAscII6x8(37,206,BLACK,"C");
-	Lcd_DspAscII6x8(117,206,BLACK,"D");
-	Lcd_DspAscII6x8(197,206,BLACK,"E");
-	Lcd_DspAscII6x8(277,206,BLACK,"F");
+	Lcd_DspAscII6x8(37,26,BLACK,(INT8U*)"0");
+	Lcd_DspAscII6x8(117,26,BLACK,(INT8U*)"1");
+	Lcd_DspAscII6x8(197,26,BLACK,(INT8U*)"2");
+	Lcd_DspAscII6x8(277,26,BLACK,(INT8U*)"3");
+	Lcd_DspAscII6x8(37,86,BLACK,(INT8U*)"4");
+	Lcd_DspAscII6x8(117,86,BLACK,(INT8U*)"5");
+	Lcd_DspAscII6x8(197,86,BLACK,(INT8U*)"6");
+	Lcd_DspAscII6x8(277,86,BLACK,(INT8U*)"7");
+	Lcd_DspAscII6x8(37,146,BLACK,(INT8U*)"8");
+	Lcd_DspAscII6x8(117,146,BLACK,(INT8U*)"9");
+	Lcd_DspAscII6x8(197,146,BLACK,(INT8U*)"A");
+	Lcd_DspAscII6x8(277,146,BLACK,(INT8U*)"B");
+	Lcd_DspAscII6x8(37,206,BLACK,(INT8U*)"C");
+	Lcd_DspAscII6x8(117,206,BLACK,(INT8U*)"D");
+	Lcd_DspAscII6x8(197,206,BLACK,(INT8U*)"E");
+	Lcd_DspAscII6x8(277,206,BLACK,(INT8U*)"F");
 	Lcd_Dma_Trans();
 	Delay(100);
 }
@@ -314,14 +341,26 @@ static void draw_cross(int x, int y)
 /*********************************************************************************************
 * name:     report_touch_data
 * func:     Llamada desde TSInt() para reportar coordenadas crudas
+*           Implementa antirrebote: ignora toques muy rápidos (< 300ms desde último toque)
 *********************************************************************************************/
 void report_touch_data(int x, int y)
 {
-    if (g_ts_ready == 0)
+    unsigned int current_time = timer2_count();
+    unsigned int time_diff;
+    
+    /* Calcular diferencia de tiempo (manejando overflow del contador) */
+    if (current_time >= g_last_touch_time)
+        time_diff = current_time - g_last_touch_time;
+    else
+        time_diff = (0xFFFFFFFF - g_last_touch_time) + current_time + 1;
+    
+    /* Solo aceptar el toque si ha pasado suficiente tiempo desde el último */
+    if (g_ts_ready == 0 && time_diff >= TOUCH_DEBOUNCE_TIME)
     {
         g_ts_raw_x = x;
         g_ts_raw_y = y;
         g_ts_ready = 1;
+        g_last_touch_time = current_time;  /* Actualizar tiempo del último toque */
     }
 }
 
@@ -351,32 +390,58 @@ static void ts_read_raw(int *xr, int *yr)
 
 /*********************************************************************************************
 * name:     get_cal_point
-* func:     Muestra cruz, espera 5 toques y captura promedio de coordenadas crudas
+* func:     Muestra cruz, espera 12 toques y captura promedio con filtrado de extremos
 *********************************************************************************************/
 static void get_cal_point(int lcd_x, int lcd_y, int *ts_x, int *ts_y)
 {
-    int i;
+    int i, j;
+    int samples_x[12], samples_y[12];
     int sum_x = 0, sum_y = 0;
-    int temp_x, temp_y;
+    int temp;
     
     draw_cross(lcd_x, lcd_y);
     Lcd_Dma_Trans();
-    Delay(50);
+    Delay(80);  // Delay más largo para permitir posicionamiento preciso
     
-    // Tomar 5 muestras y promediar
-    for (i = 0; i < 5; i++)
+    // Tomar 12 muestras
+    for (i = 0; i < 12; i++)
     {
-        ts_read_raw(&temp_x, &temp_y);
-        sum_x += temp_x;
-        sum_y += temp_y;
-        Delay(20);  // Pequeña pausa entre muestras
+        ts_read_raw(&samples_x[i], &samples_y[i]);
+        Delay(25);  // Pausa entre muestras para mejor estabilización
     }
     
-    // Calcular promedio
-    *ts_x = sum_x / 5;
-    *ts_y = sum_y / 5;
+    // Ordenar muestras X (bubble sort)
+    for (i = 0; i < 11; i++) {
+        for (j = 0; j < 11 - i; j++) {
+            if (samples_x[j] > samples_x[j + 1]) {
+                temp = samples_x[j];
+                samples_x[j] = samples_x[j + 1];
+                samples_x[j + 1] = temp;
+            }
+        }
+    }
     
-    Delay(30);
+    // Ordenar muestras Y
+    for (i = 0; i < 11; i++) {
+        for (j = 0; j < 11 - i; j++) {
+            if (samples_y[j] > samples_y[j + 1]) {
+                temp = samples_y[j];
+                samples_y[j] = samples_y[j + 1];
+                samples_y[j + 1] = temp;
+            }
+        }
+    }
+    
+    // Promediar las 8 muestras centrales (descartando 2 mínimas y 2 máximas)
+    for (i = 2; i < 10; i++) {
+        sum_x += samples_x[i];
+        sum_y += samples_y[i];
+    }
+    
+    *ts_x = sum_x / 8;
+    *ts_y = sum_y / 8;
+    
+    Delay(50);
     draw_cross(lcd_x, lcd_y);
     Lcd_Dma_Trans();
 }

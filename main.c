@@ -123,25 +123,38 @@ void Main(void)
         /* Comprobar si hay toque en la pantalla */
         if (ts_read_calibrated(&touch_x, &touch_y) == 0)
         {
-            /* Procesar toque en el Sudoku */
-            Sudoku_Procesar_Touch(touch_x, touch_y);
+            /* Verificar si hay región expandida activa */
+            if (Sudoku_Esta_Region_Expandida_Activa())
+            {
+                /* Procesar toque en la región expandida */
+                Sudoku_Procesar_Touch_Region_Expandida(touch_x, touch_y);
+            }
+            else
+            {
+                /* Procesar toque en el tablero principal */
+                Sudoku_Procesar_Touch(touch_x, touch_y);
+            }
+            
             Delay(30);  // Evitar múltiples detecciones
         }
         
-        /* Actualizar el tiempo en pantalla cada segundo */
-        tiempo_actual = timer2_count();
-        
-        /* Actualizar cada 1 segundo (1000000 microsegundos) */
-        if ((tiempo_actual - tiempo_anterior) >= 1000000)
+        /* Actualizar el tiempo en pantalla cada segundo (solo si no hay región expandida) */
+        if (!Sudoku_Esta_Region_Expandida_Activa())
         {
-            /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) */
-            if (Sudoku_Juego_En_Progreso())
+            tiempo_actual = timer2_count();
+            
+            /* Actualizar cada 1 segundo (1000000 microsegundos) */
+            if ((tiempo_actual - tiempo_anterior) >= 1000000)
             {
-                /* Calcular tiempo transcurrido desde el inicio de la partida */
-                unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
-                Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+                /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) */
+                if (Sudoku_Juego_En_Progreso())
+                {
+                    /* Calcular tiempo transcurrido desde el inicio de la partida */
+                    unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
+                    Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+                }
+                tiempo_anterior = tiempo_actual;
             }
-            tiempo_anterior = tiempo_actual;
         }
     }
 }

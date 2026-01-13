@@ -3620,7 +3620,7 @@
  5606              		.align	2
  5607              	.L114:
  5608 1ec8 58010000 		.word	.LC32
- 5609 1ecc 2C000000 		.word	count.4622
+ 5609 1ecc 2C000000 		.word	count.4629
  5610              		.cfi_endproc
  5611              	.LFE15:
  5613              		.section	.rodata
@@ -4135,7 +4135,7 @@
  6010              	.LFE16:
  6012              		.bss
  6013              		.align	2
- 6014              	count.4622:
+ 6014              	count.4629:
  6015 002c 00000000 		.space	4
  6016              		.text
  6017              	.Letext0:
@@ -4149,65 +4149,65 @@ DEFINED SYMBOLS
                             *COM*:00000004 Ymax
                             *COM*:00000004 Xmin
                             *COM*:00000004 Ymin
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2723   .bss:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2724   .bss:00000000 g_swap_xy
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2727   .bss:00000004 g_kx_fp
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2730   .bss:00000008 g_ky_fp
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2733   .bss:0000000c g_ts_xc
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2736   .bss:00000010 g_ts_yc
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2739   .bss:00000014 g_lcd_xc
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2742   .bss:00000018 g_lcd_yc
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2745   .bss:0000001c g_ts_ready
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2748   .bss:00000020 g_ts_raw_x
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2751   .bss:00000024 g_ts_raw_y
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2754   .bss:00000028 g_last_touch_time
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2757   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2760   .text:00000000 TS_Test
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3456   .text:00000710 Lcd_TC
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3269   .text:000005e4 TS_init
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3856   .text:00000bbc Check_Sel
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:2794   .text:00000024 TSInt
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4233   .text:00000ff0 report_touch_data
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3739   .text:00000a88 DesignREC
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3253   .text:000005bc $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3266   .text:000005e4 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3346   .text:000006a0 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3361   .text:000006d0 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3364   .text:000006d0 TS_close
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3398   .text:00000708 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3404   .rodata:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3453   .text:00000710 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3716   .text:00000a44 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3736   .text:00000a88 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3842   .text:00000b9c $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3853   .text:00000bbc $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3946   .text:00000ca0 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3958   .text:00000cc4 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:3960   .text:00000cc4 clamp
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4012   .text:00000d24 draw_cross
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4226   .text:00000fec $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4230   .text:00000ff0 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4313   .text:000010b4 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4321   .text:000010c8 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4323   .text:000010c8 ts_wait_for_touch
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4359   .text:00001100 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4363   .text:00001104 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4365   .text:00001104 ts_read_raw
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4404   .text:0000114c $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4409   .text:00001154 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4411   .text:00001154 get_cal_point
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:4768   .text:000014f4 ts_calibrate_5pt
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5245   .text:00001ab4 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5271   .text:00001b10 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5274   .text:00001b10 ts_read_calibrated
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5440   .text:00001cf0 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5459   .text:00001d1c $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5462   .text:00001d1c ts_test_calibracion
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5608   .text:00001ec8 $d
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:6014   .bss:0000002c count.4622
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5633   .text:00001ed0 $a
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:5636   .text:00001ed0 ts_test_numeros
-C:\Users\jaime\AppData\Local\Temp\ccIWihAW.s:6000   .text:0000235c $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2723   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2724   .bss:00000000 g_swap_xy
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2727   .bss:00000004 g_kx_fp
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2730   .bss:00000008 g_ky_fp
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2733   .bss:0000000c g_ts_xc
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2736   .bss:00000010 g_ts_yc
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2739   .bss:00000014 g_lcd_xc
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2742   .bss:00000018 g_lcd_yc
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2745   .bss:0000001c g_ts_ready
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2748   .bss:00000020 g_ts_raw_x
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2751   .bss:00000024 g_ts_raw_y
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2754   .bss:00000028 g_last_touch_time
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2757   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2760   .text:00000000 TS_Test
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3456   .text:00000710 Lcd_TC
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3269   .text:000005e4 TS_init
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3856   .text:00000bbc Check_Sel
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:2794   .text:00000024 TSInt
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4233   .text:00000ff0 report_touch_data
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3739   .text:00000a88 DesignREC
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3253   .text:000005bc $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3266   .text:000005e4 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3346   .text:000006a0 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3361   .text:000006d0 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3364   .text:000006d0 TS_close
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3398   .text:00000708 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3404   .rodata:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3453   .text:00000710 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3716   .text:00000a44 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3736   .text:00000a88 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3842   .text:00000b9c $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3853   .text:00000bbc $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3946   .text:00000ca0 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3958   .text:00000cc4 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:3960   .text:00000cc4 clamp
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4012   .text:00000d24 draw_cross
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4226   .text:00000fec $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4230   .text:00000ff0 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4313   .text:000010b4 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4321   .text:000010c8 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4323   .text:000010c8 ts_wait_for_touch
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4359   .text:00001100 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4363   .text:00001104 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4365   .text:00001104 ts_read_raw
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4404   .text:0000114c $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4409   .text:00001154 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4411   .text:00001154 get_cal_point
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:4768   .text:000014f4 ts_calibrate_5pt
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5245   .text:00001ab4 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5271   .text:00001b10 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5274   .text:00001b10 ts_read_calibrated
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5440   .text:00001cf0 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5459   .text:00001d1c $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5462   .text:00001d1c ts_test_calibracion
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5608   .text:00001ec8 $d
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:6014   .bss:0000002c count.4629
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5633   .text:00001ed0 $a
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:5636   .text:00001ed0 ts_test_numeros
+C:\Users\jaime\AppData\Local\Temp\ccTIEiNz.s:6000   .text:0000235c $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

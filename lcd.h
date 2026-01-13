@@ -153,6 +153,9 @@ void Sudoku_Actualizar_Tiempo(INT32U tiempo_us);
 void Sudoku_Pantalla_Final(INT32U tiempo_us);
 void Sudoku_Procesar_Touch(int x, int y);
 void Sudoku_Mostrar_Region_Expandida(int region_fila, int region_col);
+int Sudoku_Procesar_Touch_Region_Expandida(int x, int y);
+int Sudoku_Esta_Region_Expandida_Activa(void);
+void Sudoku_Cerrar_Region_Expandida(void);
 
 #ifdef __cplusplus
 }

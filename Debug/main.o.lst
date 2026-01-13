@@ -1203,7 +1203,7 @@
  107:../main.c     ****     /* Apuntar a la cola para poder observarla en el depurador */
  108:../main.c     ****     p_cola = cola_global;
  4118              		.loc 1 108 0
- 4119 0048 B0309FE5 		ldr	r3, .L7
+ 4119 0048 F0309FE5 		ldr	r3, .L10
  4120 004c 003093E5 		ldr	r3, [r3, #0]
  4121 0050 14300BE5 		str	r3, [fp, #-20]
  109:../main.c     ****     
@@ -1216,8 +1216,8 @@
  4125              		.loc 1 112 0
  4126 005c 0030A0E3 		mov	r3, #0
  4127 0060 18300BE5 		str	r3, [fp, #-24]
- 4128 0064 000000EA 		b	.L5
- 4129              	.L6:
+ 4128 0064 020000EA 		b	.L7
+ 4129              	.L8:
  113:../main.c     ****     
  114:../main.c     ****     /* Variables para touchscreen */
  115:../main.c     ****     int touch_x, touch_y;
@@ -1231,98 +1231,136 @@
  123:../main.c     ****         /* Comprobar si hay toque en la pantalla */
  124:../main.c     ****         if (ts_read_calibrated(&touch_x, &touch_y) == 0)
  125:../main.c     ****         {
- 126:../main.c     ****             /* Procesar toque en el Sudoku */
- 127:../main.c     ****             Sudoku_Procesar_Touch(touch_x, touch_y);
- 128:../main.c     ****             Delay(30);  // Evitar múltiples detecciones
- 129:../main.c     ****         }
- 130:../main.c     ****         
- 131:../main.c     ****         /* Actualizar el tiempo en pantalla cada segundo */
- 132:../main.c     ****         tiempo_actual = timer2_count();
- 133:../main.c     ****         
- 134:../main.c     ****         /* Actualizar cada 1 segundo (1000000 microsegundos) */
- 135:../main.c     ****         if ((tiempo_actual - tiempo_anterior) >= 1000000)
- 136:../main.c     ****         {
- 137:../main.c     ****             /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) 
- 138:../main.c     ****             if (Sudoku_Juego_En_Progreso())
- 139:../main.c     ****             {
- 140:../main.c     ****                 /* Calcular tiempo transcurrido desde el inicio de la partida */
- 141:../main.c     ****                 unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
- 142:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
- 143:../main.c     ****             }
- 144:../main.c     ****             tiempo_anterior = tiempo_actual;
- 145:../main.c     ****         }
- 146:../main.c     ****     }
- 4130              		.loc 1 146 0
+ 126:../main.c     ****             /* Verificar si hay región expandida activa */
+ 127:../main.c     ****             if (Sudoku_Esta_Region_Expandida_Activa())
+ 128:../main.c     ****             {
+ 129:../main.c     ****                 /* Procesar toque en la región expandida */
+ 130:../main.c     ****                 Sudoku_Procesar_Touch_Region_Expandida(touch_x, touch_y);
+ 131:../main.c     ****             }
+ 132:../main.c     ****             else
+ 133:../main.c     ****             {
+ 134:../main.c     ****                 /* Procesar toque en el tablero principal */
+ 135:../main.c     ****                 Sudoku_Procesar_Touch(touch_x, touch_y);
+ 136:../main.c     ****             }
+ 137:../main.c     ****             
+ 138:../main.c     ****             Delay(30);  // Evitar múltiples detecciones
+ 139:../main.c     ****         }
+ 140:../main.c     ****         
+ 141:../main.c     ****         /* Actualizar el tiempo en pantalla cada segundo (solo si no hay región expandida) */
+ 142:../main.c     ****         if (!Sudoku_Esta_Region_Expandida_Activa())
+ 143:../main.c     ****         {
+ 144:../main.c     ****             tiempo_actual = timer2_count();
+ 145:../main.c     ****             
+ 146:../main.c     ****             /* Actualizar cada 1 segundo (1000000 microsegundos) */
+ 147:../main.c     ****             if ((tiempo_actual - tiempo_anterior) >= 1000000)
+ 148:../main.c     ****             {
+ 149:../main.c     ****                 /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni termina
+ 150:../main.c     ****                 if (Sudoku_Juego_En_Progreso())
+ 151:../main.c     ****                 {
+ 152:../main.c     ****                     /* Calcular tiempo transcurrido desde el inicio de la partida */
+ 153:../main.c     ****                     unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio
+ 154:../main.c     ****                     Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+ 155:../main.c     ****                 }
+ 156:../main.c     ****                 tiempo_anterior = tiempo_actual;
+ 157:../main.c     ****             }
+ 158:../main.c     ****         }
+ 159:../main.c     ****     }
+ 4130              		.loc 1 159 0
  4131 0068 0000A0E1 		mov	r0, r0	@ nop
- 4132              	.L5:
+ 4132 006c 000000EA 		b	.L7
+ 4133              	.L9:
+ 4134 0070 0000A0E1 		mov	r0, r0	@ nop
+ 4135              	.L7:
  124:../main.c     ****         if (ts_read_calibrated(&touch_x, &touch_y) == 0)
- 4133              		.loc 1 124 0
- 4134 006c 20204BE2 		sub	r2, fp, #32
- 4135 0070 24304BE2 		sub	r3, fp, #36
- 4136 0074 0200A0E1 		mov	r0, r2
- 4137 0078 0310A0E1 		mov	r1, r3
- 4138 007c FEFFFFEB 		bl	ts_read_calibrated
- 4139 0080 0030A0E1 		mov	r3, r0
- 4140 0084 000053E3 		cmp	r3, #0
- 4141 0088 0600001A 		bne	.L2
- 127:../main.c     ****             Sudoku_Procesar_Touch(touch_x, touch_y);
- 4142              		.loc 1 127 0
- 4143 008c 20201BE5 		ldr	r2, [fp, #-32]
- 4144 0090 24301BE5 		ldr	r3, [fp, #-36]
- 4145 0094 0200A0E1 		mov	r0, r2
- 4146 0098 0310A0E1 		mov	r1, r3
- 4147 009c FEFFFFEB 		bl	Sudoku_Procesar_Touch
- 128:../main.c     ****             Delay(30);  // Evitar múltiples detecciones
- 4148              		.loc 1 128 0
- 4149 00a0 1E00A0E3 		mov	r0, #30
- 4150 00a4 FEFFFFEB 		bl	Delay
- 4151              	.L2:
- 132:../main.c     ****         tiempo_actual = timer2_count();
- 4152              		.loc 1 132 0
- 4153 00a8 FEFFFFEB 		bl	timer2_count
- 4154 00ac 18000BE5 		str	r0, [fp, #-24]
- 135:../main.c     ****         if ((tiempo_actual - tiempo_anterior) >= 1000000)
- 4155              		.loc 1 135 0
- 4156 00b0 18201BE5 		ldr	r2, [fp, #-24]
- 4157 00b4 10301BE5 		ldr	r3, [fp, #-16]
- 4158 00b8 022063E0 		rsb	r2, r3, r2
- 4159 00bc 40309FE5 		ldr	r3, .L7+4
- 4160 00c0 030052E1 		cmp	r2, r3
- 4161 00c4 E7FFFF9A 		bls	.L6
- 138:../main.c     ****             if (Sudoku_Juego_En_Progreso())
- 4162              		.loc 1 138 0
- 4163 00c8 FEFFFFEB 		bl	Sudoku_Juego_En_Progreso
- 4164 00cc 0030A0E1 		mov	r3, r0
- 4165 00d0 000053E3 		cmp	r3, #0
- 4166 00d4 0600000A 		beq	.L4
- 4167              	.LBB2:
- 141:../main.c     ****                 unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
- 4168              		.loc 1 141 0
- 4169 00d8 FEFFFFEB 		bl	Sudoku_Obtener_Tiempo_Inicio
- 4170 00dc 0030A0E1 		mov	r3, r0
- 4171 00e0 18201BE5 		ldr	r2, [fp, #-24]
- 4172 00e4 023063E0 		rsb	r3, r3, r2
- 4173 00e8 1C300BE5 		str	r3, [fp, #-28]
- 142:../main.c     ****                 Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
- 4174              		.loc 1 142 0
- 4175 00ec 1C001BE5 		ldr	r0, [fp, #-28]
- 4176 00f0 FEFFFFEB 		bl	Sudoku_Actualizar_Tiempo
- 4177              	.L4:
- 4178              	.LBE2:
- 144:../main.c     ****             tiempo_anterior = tiempo_actual;
- 4179              		.loc 1 144 0
- 4180 00f4 18301BE5 		ldr	r3, [fp, #-24]
- 4181 00f8 10300BE5 		str	r3, [fp, #-16]
- 4182              		.loc 1 146 0
- 4183 00fc DAFFFFEA 		b	.L5
- 4184              	.L8:
- 4185              		.align	2
- 4186              	.L7:
- 4187 0100 00000000 		.word	cola_global
- 4188 0104 3F420F00 		.word	999999
- 4189              		.cfi_endproc
- 4190              	.LFE7:
- 4192              	.Letext0:
+ 4136              		.loc 1 124 0
+ 4137 0074 20204BE2 		sub	r2, fp, #32
+ 4138 0078 24304BE2 		sub	r3, fp, #36
+ 4139 007c 0200A0E1 		mov	r0, r2
+ 4140 0080 0310A0E1 		mov	r1, r3
+ 4141 0084 FEFFFFEB 		bl	ts_read_calibrated
+ 4142 0088 0030A0E1 		mov	r3, r0
+ 4143 008c 000053E3 		cmp	r3, #0
+ 4144 0090 1000001A 		bne	.L2
+ 127:../main.c     ****             if (Sudoku_Esta_Region_Expandida_Activa())
+ 4145              		.loc 1 127 0
+ 4146 0094 FEFFFFEB 		bl	Sudoku_Esta_Region_Expandida_Activa
+ 4147 0098 0030A0E1 		mov	r3, r0
+ 4148 009c 000053E3 		cmp	r3, #0
+ 4149 00a0 0500000A 		beq	.L3
+ 130:../main.c     ****                 Sudoku_Procesar_Touch_Region_Expandida(touch_x, touch_y);
+ 4150              		.loc 1 130 0
+ 4151 00a4 20201BE5 		ldr	r2, [fp, #-32]
+ 4152 00a8 24301BE5 		ldr	r3, [fp, #-36]
+ 4153 00ac 0200A0E1 		mov	r0, r2
+ 4154 00b0 0310A0E1 		mov	r1, r3
+ 4155 00b4 FEFFFFEB 		bl	Sudoku_Procesar_Touch_Region_Expandida
+ 4156 00b8 040000EA 		b	.L4
+ 4157              	.L3:
+ 135:../main.c     ****                 Sudoku_Procesar_Touch(touch_x, touch_y);
+ 4158              		.loc 1 135 0
+ 4159 00bc 20201BE5 		ldr	r2, [fp, #-32]
+ 4160 00c0 24301BE5 		ldr	r3, [fp, #-36]
+ 4161 00c4 0200A0E1 		mov	r0, r2
+ 4162 00c8 0310A0E1 		mov	r1, r3
+ 4163 00cc FEFFFFEB 		bl	Sudoku_Procesar_Touch
+ 4164              	.L4:
+ 138:../main.c     ****             Delay(30);  // Evitar múltiples detecciones
+ 4165              		.loc 1 138 0
+ 4166 00d0 1E00A0E3 		mov	r0, #30
+ 4167 00d4 FEFFFFEB 		bl	Delay
+ 4168              	.L2:
+ 142:../main.c     ****         if (!Sudoku_Esta_Region_Expandida_Activa())
+ 4169              		.loc 1 142 0
+ 4170 00d8 FEFFFFEB 		bl	Sudoku_Esta_Region_Expandida_Activa
+ 4171 00dc 0030A0E1 		mov	r3, r0
+ 4172 00e0 000053E3 		cmp	r3, #0
+ 4173 00e4 DFFFFF1A 		bne	.L8
+ 144:../main.c     ****             tiempo_actual = timer2_count();
+ 4174              		.loc 1 144 0
+ 4175 00e8 FEFFFFEB 		bl	timer2_count
+ 4176 00ec 18000BE5 		str	r0, [fp, #-24]
+ 147:../main.c     ****             if ((tiempo_actual - tiempo_anterior) >= 1000000)
+ 4177              		.loc 1 147 0
+ 4178 00f0 18201BE5 		ldr	r2, [fp, #-24]
+ 4179 00f4 10301BE5 		ldr	r3, [fp, #-16]
+ 4180 00f8 022063E0 		rsb	r2, r3, r2
+ 4181 00fc 40309FE5 		ldr	r3, .L10+4
+ 4182 0100 030052E1 		cmp	r2, r3
+ 4183 0104 D9FFFF9A 		bls	.L9
+ 150:../main.c     ****                 if (Sudoku_Juego_En_Progreso())
+ 4184              		.loc 1 150 0
+ 4185 0108 FEFFFFEB 		bl	Sudoku_Juego_En_Progreso
+ 4186 010c 0030A0E1 		mov	r3, r0
+ 4187 0110 000053E3 		cmp	r3, #0
+ 4188 0114 0600000A 		beq	.L6
+ 4189              	.LBB2:
+ 153:../main.c     ****                     unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio
+ 4190              		.loc 1 153 0
+ 4191 0118 FEFFFFEB 		bl	Sudoku_Obtener_Tiempo_Inicio
+ 4192 011c 0030A0E1 		mov	r3, r0
+ 4193 0120 18201BE5 		ldr	r2, [fp, #-24]
+ 4194 0124 023063E0 		rsb	r3, r3, r2
+ 4195 0128 1C300BE5 		str	r3, [fp, #-28]
+ 154:../main.c     ****                     Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
+ 4196              		.loc 1 154 0
+ 4197 012c 1C001BE5 		ldr	r0, [fp, #-28]
+ 4198 0130 FEFFFFEB 		bl	Sudoku_Actualizar_Tiempo
+ 4199              	.L6:
+ 4200              	.LBE2:
+ 156:../main.c     ****                 tiempo_anterior = tiempo_actual;
+ 4201              		.loc 1 156 0
+ 4202 0134 18301BE5 		ldr	r3, [fp, #-24]
+ 4203 0138 10300BE5 		str	r3, [fp, #-16]
+ 4204              		.loc 1 159 0
+ 4205 013c CCFFFFEA 		b	.L7
+ 4206              	.L11:
+ 4207              		.align	2
+ 4208              	.L10:
+ 4209 0140 00000000 		.word	cola_global
+ 4210 0144 3F420F00 		.word	999999
+ 4211              		.cfi_endproc
+ 4212              	.LFE7:
+ 4214              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
                             *COM*:00000004 CheckTSP
@@ -1334,21 +1372,21 @@ DEFINED SYMBOLS
                             *COM*:00000004 Xmin
                             *COM*:00000004 Ymin
                             *COM*:00000001 yn
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3020   .data:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3023   .data:00000000 cuadricula_C_C
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3171   .data:00000120 cuadricula_C_ARM
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3319   .data:00000240 cuadricula_ARM_C
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3467   .data:00000360 cuadricula_ARM_ARM
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3613   .rodata:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3616   .rodata:00000000 cuadricula_Respaldo
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3765   .data:00000480 cuadricula_ARM_ARM_ALL
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:3913   .data:000005a0 solucion
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:4062   .data:000006c0 cuadricula
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:4069   .bss:00000000 celdas_vacias
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:4066   .bss:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:4072   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:4075   .text:00000000 Main
-C:\Users\jaime\AppData\Local\Temp\ccTgFU2l.s:4187   .text:00000100 $d
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3020   .data:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3023   .data:00000000 cuadricula_C_C
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3171   .data:00000120 cuadricula_C_ARM
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3319   .data:00000240 cuadricula_ARM_C
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3467   .data:00000360 cuadricula_ARM_ARM
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3613   .rodata:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3616   .rodata:00000000 cuadricula_Respaldo
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3765   .data:00000480 cuadricula_ARM_ARM_ALL
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:3913   .data:000005a0 solucion
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:4062   .data:000006c0 cuadricula
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:4069   .bss:00000000 celdas_vacias
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:4066   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:4072   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:4075   .text:00000000 Main
+C:\Users\jaime\AppData\Local\Temp\cc0ONTFi.s:4209   .text:00000140 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
@@ -1364,6 +1402,8 @@ ts_calibrate_5pt
 Sudoku_Pantalla_Inicial
 leds_off
 ts_read_calibrated
+Sudoku_Esta_Region_Expandida_Activa
+Sudoku_Procesar_Touch_Region_Expandida
 Sudoku_Procesar_Touch
 Delay
 timer2_count

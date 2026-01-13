@@ -6,6 +6,7 @@
 *********************************************************************************************/
 
 /*--- ficheros de cabecera ---*/
+#include <string.h>
 #include "def.h"
 #include "44b.h"
 #include "44blib.h"
@@ -24,6 +25,13 @@
 extern INT8U g_auc_Ascii8x16[];
 extern INT8U g_auc_Ascii6x8[];
 extern STRU_BITMAP Stru_Bitmap_gbMouse;
+
+/*--- variables globales para región expandida ---*/
+static int g_region_expandida_activa = 0;  /* 1 si hay región expandida mostrada */
+static int g_region_fila_actual = 0;       /* Fila de región actual (0-2) */
+static int g_region_col_actual = 0;        /* Columna de región actual (0-2) */
+static int g_celda_seleccionada_i = -1;    /* Fila seleccionada dentro de región (0-2, -1=ninguna) */
+static int g_celda_seleccionada_j = -1;    /* Columna seleccionada dentro de región (0-2, -1=ninguna) */
 
 /*--- c�digo de la funci�n ---*/
 void Lcd_Init(void)
@@ -565,23 +573,23 @@ void Sudoku_Pantalla_Inicial(void)
 	Lcd_Clr();
 	
 	/* Título */
-	Lcd_DspAscII8x16(85, 10, BLACK, "SUDOKU 9x9");
+	Lcd_DspAscII8x16(85, 10, BLACK, (INT8U*)"SUDOKU 9x9");
 	
 	/* Instrucciones */
-	Lcd_DspAscII6x8(20, 40, DARKGRAY, "INSTRUCCIONES:");
-	Lcd_DspAscII6x8(10, 55, BLACK, "1. Boton Derecho: cambia valor");
-	Lcd_DspAscII6x8(10, 70, BLACK, "2. Boton Izquierdo: confirma");
-	Lcd_DspAscII6x8(10, 85, BLACK, "3. Introducir valor 0: borrar");
-	Lcd_DspAscII6x8(10, 100, BLACK, "4. Fila 0: terminar partida");
+	Lcd_DspAscII6x8(20, 40, DARKGRAY, (INT8U*)"INSTRUCCIONES:");
+	Lcd_DspAscII6x8(10, 55, BLACK, (INT8U*)"1. Boton Derecho: cambia valor");
+	Lcd_DspAscII6x8(10, 70, BLACK, (INT8U*)"2. Boton Izquierdo: confirma");
+	Lcd_DspAscII6x8(10, 85, BLACK, (INT8U*)"3. Introducir valor 0: borrar");
+	Lcd_DspAscII6x8(10, 100, BLACK, (INT8U*)"4. Fila 0: terminar partida");
 	
 	/* Leyenda de símbolos en pantalla */
-	Lcd_DspAscII6x8(20, 125, DARKGRAY, "LEYENDA:");
-	Lcd_DspAscII6x8(10, 140, BLACK, "F = Fila    C = Columna");
-	Lcd_DspAscII6x8(10, 155, BLACK, "E = Error detectado");
+	Lcd_DspAscII6x8(20, 125, DARKGRAY, (INT8U*)"LEYENDA:");
+	Lcd_DspAscII6x8(10, 140, BLACK, (INT8U*)"F = Fila    C = Columna");
+	Lcd_DspAscII6x8(10, 155, BLACK, (INT8U*)"E = Error detectado");
 	
 	/* Mensaje para iniciar */
 	Lcd_Draw_Box(40, 190, 280, 220, BLACK);
-	Lcd_DspAscII8x16(60, 198, BLACK, "Pulse un boton para jugar");
+	Lcd_DspAscII8x16(60, 198, BLACK, (INT8U*)"Pulse un boton para jugar");
 	
 	/* Transferir a pantalla */
 	Lcd_Dma_Trans();
@@ -843,14 +851,14 @@ void Sudoku_Pantalla_Final(INT32U tiempo_us)
 	Lcd_Clr();
 	
 	/* Título */
-	Lcd_DspAscII8x16(80, 40, BLACK, "PARTIDA TERMINADA");
+	Lcd_DspAscII8x16(80, 40, BLACK, (INT8U*)"PARTIDA TERMINADA");
 	
 	/* Mostrar tiempo final */
-	Lcd_DspAscII8x16(90, 80, BLACK, "Tiempo final:");
+	Lcd_DspAscII8x16(90, 80, BLACK, (INT8U*)"Tiempo final:");
 	Lcd_DspAscII8x16(130, 100, BLACK, tiempo_str);
 	
 	/* Mensaje para reiniciar */
-	Lcd_DspAscII8x16(30, 158, BLACK, "Pulse un boton para reiniciar");
+	Lcd_DspAscII8x16(30, 158, BLACK, (INT8U*)"Pulse un boton para reiniciar");
 	
 	/* Transferir a pantalla */
 	Lcd_Dma_Trans();
@@ -971,44 +979,117 @@ void Sudoku_Procesar_Touch(int x, int y)
 }
 
 /*********************************************************************************************
-* name:		Sudoku_Mostrar_Region_Expandida()
-* func:		Muestra una región 3x3 expandida en toda la pantalla
-* para:		region_fila, region_col - región 3x3 (0-2)
-* ret:		none
+* name:		Sudoku_Dibujar_Candidatos_Pequenos()
+* func:		Dibuja los candidatos en pequeño dentro de una celda
 *********************************************************************************************/
-void Sudoku_Mostrar_Region_Expandida(int region_fila, int region_col)
+static void Sudoku_Dibujar_Candidatos_Pequenos(int x, int y, int tam, CELDA celda)
+{
+	int k;
+	INT8U num_str[2];
+	num_str[1] = '\0';
+	
+	/* Dibujar candidatos en 3x3 dentro de la celda */
+	for (k = 1; k <= 9; k++)
+	{
+		if (celda_es_candidato(celda, k))
+		{
+			int cand_fila = (k - 1) / 3;
+			int cand_col = (k - 1) % 3;
+			int cand_x = x + 4 + cand_col * (tam / 3);
+			int cand_y = y + 2 + cand_fila * (tam / 3);
+			
+			num_str[0] = '0' + k;
+			Lcd_DspAscII6x8(cand_x, cand_y, DARKGRAY, num_str);
+		}
+	}
+}
+
+/*********************************************************************************************
+* name:		Sudoku_Dibujar_Teclado_Virtual()
+* func:		Dibuja teclado virtual con números 1-9
+*********************************************************************************************/
+static void Sudoku_Dibujar_Teclado_Virtual(void)
+{
+	int num;
+	INT8U num_str[2];
+	num_str[1] = '\0';
+	
+	#define TECLADO_X 200
+	#define TECLADO_Y 30
+	#define TECLA_TAM 35
+	
+	/* Dibujar 9 teclas en 3x3 */
+	for (num = 1; num <= 9; num++)
+	{
+		int tecla_fila = (num - 1) / 3;
+		int tecla_col = (num - 1) % 3;
+		int tx = TECLADO_X + tecla_col * TECLA_TAM;
+		int ty = TECLADO_Y + tecla_fila * TECLA_TAM;
+		
+		/* Dibujar borde de tecla */
+		Lcd_Draw_Box(tx, ty, tx + TECLA_TAM, ty + TECLA_TAM, BLACK);
+		
+		/* Dibujar número centrado */
+		num_str[0] = '0' + num;
+		Lcd_DspAscII8x16(tx + TECLA_TAM/2 - 4, ty + TECLA_TAM/2 - 8, BLACK, num_str);
+	}
+	
+	/* Botón borrar (debajo del teclado) - Más grande para facilitar el toque */
+	Lcd_Draw_Box(TECLADO_X, TECLADO_Y + 3 * TECLA_TAM + 10, 
+	             TECLADO_X + TECLA_TAM * 3, TECLADO_Y + 3 * TECLA_TAM + 10 + 40, BLACK);
+	Lcd_DspAscII6x8(TECLADO_X + 30, TECLADO_Y + 3 * TECLA_TAM + 23, BLACK, 
+	                (INT8U*)"BORRAR");
+	
+	/* Botón VOLVER (debajo del botón BORRAR) */
+	Lcd_Draw_Box(TECLADO_X, TECLADO_Y + 3 * TECLA_TAM + 55, 
+	             TECLADO_X + TECLA_TAM * 3, TECLADO_Y + 3 * TECLA_TAM + 55 + 40, LIGHTGRAY);
+	Lcd_DspAscII6x8(TECLADO_X + 30, TECLADO_Y + 3 * TECLA_TAM + 68, BLACK, 
+	                (INT8U*)"VOLVER");
+}
+
+/*********************************************************************************************
+* name:		Sudoku_Redibujar_Region_Expandida()
+* func:		Redibuja la región expandida completa
+*********************************************************************************************/
+static void Sudoku_Redibujar_Region_Expandida(void)
 {
 	extern CELDA (*cuadricula)[NUM_COLUMNAS];
 	int i, j;
-	int fila_inicio = region_fila * 3;
-	int col_inicio = region_col * 3;
+	int fila_inicio = g_region_fila_actual * 3;
+	int col_inicio = g_region_col_actual * 3;
 	
-	#define CELDA_GRANDE 70  /* Tamaño de celda expandida */
-	#define MARGEN_EXPANDIDO 30
+	#define CELDA_GRANDE 60
+	#define MARGEN_IZQ_EXP 10
+	#define MARGEN_SUP_EXP 30
 	
 	/* Limpiar pantalla */
 	Lcd_Clr();
 	
-	/* Título */
-	Lcd_DspAscII8x16(80, 5, BLACK, (unsigned char *)"Region ");
-	Lcd_DspAscII8x16(145, 5, BLACK, (unsigned char *)"1");  /* Se puede calcular */
-	
-	/* Dibujar cuadrícula expandida */
+	/* Dibujar cuadrícula 3x3 a la izquierda */
 	for (i = 0; i < 3; i++)
 	{
 		for (j = 0; j < 3; j++)
 		{
-			int x = MARGEN_EXPANDIDO + j * CELDA_GRANDE;
-			int y = MARGEN_EXPANDIDO + i * CELDA_GRANDE + 20;
+			int x = MARGEN_IZQ_EXP + j * CELDA_GRANDE;
+			int y = MARGEN_SUP_EXP + i * CELDA_GRANDE;
 			int fila = fila_inicio + i;
 			int col = col_inicio + j;
-			
-			/* Dibujar borde de celda */
-			Lcd_Draw_Box(x, y, x + CELDA_GRANDE, y + CELDA_GRANDE, BLACK);
 			
 			/* Obtener celda */
 			CELDA celda = cuadricula[fila][col];
 			INT8U valor = celda_leer_valor(celda);
+			int es_pista = celda_es_pista(celda);
+			
+			/* Color de fondo si está seleccionada */
+			INT8U color_borde = BLACK;
+			if (g_celda_seleccionada_i == i && g_celda_seleccionada_j == j)
+			{
+				/* Celda seleccionada - borde más grueso */
+				Lcd_Draw_Box(x-1, y-1, x + CELDA_GRANDE+1, y + CELDA_GRANDE+1, BLACK);
+			}
+			
+			/* Dibujar borde de celda */
+			Lcd_Draw_Box(x, y, x + CELDA_GRANDE, y + CELDA_GRANDE, color_borde);
 			
 			if (valor != 0)
 			{
@@ -1017,32 +1098,302 @@ void Sudoku_Mostrar_Region_Expandida(int region_fila, int region_col)
 				num_str[0] = '0' + valor;
 				num_str[1] = '\0';
 				
-				/* Número centrado en celda */
+				/* Número centrado */
+				INT8U color_num = es_pista ? BLACK : DARKGRAY;
 				Lcd_DspAscII8x16(x + CELDA_GRANDE/2 - 4, y + CELDA_GRANDE/2 - 8, 
-				                 BLACK, num_str);
+				                 color_num, num_str);
+			}
+			else
+			{
+				/* Celda vacía - dibujar candidatos */
+				Sudoku_Dibujar_Candidatos_Pequenos(x, y, CELDA_GRANDE, celda);
 			}
 		}
 	}
 	
-	/* Mensaje para salir */
-	Lcd_DspAscII6x8(80, 220, DARKGRAY, (unsigned char *)"Toca para volver");
+	/* Dibujar teclado virtual a la derecha */
+	Sudoku_Dibujar_Teclado_Virtual();
 	
 	/* Transferir a pantalla */
 	Lcd_Dma_Trans();
+}
+
+/*********************************************************************************************
+* name:		Sudoku_Mostrar_Region_Expandida()
+* func:		Muestra una región 3x3 expandida con teclado virtual
+* para:		region_fila, region_col - región 3x3 (0-2)
+* ret:		none
+*********************************************************************************************/
+void Sudoku_Mostrar_Region_Expandida(int region_fila, int region_col)
+{
+	/* Guardar estado de región expandida */
+	g_region_expandida_activa = 1;
+	g_region_fila_actual = region_fila;
+	g_region_col_actual = region_col;
+	g_celda_seleccionada_i = -1;
+	g_celda_seleccionada_j = -1;
 	
-	/* Esperar toque para volver */
-	extern int ts_read_calibrated(int *x, int *y);
-	int touch_x, touch_y;
-	while (ts_read_calibrated(&touch_x, &touch_y) != 0)
-	{
-		/* Esperar toque */
-	}
+	/* Dibujar interfaz */
+	Sudoku_Redibujar_Region_Expandida();
 	
-	Delay(50);  /* Anti-rebote */
+	/* El bucle de interacción se maneja en main.c */
+	/* Esta función solo inicializa la vista expandida */
+}
+
+/*********************************************************************************************
+* name:		Sudoku_Esta_Region_Expandida_Activa()
+* func:		Verifica si hay una región expandida activa
+* ret:		1 si activa, 0 si no
+*********************************************************************************************/
+int Sudoku_Esta_Region_Expandida_Activa(void)
+{
+	return g_region_expandida_activa;
+}
+
+/*********************************************************************************************
+* name:		Sudoku_Cerrar_Region_Expandida()
+* func:		Cierra la región expandida y vuelve al tablero completo
+*********************************************************************************************/
+void Sudoku_Cerrar_Region_Expandida(void)
+{
+	extern CELDA (*cuadricula)[NUM_COLUMNAS];
+	
+	g_region_expandida_activa = 0;
+	g_celda_seleccionada_i = -1;
+	g_celda_seleccionada_j = -1;
 	
 	/* Redibujar tablero completo */
-	extern void Sudoku_Dibujar_Tablero(void);
-	extern void Sudoku_Actualizar_Tablero_Completo(void* cuadricula);
 	Sudoku_Dibujar_Tablero();
 	Sudoku_Actualizar_Tablero_Completo(cuadricula);
+}
+
+/*********************************************************************************************
+* name:		Sudoku_Procesar_Touch_Region_Expandida()
+* func:		Procesa toques en la región expandida (selección de celda o número)
+* para:		x, y - coordenadas del toque
+* ret:		1 si se procesó el toque, 0 si no
+*********************************************************************************************/
+int Sudoku_Procesar_Touch_Region_Expandida(int x, int y)
+{
+	extern CELDA (*cuadricula)[NUM_COLUMNAS];
+	
+	if (!g_region_expandida_activa)
+		return 0;
+	
+	#define CELDA_GRANDE 60
+	#define MARGEN_IZQ_EXP 10
+	#define MARGEN_SUP_EXP 30
+	#define TECLADO_X 200
+	#define TECLADO_Y 30
+	#define TECLA_TAM 35
+	
+	/* Verificar si se tocó una celda de la cuadrícula */
+	if (x >= MARGEN_IZQ_EXP && x < MARGEN_IZQ_EXP + 3 * CELDA_GRANDE &&
+	    y >= MARGEN_SUP_EXP && y < MARGEN_SUP_EXP + 3 * CELDA_GRANDE)
+	{
+		int j = (x - MARGEN_IZQ_EXP) / CELDA_GRANDE;
+		int i = (y - MARGEN_SUP_EXP) / CELDA_GRANDE;
+		
+		/* Calcular posición real en el tablero */
+		int fila = g_region_fila_actual * 3 + i;
+		int col = g_region_col_actual * 3 + j;
+		
+		/* Verificar que no sea una pista */
+		CELDA celda = cuadricula[fila][col];
+		if (!celda_es_pista(celda))
+		{
+			/* Seleccionar esta celda */
+			g_celda_seleccionada_i = i;
+			g_celda_seleccionada_j = j;
+			Sudoku_Redibujar_Region_Expandida();
+		}
+		
+		return 1;
+	}
+	
+	/* Verificar si se tocó una tecla del teclado virtual */
+	if (x >= TECLADO_X && x < TECLADO_X + 3 * TECLA_TAM &&
+	    y >= TECLADO_Y && y < TECLADO_Y + 3 * TECLA_TAM)
+	{
+		/* Solo procesar si hay celda seleccionada */
+		if (g_celda_seleccionada_i >= 0 && g_celda_seleccionada_j >= 0)
+		{
+			int tecla_col = (x - TECLADO_X) / TECLA_TAM;
+			int tecla_fila = (y - TECLADO_Y) / TECLA_TAM;
+			INT8U numero = tecla_fila * 3 + tecla_col + 1;
+			
+			/* Calcular posición real en el tablero */
+			int fila = g_region_fila_actual * 3 + g_celda_seleccionada_i;
+			int col = g_region_col_actual * 3 + g_celda_seleccionada_j;
+			
+			/* Verificar que no sea una pista */
+			if (!celda_es_pista(cuadricula[fila][col]))
+			{
+				/* Guardar valor previo de la celda */
+				INT8U valor_previo = celda_leer_valor(cuadricula[fila][col]);
+				
+				/* Verificar si el valor es candidato */
+				if (celda_es_candidato(cuadricula[fila][col], numero))
+				{
+					INT8U f, c;
+					extern int celdas_vacias;
+					
+					/* Es candidato: escribir el valor en la celda */
+					/* Primero limpiar todos los errores previos */
+					for (f = 0; f < NUM_FILAS; f++)
+					{
+						for (c = 0; c < NUM_COLUMNAS; c++)
+						{
+							celda_limpiar_error(&cuadricula[f][c]);
+						}
+					}
+					
+					celda_poner_valor(&cuadricula[fila][col], numero);
+					
+					/* Decidir si propagar o actualizar según el caso */
+					if (valor_previo != 0)
+					{
+						/* Se modificó un valor previo -> recalcular todo */
+						celdas_vacias = candidatos_actualizar_all(cuadricula);
+					}
+					else
+					{
+						/* Celda vacía -> solo propagar el nuevo valor */
+						candidatos_propagar_arm(cuadricula, fila, col);
+					}
+					
+					/* Redibujar */
+					Sudoku_Redibujar_Region_Expandida();
+				}
+				else
+				{
+					/* No es candidato: es un error */
+					INT8U f, c;
+					extern int celdas_vacias;
+					
+					/* Marcar la celda con error */
+					celda_marcar_error(&cuadricula[fila][col]);
+					
+					/* Poner el valor incorrecto en la celda para visualizarlo */
+					celda_poner_valor(&cuadricula[fila][col], numero);
+					
+					/* Actualizar candidatos para reflejar el cambio */
+					if (valor_previo != 0)
+					{
+						/* Se modificó un valor previo -> recalcular todo */
+						celdas_vacias = candidatos_actualizar_all(cuadricula);
+					}
+					else
+					{
+						/* Celda vacía -> propagar el nuevo valor */
+						candidatos_propagar_arm(cuadricula, fila, col);
+					}
+					
+					/* Limpiar todos los errores previos primero */
+					for (f = 0; f < NUM_FILAS; f++)
+					{
+						for (c = 0; c < NUM_COLUMNAS; c++)
+						{
+							celda_limpiar_error(&cuadricula[f][c]);
+						}
+					}
+					
+					/* Marcar la celda donde intentamos poner el valor */
+					celda_marcar_error(&cuadricula[fila][col]);
+					
+					/* Marcar TODAS las celdas involucradas en el conflicto */
+					/* Buscar en la misma fila */
+					for (c = 0; c < NUM_COLUMNAS; c++)
+					{
+						if (c != col && celda_leer_valor(cuadricula[fila][c]) == numero)
+						{
+							celda_marcar_error(&cuadricula[fila][c]);
+						}
+					}
+					
+					/* Buscar en la misma columna */
+					for (f = 0; f < NUM_FILAS; f++)
+					{
+						if (f != fila && celda_leer_valor(cuadricula[f][col]) == numero)
+						{
+							celda_marcar_error(&cuadricula[f][col]);
+						}
+					}
+					
+					/* Buscar en la misma región 3x3 */
+					INT8U region_fila_inicio = (fila / 3) * 3;
+					INT8U region_col_inicio = (col / 3) * 3;
+					
+					for (f = region_fila_inicio; f < region_fila_inicio + 3; f++)
+					{
+						for (c = region_col_inicio; c < region_col_inicio + 3; c++)
+						{
+							if ((f != fila || c != col) && celda_leer_valor(cuadricula[f][c]) == numero)
+							{
+								celda_marcar_error(&cuadricula[f][c]);
+							}
+						}
+					}
+					
+					/* Redibujar */
+					Sudoku_Redibujar_Region_Expandida();
+				}
+			}
+		}
+		
+		return 1;
+	}
+	
+	/* Verificar si se tocó el botón BORRAR */
+	if (x >= TECLADO_X && x < TECLADO_X + 3 * TECLA_TAM &&
+	    y >= TECLADO_Y + 3 * TECLA_TAM + 10 && y < TECLADO_Y + 3 * TECLA_TAM + 50)
+	{
+		/* Solo procesar si hay celda seleccionada */
+		if (g_celda_seleccionada_i >= 0 && g_celda_seleccionada_j >= 0)
+		{
+			/* Calcular posición real en el tablero */
+			int fila = g_region_fila_actual * 3 + g_celda_seleccionada_i;
+			int col = g_region_col_actual * 3 + g_celda_seleccionada_j;
+			
+			/* Verificar que no sea una pista antes de borrar */
+			if (!celda_es_pista(cuadricula[fila][col]))
+			{
+				INT8U f, c;
+				extern int celdas_vacias;
+				
+				/* Valor 0 = borrar */
+				/* Limpiar todos los errores previos */
+				for (f = 0; f < NUM_FILAS; f++)
+				{
+					for (c = 0; c < NUM_COLUMNAS; c++)
+					{
+						celda_limpiar_error(&cuadricula[f][c]);
+					}
+				}
+				
+				/* Borrar el valor de la celda */
+				celda_poner_valor(&cuadricula[fila][col], 0);
+				
+				/* Al borrar un valor, hay que recalcular todos los candidatos */
+				celdas_vacias = candidatos_actualizar_all(cuadricula);
+				
+				/* Redibujar */
+				Sudoku_Redibujar_Region_Expandida();
+			}
+		}
+		
+		return 1;
+	}
+	
+	/* Verificar si se tocó el botón VOLVER */
+	if (x >= TECLADO_X && x < TECLADO_X + 3 * TECLA_TAM &&
+	    y >= TECLADO_Y + 3 * TECLA_TAM + 55 && y < TECLADO_Y + 3 * TECLA_TAM + 95)
+	{
+		/* Volver al tablero principal */
+		Sudoku_Cerrar_Region_Expandida();
+		return 1;
+	}
+	
+	/* Si se tocó fuera de todas las áreas interactivas, ignorar el toque */
+	return 0;
 }
