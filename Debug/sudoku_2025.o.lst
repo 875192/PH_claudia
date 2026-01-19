@@ -760,15 +760,15 @@
  2362              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 sudoku_2025.c
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:1810   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:1812   .text:00000000 celda_eliminar_candidato
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:1857   .text:0000005c candidatos_propagar_c
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:2060   .text:000002a8 $d
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:2351   .rodata:00000000 C.0.4904
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:2064   .text:000002ac $a
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:2067   .text:000002ac candidatos_actualizar_c
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:2208   .text:0000041c candidatos_actualizar_c_arm
-C:\Users\jaime\AppData\Local\Temp\ccxfmYaH.s:2348   .rodata:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:1810   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:1812   .text:00000000 celda_eliminar_candidato
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:1857   .text:0000005c candidatos_propagar_c
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:2060   .text:000002a8 $d
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:2351   .rodata:00000000 C.0.4904
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:2064   .text:000002ac $a
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:2067   .text:000002ac candidatos_actualizar_c
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:2208   .text:0000041c candidatos_actualizar_c_arm
+C:\Users\jaime\AppData\Local\Temp\ccl7ydaw.s:2348   .rodata:00000000 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

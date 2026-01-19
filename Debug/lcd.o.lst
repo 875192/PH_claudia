@@ -3348,40 +3348,40 @@
  4890              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 lcd.c
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2129   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2132   .text:00000000 Lcd_Init
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2237   .text:00000110 $d
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4602   .text:00001db4 Zdma0Done
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2273   .text:00000194 $a
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2276   .text:00000194 Lcd_Active_Clr
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2326   .text:000001f8 $d
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2330   .text:000001fc $a
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2333   .text:000001fc LCD_GetPixel
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2414   .text:000002cc Lcd_Clr
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2464   .text:00000330 $d
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2469   .text:00000338 $a
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2472   .text:00000338 LcdClrRect
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:2951   .text:00000988 Lcd_Draw_Box
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:3712   .text:0000137c Lcd_Draw_HLine
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:3878   .text:00001584 Lcd_Draw_VLine
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:3016   .text:00000a24 Lcd_Draw_Line
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4056   .text:000017bc Lcd_DisplayString
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4088   .text:000017e8 Lcd_DspAscII8x16
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4337   .text:00001af8 $d
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4341   .text:00001afc $a
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4344   .text:00001afc Lcd_DspAscII6x8
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4494   .text:00001cbc $d
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4498   .text:00001cc0 $a
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4501   .text:00001cc0 ReverseLine
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4596   .data:00000000 ucZdma0Done
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4638   .text:00001dec $d
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4643   .text:00001df4 $a
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4646   .text:00001df4 Lcd_Dma_Trans
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4709   .text:00001e80 $d
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4722   .rodata:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4726   .text:00001ea4 $a
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4729   .text:00001ea4 Lcd_Test
-C:\Users\jaime\AppData\Local\Temp\cc4ekPxl.s:4882   .text:00002074 $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2129   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2132   .text:00000000 Lcd_Init
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2237   .text:00000110 $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4602   .text:00001db4 Zdma0Done
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2273   .text:00000194 $a
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2276   .text:00000194 Lcd_Active_Clr
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2326   .text:000001f8 $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2330   .text:000001fc $a
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2333   .text:000001fc LCD_GetPixel
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2414   .text:000002cc Lcd_Clr
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2464   .text:00000330 $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2469   .text:00000338 $a
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2472   .text:00000338 LcdClrRect
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:2951   .text:00000988 Lcd_Draw_Box
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:3712   .text:0000137c Lcd_Draw_HLine
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:3878   .text:00001584 Lcd_Draw_VLine
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:3016   .text:00000a24 Lcd_Draw_Line
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4056   .text:000017bc Lcd_DisplayString
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4088   .text:000017e8 Lcd_DspAscII8x16
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4337   .text:00001af8 $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4341   .text:00001afc $a
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4344   .text:00001afc Lcd_DspAscII6x8
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4494   .text:00001cbc $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4498   .text:00001cc0 $a
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4501   .text:00001cc0 ReverseLine
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4596   .data:00000000 ucZdma0Done
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4638   .text:00001dec $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4643   .text:00001df4 $a
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4646   .text:00001df4 Lcd_Dma_Trans
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4709   .text:00001e80 $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4722   .rodata:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4726   .text:00001ea4 $a
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4729   .text:00001ea4 Lcd_Test
+C:\Users\jaime\AppData\Local\Temp\cct2xHA8.s:4882   .text:00002074 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

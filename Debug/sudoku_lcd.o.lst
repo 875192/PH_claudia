@@ -1933,28 +1933,28 @@
  3608              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 sudoku_lcd.c
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2083   .rodata:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2114   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2117   .text:00000000 sudoku_mostrar_pantalla_inicial
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2205   .text:000000e8 $d
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2229   .text:00000110 $a
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2232   .text:00000110 sudoku_dibujar_marco_tablero
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2483   .text:000003dc $d
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2492   .text:000003f4 $a
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2494   .text:000003f4 sudoku_dibujar_candidatos
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2669   .text:0000061c $d
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2673   .text:00000620 $a
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:2676   .text:00000620 sudoku_dibujar_celda_completa
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3123   .text:00000c14 sudoku_dibujar_numero_celda
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3162   .text:00000c64 $d
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3166   .text:00000c68 $a
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3169   .text:00000c68 sudoku_resaltar_celda
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3304   .text:00000df8 sudoku_dibujar_tablero_completo
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3429   .text:00000f50 sudoku_actualizar_celda
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3531   .text:00001068 sudoku_mostrar_victoria
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3572   .text:000010b8 $d
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3577   .text:000010c0 $a
-C:\Users\jaime\AppData\Local\Temp\ccFNM7Qc.s:3580   .text:000010c0 sudoku_iniciar_juego
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2083   .rodata:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2114   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2117   .text:00000000 sudoku_mostrar_pantalla_inicial
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2205   .text:000000e8 $d
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2229   .text:00000110 $a
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2232   .text:00000110 sudoku_dibujar_marco_tablero
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2483   .text:000003dc $d
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2492   .text:000003f4 $a
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2494   .text:000003f4 sudoku_dibujar_candidatos
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2669   .text:0000061c $d
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2673   .text:00000620 $a
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:2676   .text:00000620 sudoku_dibujar_celda_completa
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3123   .text:00000c14 sudoku_dibujar_numero_celda
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3162   .text:00000c64 $d
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3166   .text:00000c68 $a
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3169   .text:00000c68 sudoku_resaltar_celda
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3304   .text:00000df8 sudoku_dibujar_tablero_completo
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3429   .text:00000f50 sudoku_actualizar_celda
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3531   .text:00001068 sudoku_mostrar_victoria
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3572   .text:000010b8 $d
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3577   .text:000010c0 $a
+C:\Users\jaime\AppData\Local\Temp\ccrywWI6.s:3580   .text:000010c0 sudoku_iniciar_juego
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

@@ -384,23 +384,23 @@
  2996              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 timer2.c
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2721   .bss:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2722   .bss:00000000 timer2_numero_int
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2721   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2722   .bss:00000000 timer2_numero_int
                             *COM*:00000004 tiempo_inicio
                             *COM*:00000004 tiempo_fin
                             *COM*:00000004 resta
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2728   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2731   .text:00000000 timer2_ISR
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2777   .text:00000050 $d
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2782   .text:00000058 $a
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2785   .text:00000058 timer2_init
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2859   .text:00000110 $d
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2872   .text:00000138 $a
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2875   .text:00000138 timer2_start
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2937   .text:000001cc $d
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2944   .text:000001dc $a
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2947   .text:000001dc timer2_count
-C:\Users\jaime\AppData\Local\Temp\ccVS1eGR.s:2991   .text:00000234 $d
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2728   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2731   .text:00000000 timer2_ISR
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2777   .text:00000050 $d
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2782   .text:00000058 $a
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2785   .text:00000058 timer2_init
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2859   .text:00000110 $d
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2872   .text:00000138 $a
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2875   .text:00000138 timer2_start
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2937   .text:000001cc $d
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2944   .text:000001dc $a
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2947   .text:000001dc timer2_count
+C:\Users\jaime\AppData\Local\Temp\cc5BHJCZ.s:2991   .text:00000234 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
