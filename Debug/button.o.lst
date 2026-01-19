@@ -2639,7 +2639,7 @@
  4923 10bc 31000000 		.word	evento_teclado_digito
  4924 10c0 30000000 		.word	numero_actual
  4925 10c4 17000000 		.word	evento_boton_derecho
- 4926 10c8 32000000 		.word	fila_anterior.4460
+ 4926 10c8 32000000 		.word	fila_anterior.4463
  4927 10cc 18000000 		.word	evento_boton_izquierdo
  4928 10d0 14000000 		.word	estado_juego
  4929 10d4 20000000 		.word	pantalla_inicial_mostrada
@@ -3011,7 +3011,7 @@
  5212 1418 30000000 		.word	numero_actual
  5213 141c 17000000 		.word	evento_boton_derecho
  5214 1420 15000000 		.word	fila_seleccionada
- 5215 1424 40000000 		.word	columna_anterior.4491
+ 5215 1424 40000000 		.word	columna_anterior.4494
  5216 1428 18000000 		.word	evento_boton_izquierdo
  5217 142c 16000000 		.word	columna_seleccionada
  5218 1430 00000000 		.word	cuadricula_C_C
@@ -3926,8 +3926,8 @@
  5910              	.L177:
  5911              		.align	2
  5912              	.L176:
- 5913 1b90 88000000 		.word	C.58.6310
- 5914 1b94 98000000 		.word	C.59.6315
+ 5913 1b90 88000000 		.word	C.58.6312
+ 5914 1b94 98000000 		.word	C.59.6317
  5915 1b98 00000000 		.word	tecla_mapa
  5916              		.cfi_endproc
  5917              	.LFE19:
@@ -4308,7 +4308,7 @@
  6204 1ea8 34000000 		.word	tiempo_inicio_partida
  6205 1eac 0046C323 		.word	600000000
  6206 1eb0 83DE1B43 		.word	1125899907
- 6207 1eb4 3C000000 		.word	ultimo_segundo_mostrado.4535
+ 6207 1eb4 3C000000 		.word	ultimo_segundo_mostrado.4538
  6208 1eb8 89888888 		.word	-2004318071
  6209 1ebc 57020000 		.word	599
  6210 1ec0 CDCCCCCC 		.word	-858993459
@@ -9539,33 +9539,33 @@
  10301              	.LFE38:
  10303              		.bss
  10304              		.align	2
- 10305              	ultimo_segundo_mostrado.4535:
+ 10305              	ultimo_segundo_mostrado.4538:
  10306 003c 00000000 		.space	4
  10307              		.section	.rodata
  10308 0087 00       		.align	2
- 10311              	C.58.6310:
+ 10311              	C.58.6312:
  10312 0088 FD000006 		.word	100663549
  10313 008c FB000006 		.word	100663547
  10314 0090 F7000006 		.word	100663543
  10315 0094 EF000006 		.word	100663535
  10316              		.align	2
- 10319              	C.59.6315:
+ 10319              	C.59.6317:
  10320 0098 07       		.byte	7
  10321 0099 0B       		.byte	11
  10322 009a 0D       		.byte	13
  10323 009b 0E       		.byte	14
  10324              		.bss
- 10325              	columna_anterior.4491:
+ 10325              	columna_anterior.4494:
  10326 0040 00       		.space	1
  10327 0041 000000   		.data
- 10330              	fila_anterior.4460:
+ 10330              	fila_anterior.4463:
  10331 0032 FF       		.byte	-1
  10332 0033 00       		.text
  10333              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 button.c
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3100   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3102   .text:00000000 celda_poner_valor
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3100   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3102   .text:00000000 celda_poner_valor
                             *COM*:00000004 CheckTSP
                             *COM*:00000004 oneTouch
                             *COM*:00000004 Vx
@@ -9574,143 +9574,143 @@ C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3102   .text:00000000 celda_poner_v
                             *COM*:00000004 Ymax
                             *COM*:00000004 Xmin
                             *COM*:00000004 Ymin
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3156   .bss:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3157   .bss:00000000 modo_zoom
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3160   .bss:00000004 region_zoom_fila
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3163   .bss:00000008 region_zoom_col
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3166   .bss:0000000c celda_candidatos_fila
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3169   .bss:00000010 celda_candidatos_col
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3172   .data:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3175   .data:00000000 botones
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3197   .bss:00000014 estado_juego
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3202   .data:00000030 numero_actual
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3205   .bss:00000015 fila_seleccionada
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3207   .bss:00000016 columna_seleccionada
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3209   .bss:00000017 evento_boton_derecho
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3211   .bss:00000018 evento_boton_izquierdo
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3213   .bss:00000019 juego_iniciado
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3216   .bss:0000001c contador_error
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3218   .bss:00000020 pantalla_inicial_mostrada
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3220   .bss:00000021 tablero_dibujado
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3223   .rodata:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3226   .rodata:00000000 tecla_mapa
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3244   .bss:00000022 teclado_estado
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3247   .bss:00000024 teclado_timer
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3252   .data:00000031 evento_teclado_digito
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3256   .bss:00000028 tiempo_inicio
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3259   .bss:0000002c tiempo_fin
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3262   .bss:00000030 resta
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3265   .bss:00000034 tiempo_inicio_partida
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3268   .bss:00000038 ultimo_tiempo_mostrado
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3274   .text:00000068 Eint4567_ISR
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3432   .text:0000021c $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3442   .text:00000238 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3445   .text:00000238 Eint1_ISR
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3510   .text:000002c0 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3519   .text:000002d8 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3522   .text:000002d8 Eint4567_init
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3616   .text:000003c0 eint1_init
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3599   .text:00000394 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3613   .text:000003c0 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3665   .text:00000428 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3674   .text:00000440 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3676   .text:00000440 procesar_rebote
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3715   .text:00000494 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3721   .text:000004a4 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4195   .text:00000948 leer_estado_boton
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3927   .text:000006fc $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3940   .text:00000724 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3943   .text:00000724 procesar_maquina_estados_botones
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3967   .text:00000744 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4293   .text:00000a04 estado_inicial
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:3974   .text:00000758 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4544   .text:00000ca4 estado_selec_fila
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6013   .text:00001c84 mostrar_tiempo_partida
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4941   .text:000010f0 estado_selec_columna
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5226   .text:0000143c estado_selec_valor
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5585   .text:00001884 estado_mostrando_error
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4048   .text:000007f8 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4053   .text:00000800 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4056   .text:00000800 procesar_teclado
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4096   .text:0000084c $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4102   .text:0000085c $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5799   .text:00001a78 teclado_escanear
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5761   .text:00001a40 teclado_soltado
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4184   .text:00000934 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4192   .text:00000948 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4241   .text:000009b4 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4246   .text:000009bc $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4249   .text:000009bc procesar_antirebote_botones
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6218   .text:00001ecc resetear_tiempo_partida
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7188   .text:000029cc limpiar_marcas_error
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5922   .text:00001b9c marcar_pistas_iniciales
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4522   .text:00000c60 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4542   .text:00000ca4 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6496   .text:00002174 mostrar_partida_terminada
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7506   .text:00002cbc limpiar_todos_eventos
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4923   .text:000010bc $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10330  .data:00000032 fila_anterior.4460
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:4939   .text:000010f0 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5211   .text:00001414 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10325  .bss:00000040 columna_anterior.4491
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5224   .text:0000143c $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7605   .text:00002db4 detectar_y_marcar_errores_celda
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7267   .text:00002a80 verificar_tablero_completo
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7353   .text:00002b34 finalizar_partida_completa
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5569   .text:00001858 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5583   .text:00001884 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7908   .text:00003144 limpiar_errores_visuales
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5713   .text:000019ec $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5723   .text:00001a08 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5725   .text:00001a08 teclado_leer_columnas
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5793   .text:00001a74 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5797   .text:00001a78 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5913   .text:00001b90 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10311  .rodata:00000088 C.58.6310
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10319  .rodata:00000098 C.59.6315
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:5919   .text:00001b9c $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6204   .text:00001ea8 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10305  .bss:0000003c ultimo_segundo_mostrado.4535
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6216   .text:00001ecc $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6250   .text:00001efc $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6269   .text:00001f04 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6271   .text:00001f04 mostrar_victoria_con_tiempo
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6473   .text:0000214c $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6494   .text:00002174 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6698   .text:000023bc $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6711   .text:000023e4 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:6713   .text:000023e4 detectar_y_marcar_errores
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7181   .text:000029c4 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7186   .text:000029cc $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7261   .text:00002a7c $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7265   .text:00002a80 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7347   .text:00002b30 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7351   .text:00002b34 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7492   .text:00002c98 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7504   .text:00002cbc $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7593   .text:00002d98 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7603   .text:00002db4 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7901   .text:0000313c $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:7906   .text:00003144 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8003   .text:00003240 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8007   .text:00003244 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8010   .text:00003244 procesar_touchscreen_sudoku
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8939   .text:00003ca0 dibujar_zoom_region
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:9865   .text:000047e8 procesar_toque_candidatos
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10030  .text:000049a0 es_numero_candidato
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8884   .text:00003c38 es_celda_pista
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:9247   .text:00004034 dibujar_zoom_candidatos
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8864   .text:00003bfc $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8882   .text:00003c38 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8928   .text:00003c9c $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:8937   .text:00003ca0 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10092  .text:00004a28 dibujar_flecha_salida
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:9237   .text:00004020 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:9245   .text:00004034 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:9858   .text:000047e0 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:9863   .text:000047e8 $a
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10023  .text:00004998 $d
-C:\Users\jaime\AppData\Local\Temp\ccYQ4jyx.s:10028  .text:000049a0 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3156   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3157   .bss:00000000 modo_zoom
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3160   .bss:00000004 region_zoom_fila
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3163   .bss:00000008 region_zoom_col
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3166   .bss:0000000c celda_candidatos_fila
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3169   .bss:00000010 celda_candidatos_col
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3172   .data:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3175   .data:00000000 botones
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3197   .bss:00000014 estado_juego
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3202   .data:00000030 numero_actual
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3205   .bss:00000015 fila_seleccionada
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3207   .bss:00000016 columna_seleccionada
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3209   .bss:00000017 evento_boton_derecho
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3211   .bss:00000018 evento_boton_izquierdo
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3213   .bss:00000019 juego_iniciado
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3216   .bss:0000001c contador_error
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3218   .bss:00000020 pantalla_inicial_mostrada
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3220   .bss:00000021 tablero_dibujado
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3223   .rodata:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3226   .rodata:00000000 tecla_mapa
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3244   .bss:00000022 teclado_estado
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3247   .bss:00000024 teclado_timer
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3252   .data:00000031 evento_teclado_digito
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3256   .bss:00000028 tiempo_inicio
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3259   .bss:0000002c tiempo_fin
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3262   .bss:00000030 resta
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3265   .bss:00000034 tiempo_inicio_partida
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3268   .bss:00000038 ultimo_tiempo_mostrado
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3274   .text:00000068 Eint4567_ISR
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3432   .text:0000021c $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3442   .text:00000238 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3445   .text:00000238 Eint1_ISR
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3510   .text:000002c0 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3519   .text:000002d8 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3522   .text:000002d8 Eint4567_init
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3616   .text:000003c0 eint1_init
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3599   .text:00000394 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3613   .text:000003c0 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3665   .text:00000428 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3674   .text:00000440 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3676   .text:00000440 procesar_rebote
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3715   .text:00000494 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3721   .text:000004a4 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4195   .text:00000948 leer_estado_boton
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3927   .text:000006fc $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3940   .text:00000724 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3943   .text:00000724 procesar_maquina_estados_botones
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3967   .text:00000744 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4293   .text:00000a04 estado_inicial
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:3974   .text:00000758 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4544   .text:00000ca4 estado_selec_fila
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6013   .text:00001c84 mostrar_tiempo_partida
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4941   .text:000010f0 estado_selec_columna
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5226   .text:0000143c estado_selec_valor
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5585   .text:00001884 estado_mostrando_error
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4048   .text:000007f8 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4053   .text:00000800 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4056   .text:00000800 procesar_teclado
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4096   .text:0000084c $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4102   .text:0000085c $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5799   .text:00001a78 teclado_escanear
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5761   .text:00001a40 teclado_soltado
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4184   .text:00000934 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4192   .text:00000948 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4241   .text:000009b4 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4246   .text:000009bc $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4249   .text:000009bc procesar_antirebote_botones
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6218   .text:00001ecc resetear_tiempo_partida
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7188   .text:000029cc limpiar_marcas_error
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5922   .text:00001b9c marcar_pistas_iniciales
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4522   .text:00000c60 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4542   .text:00000ca4 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6496   .text:00002174 mostrar_partida_terminada
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7506   .text:00002cbc limpiar_todos_eventos
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4923   .text:000010bc $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10330  .data:00000032 fila_anterior.4463
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:4939   .text:000010f0 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5211   .text:00001414 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10325  .bss:00000040 columna_anterior.4494
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5224   .text:0000143c $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7605   .text:00002db4 detectar_y_marcar_errores_celda
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7267   .text:00002a80 verificar_tablero_completo
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7353   .text:00002b34 finalizar_partida_completa
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5569   .text:00001858 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5583   .text:00001884 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7908   .text:00003144 limpiar_errores_visuales
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5713   .text:000019ec $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5723   .text:00001a08 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5725   .text:00001a08 teclado_leer_columnas
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5793   .text:00001a74 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5797   .text:00001a78 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5913   .text:00001b90 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10311  .rodata:00000088 C.58.6312
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10319  .rodata:00000098 C.59.6317
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:5919   .text:00001b9c $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6204   .text:00001ea8 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10305  .bss:0000003c ultimo_segundo_mostrado.4538
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6216   .text:00001ecc $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6250   .text:00001efc $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6269   .text:00001f04 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6271   .text:00001f04 mostrar_victoria_con_tiempo
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6473   .text:0000214c $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6494   .text:00002174 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6698   .text:000023bc $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6711   .text:000023e4 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:6713   .text:000023e4 detectar_y_marcar_errores
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7181   .text:000029c4 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7186   .text:000029cc $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7261   .text:00002a7c $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7265   .text:00002a80 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7347   .text:00002b30 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7351   .text:00002b34 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7492   .text:00002c98 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7504   .text:00002cbc $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7593   .text:00002d98 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7603   .text:00002db4 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7901   .text:0000313c $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:7906   .text:00003144 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8003   .text:00003240 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8007   .text:00003244 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8010   .text:00003244 procesar_touchscreen_sudoku
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8939   .text:00003ca0 dibujar_zoom_region
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:9865   .text:000047e8 procesar_toque_candidatos
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10030  .text:000049a0 es_numero_candidato
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8884   .text:00003c38 es_celda_pista
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:9247   .text:00004034 dibujar_zoom_candidatos
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8864   .text:00003bfc $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8882   .text:00003c38 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8928   .text:00003c9c $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:8937   .text:00003ca0 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10092  .text:00004a28 dibujar_flecha_salida
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:9237   .text:00004020 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:9245   .text:00004034 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:9858   .text:000047e0 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:9863   .text:000047e8 $a
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10023  .text:00004998 $d
+C:\Users\jaime\AppData\Local\Temp\ccKpbdqm.s:10028  .text:000049a0 $a
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

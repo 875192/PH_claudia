@@ -276,17 +276,17 @@
  2309              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 cola.c
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2116   .cola_debug:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2119   .cola_debug:00000000 cola_buffer
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2122   .bss:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2123   .bss:00000000 cola_indice_esc
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2126   .bss:00000004 cola_num_eventos
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2129   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2132   .text:00000000 cola_init
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2213   .text:000000d4 $d
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2219   .text:000000e0 $a
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2222   .text:000000e0 cola_depuracion
-C:\Users\jaime\AppData\Local\Temp\ccxsQyAq.s:2304   .text:000001c4 $d
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2116   .cola_debug:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2119   .cola_debug:00000000 cola_buffer
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2122   .bss:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2123   .bss:00000000 cola_indice_esc
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2126   .bss:00000004 cola_num_eventos
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2129   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2132   .text:00000000 cola_init
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2213   .text:000000d4 $d
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2219   .text:000000e0 $a
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2222   .text:000000e0 cola_depuracion
+C:\Users\jaime\AppData\Local\Temp\ccHlqwxw.s:2304   .text:000001c4 $d
                      .debug_frame:00000010 $d
 
 NO UNDEFINED SYMBOLS

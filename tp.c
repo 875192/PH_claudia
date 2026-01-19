@@ -615,42 +615,26 @@ int ts_read_calibrated(int *x, int *y)
 
 /*********************************************************************************************
 * name:     ts_test_calibracion
-* func:     Función de test completa: calibra y permite dibujar
+* func:     Calibra el touchscreen y retorna (no entra en bucle)
 *********************************************************************************************/
 void ts_test_calibracion(void)
 {
-    int x, y;
-    
-    Lcd_Init();
-    TS_init();
-    
-    // Calibrar con margen de 50 píxeles
+    // Calibrar con margen de 50 píxeles para mejor precisión
     ts_calibrate_5pt(SCR_XSIZE, SCR_YSIZE, 50);
     
+    // Mensaje de confirmación
     Lcd_Clr();
     Lcd_Active_Clr();
-    Lcd_DspAscII8x16(80, 110, BLACK, (unsigned char *)"Dibuja!");
+    Lcd_DspAscII8x16(50, 100, BLACK, (unsigned char *)"Calibracion OK!");
+    Lcd_DspAscII6x8(40, 130, BLACK, (unsigned char *)"Continuando...");
     Lcd_Dma_Trans();
-    Delay(100);
+    Delay(500);
     
+    // Limpiar pantalla antes de retornar
     Lcd_Clr();
     Lcd_Dma_Trans();
     
-    // Loop de dibujo
-    while (1)
-    {
-        if (ts_read_calibrated(&x, &y) == 0)
-        {
-            (LCD_PutPixel(x, y, 0xf));
-            
-            static int count = 0;
-            if (++count >= 5)
-            {
-                Lcd_Dma_Trans();
-                count = 0;
-            }
-        }
-    }
+    // Retornar para que el programa continúe
 }
 
 /*********************************************************************************************
