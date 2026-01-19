@@ -18,5 +18,6 @@ void led2_on();					// led 2 encendido
 void led2_off();				// led 2 apagado
 void leds_switch();				// invierte el valor de los leds (*)
 void Led_Display(int LedStatus);		// control directo del LED
+void led2_switch(void);
 
 #endif /* _LED_H_ */

@@ -1,21 +1,36 @@
-button.d button.o: ../button.c ../button.h ../maquina_estados.h \
- C:\hlocal\workspace_Hardware\practica3\common/def.h ../eventos.h \
- ../timer3.h C:\hlocal\workspace_Hardware\practica3\common/44blib.h \
+button.d button.o: ../button.c ../button.h ../sudoku_2025.h ../celda.h \
+ ../8led.h C:\hlocal\workspace_Hardware\practica3\common/44blib.h \
  C:\hlocal\workspace_Hardware\practica3\common/44b.h \
- C:\hlocal\workspace_Hardware\practica3\common/option.h
+ C:\hlocal\workspace_Hardware\practica3\common/option.h \
+ C:\hlocal\workspace_Hardware\practica3\common/def.h ../cola.h \
+ ../eventos.h ../timer2.h ../tableros.h ../sudoku_lcd.h ../lcd.h ../tp.h
 
 ../button.h:
 
-../maquina_estados.h:
+../sudoku_2025.h:
 
-C:\hlocal\workspace_Hardware\practica3\common/def.h:
+../celda.h:
 
-../eventos.h:
-
-../timer3.h:
+../8led.h:
 
 C:\hlocal\workspace_Hardware\practica3\common/44blib.h:
 
 C:\hlocal\workspace_Hardware\practica3\common/44b.h:
 
 C:\hlocal\workspace_Hardware\practica3\common/option.h:
+
+C:\hlocal\workspace_Hardware\practica3\common/def.h:
+
+../cola.h:
+
+../eventos.h:
+
+../timer2.h:
+
+../tableros.h:
+
+../sudoku_lcd.h:
+
+../lcd.h:
+
+../tp.h:

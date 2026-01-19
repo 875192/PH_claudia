@@ -1,17 +1,20 @@
 /*********************************************************************************************
-* Fichero:		led.c
-* Autor:
-* Descrip:		funciones de control de los LED de la placa
-* Version:
-*********************************************************************************************/
+ * Fichero:		led.c
+ * Autor:
+ * Descrip:		funciones de control de los LED de la placa
+ * Version:
+ *********************************************************************************************/
 
 /*--- ficheros de cabecera ---*/
 #include "led.h"
 #include "44b.h"
 #include "44blib.h"
+#include "eventos.h"
+#include "timer2.h"
+#include "cola.h"
 
 /*--- variables globales del módulo ---*/
-static int led_state = 0;		/* estado del LED */
+static int led_state = 0; /* estado del LED */
 
 /*--- código de las funciones públicas ---*/
 void leds_on()
@@ -39,7 +42,6 @@ void led1_off()
 void led2_on()
 {
 	led_state = led_state | 0x2;
-	Led_Display(led_state);
 }
 
 void led2_off()
@@ -52,7 +54,23 @@ void leds_switch()
 {
 	led_state ^= 0x03;
 	Led_Display(led_state);
+	// cola_depuracion(EVT_LEDS_CAMBIO, timer2_count(), 5);
+}
 
+/* */
+void led2_switch(void)
+{
+	/* El rPDATB es el registro de datos del puerto B.
+	 * El LED2 está conectado al bit 10 del puerto B.
+	 * Si el bit 10 es 1, el LED está apagado; si es 0, el LED está encendido.
+	 * El 400 en hexadecimal es 2^10, que corresponde al bit 10.
+	 * Si rPDATB & 0x400 es verdadero, significa que el bit 10 es 1 (LED apagado).
+	 * Si es falso, el bit 10 es 0 (LED encendido).
+	 */
+	if (rPDATB & 0x400)
+		led2_on();
+	else
+		led2_off();
 }
 
 void Led_Display(int LedStatus)

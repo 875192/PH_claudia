@@ -143,22 +143,6 @@ void Lcd_DspHz16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U *s);
 void ReverseLine(INT32U ulHeight, INT32U ulY);
 INT8U LCD_GetPixel(INT16U usX, INT16U usY);
 
-/*--- Funciones Sudoku ---*/
-void Sudoku_Pantalla_Inicial(void);
-void Sudoku_Dibujar_Tablero(void);
-void Sudoku_Dibujar_Numero_En_Celda(INT16U fila, INT16U col, INT8U numero, INT8U es_pista, INT8U tiene_error);
-void Sudoku_Dibujar_Candidatos_En_Celda(INT16U fila, INT16U col, INT16U candidatos);
-void Sudoku_Actualizar_Tablero_Completo(void* cuadricula);
-void Sudoku_Actualizar_Tiempo(INT32U tiempo_us);
-void Sudoku_Pantalla_Final(INT32U tiempo_us);
-void Sudoku_Procesar_Touch(int x, int y);
-void Sudoku_Mostrar_Region_Expandida(int region_fila, int region_col);
-int Sudoku_Procesar_Touch_Region_Expandida(int x, int y);
-int Sudoku_Esta_Region_Expandida_Activa(void);
-int Sudoku_Hay_Celda_Seleccionada(void);
-int Sudoku_Obtener_Celda_Seleccionada(int* fila, int* col);
-void Sudoku_Cerrar_Region_Expandida(void);
-void Sudoku_Redibujar_Region_Expandida(void);
 
 #ifdef __cplusplus
 }

@@ -749,11 +749,11 @@
  2550              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 tableros.c
-C:\Users\jaime\AppData\Local\Temp\ccrZLQ2e.s:1808   .data:00000000 cuadricula_C_C
-C:\Users\jaime\AppData\Local\Temp\ccrZLQ2e.s:1805   .data:00000000 $d
-C:\Users\jaime\AppData\Local\Temp\ccrZLQ2e.s:1957   .data:00000120 cuadricula_C_ARM
-C:\Users\jaime\AppData\Local\Temp\ccrZLQ2e.s:2106   .data:00000240 cuadricula_ARM_C
-C:\Users\jaime\AppData\Local\Temp\ccrZLQ2e.s:2255   .data:00000360 cuadricula_ARM_ARM
-C:\Users\jaime\AppData\Local\Temp\ccrZLQ2e.s:2404   .data:00000480 solucion
+C:\Users\jaime\AppData\Local\Temp\ccRHB2r5.s:1808   .data:00000000 cuadricula_C_C
+C:\Users\jaime\AppData\Local\Temp\ccRHB2r5.s:1805   .data:00000000 $d
+C:\Users\jaime\AppData\Local\Temp\ccRHB2r5.s:1957   .data:00000120 cuadricula_C_ARM
+C:\Users\jaime\AppData\Local\Temp\ccRHB2r5.s:2106   .data:00000240 cuadricula_ARM_C
+C:\Users\jaime\AppData\Local\Temp\ccRHB2r5.s:2255   .data:00000360 cuadricula_ARM_ARM
+C:\Users\jaime\AppData\Local\Temp\ccRHB2r5.s:2404   .data:00000480 solucion
 
 NO UNDEFINED SYMBOLS

@@ -7,16 +7,17 @@ C_SRCS += \
 ../8led.c \
 ../Bmp.c \
 ../button.c \
+../celda.c \
 ../cola.c \
 ../lcd.c \
 ../led.c \
 ../main.c \
-../maquina_estados.c \
 ../sudoku_2025.c \
+../sudoku_lcd.c \
+../tableros.c \
 ../timer.c \
 ../timer1.c \
 ../timer2.c \
-../timer3.c \
 ../tp.c 
 
 ASM_SRCS += \
@@ -26,33 +27,35 @@ OBJS += \
 ./8led.o \
 ./Bmp.o \
 ./button.o \
+./celda.o \
 ./cola.o \
 ./init_b.o \
 ./lcd.o \
 ./led.o \
 ./main.o \
-./maquina_estados.o \
 ./sudoku_2025.o \
+./sudoku_lcd.o \
+./tableros.o \
 ./timer.o \
 ./timer1.o \
 ./timer2.o \
-./timer3.o \
 ./tp.o 
 
 C_DEPS += \
 ./8led.d \
 ./Bmp.d \
 ./button.d \
+./celda.d \
 ./cola.d \
 ./lcd.d \
 ./led.d \
 ./main.d \
-./maquina_estados.d \
 ./sudoku_2025.d \
+./sudoku_lcd.d \
+./tableros.d \
 ./timer.d \
 ./timer1.d \
 ./timer2.d \
-./timer3.d \
 ./tp.d 
 
 ASM_DEPS += \

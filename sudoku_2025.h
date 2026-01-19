@@ -1,59 +1,59 @@
-/* guarda para evitar inclusiones mÃºltiples ("include guard") */
+/*
+ * Asignatura: Proyecto hardware
+ * Fecha: 09/10/2025
+ * Autores: Francisco Jose Martinez, Claudia Mateo, Nayara Gomez
+ * Archivo: sudoku_2025.h
+ *
+ * Declara tamaños y funciones para actualizar/propagar candidatos en
+ * tableros Sudoku 9x9 (CELDA[NUM_FILAS][NUM_COLUMNAS]). Usado por las
+ * implementaciones C y ARM del proyecto.
+ */
+
 #ifndef SUDOKU_H_2025
 #define SUDOKU_H_2025
 
 #include <inttypes.h>
 #include "celda.h"
 
-/* TamaÃ±os de la cuadrÃ­cula */
-/* Se utilizan 16 columnas para facilitar la visualizaciÃ³n */
-enum {NUM_FILAS = 9,
+/* Tamaños de la cuadrícula */
+enum
+{
+      NUM_FILAS = 9,
       PADDING = 7,
-      NUM_COLUMNAS = NUM_FILAS + PADDING};
+      NUM_COLUMNAS = NUM_FILAS + PADDING
+};
 
 /* Definiciones para valores muy utilizados */
-/* FALSE y TRUE ya están definidos en def.h */
+enum
+{
+      FALSO = 0,
+      VERDADERO = 1
+};
 
-/* La informaciÃ³n de cada celda esta codificada en 16 bits
- * con el siguiente formato, empezando en el bit mas significativo (MSB):
- * 9 bits vector CANDIDATOS (0: es candidato, 1: no es candidato)
- * 1 bit  no usado
- * 1 bit  ERROR
- * 1 bit  PISTA
- * 4 bits VALOR
- */
+/* Prototipos de funciones de lógica de candidatos */
+void candidatos_propagar_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
+                           uint8_t fila, uint8_t columna);
 
-/* declaraciÃ³n de funciones visibles en el exterior */
+int candidatos_actualizar_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
-int sudoku9x9(CELDA cuadricula_C_C[NUM_FILAS][NUM_COLUMNAS],
-        CELDA cuadricula_C_ARM[NUM_FILAS][NUM_COLUMNAS],
-        CELDA cuadricula_ARM_ARM[NUM_FILAS][NUM_COLUMNAS],
-        CELDA cuadricula_ARM_ARM_ALL[NUM_FILAS][NUM_COLUMNAS],
-        CELDA cuadricula_ARM_C[NUM_FILAS][NUM_COLUMNAS],
-        CELDA solucion[NUM_FILAS][NUM_COLUMNAS]);
+__attribute__((noinline)) int candidatos_actualizar_arm_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+
+int candidatos_propagar_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
+                            uint8_t fila, uint8_t columna);
+
+int candidatos_actualizar_all(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
 int candidatos_actualizar_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
-int candidatos_actualizar_c_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+/* FUNCIONES DE VISUALIZACIÓN - USAR LAS DE sudoku_lcd.h */
+/* NO re definir aquí */
 
-
-/* declaraciÃ³n de funciones ARM a implementar */
-
-void
-candidatos_propagar_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
-						uint8_t fila, uint8_t columna);
-
-void
-candidatos_propagar_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
-						uint8_t fila, uint8_t columna);
-
-int
-candidatos_actualizar_arm_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
-
-int
-candidatos_actualizar_arm_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
-
-int
-candidatos_actualizar_all(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+/* Funciones de control del juego */
+int Sudoku_Esta_Region_Expandida_Activa(void);
+void Sudoku_Procesar_Touch_Region_Expandida(int x, int y);
+void Sudoku_Procesar_Touch(int x, int y);
+int Sudoku_Juego_En_Progreso(void);
+int Sudoku_Partida_Terminada(void);
+unsigned int Sudoku_Obtener_Tiempo_Inicio(void);
 
 #endif /* SUDOKU_H_2025 */

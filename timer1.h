@@ -1,19 +1,14 @@
-/*********************************************************************************************
-* Fichero:		timer1.h
-* Autor:
-* Descrip:		Control del timer1 para latido (heartbeat) con LED
-* Version:		1.0
-*********************************************************************************************/
-
-#ifndef _TIMER1_H_
-#define _TIMER1_H_
-
-/*--- Declaración de funciones visibles del módulo timer1.c/timer1.h ---*/
-
-/**
- * Inicializa el Timer1 para generar 60 eventos por segundo.
- * El LED de la derecha parpadeará a 6 Hz (3 veces por segundo on/off).
+/*
+ * Asignatura: Proyecto hardware
+ * Fecha: 10/11/2025
+ * Autores: Claudia Mateo Cuellar 871961
+ * Archivo: timer1.h
+ * Descripción: Declaración de funciones para la gestión del Timer1
  */
+
+#ifndef TIMER1_H_
+#define TIMER1_H_
+
 void timer1_init(void);
 
-#endif /* _TIMER1_H_ */
+#endif /* TIMER1_H_ */

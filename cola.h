@@ -1,75 +1,48 @@
-/*********************************************************************************************
-* Fichero:		cola.h
-* Autor:		
-* Descrip:		Cola circular de depuración para tracking de eventos
-* Version:		1.0
-*********************************************************************************************/
+/*
+ * Asignatura: Proyecto hardware
+ * Fecha: 10/11/2025
+ * Autores: Claudia Mateo Cuellar 871961
+ * Archivo: cola.h
+ * Descripción: Implementación de una cola circular de depuración para almacenar eventos con timestamp y datos auxiliares
+ */
 
-#ifndef _COLA_H_
-#define _COLA_H_
+#ifndef COLA_H
+#define COLA_H
 
 #include <stdint.h>
 
-/*--- Configuración de la cola ---*/
-#define COLA_SIZE 150			// Tamaño de la cola (número de eventos que almacena)
-
-/* Dirección de memoria de la cola
- * Se ubica al final del espacio de memoria, antes de las pilas de los distintos modos
- * El espacio de memoria disponible es de 0xc000000 a 0xc7fffff (8 MB)
- * Las pilas están al final, así que ubicamos la cola justo antes
+/**
+ * Número máximo de eventos en la cola.
+ * Tamaño estimado: COLA_MAX_EVENTOS × sizeof(evento_t) = 256 × 12 = 3 KB
  */
-#define COLA_ADDRESS 0xc700000	// Dirección base de la cola
+#define COLA_MAX_EVENTOS 256
 
-/*--- Estructura de un evento en la cola ---*/
-typedef struct {
-	uint32_t instante;		// Momento exacto en que se produjo el evento (en microsegundos)
-	uint8_t ID_evento;		// Identificador del tipo de evento
-	uint32_t auxData;		// Datos auxiliares del evento (botón pulsado, ticks, etc.)
-} EventoCola;
-
-/*--- Estructura de la cola circular ---*/
-typedef struct {
-	uint32_t indice_escritura;		// Índice donde se escribirá el próximo evento
-	uint32_t num_eventos;			// Número total de eventos escritos (para estadísticas)
-	EventoCola eventos[COLA_SIZE];	// Array circular de eventos
-} ColaDebug;
-
-/*--- Variables visibles del módulo cola.c/cola.h ---*/
-extern ColaDebug* cola_global;
-
-/*--- Declaración de funciones visibles del módulo cola.c/cola.h ---*/
+/**
+ * Estructura que representa un evento de depuración.
+ * - ID_evento: identificador pequeño del evento.
+ * - instant: timestamp (µs) cuando ocurrió el evento.
+ * - auxData: campo auxiliar para datos adicionales.
+ */
+typedef struct
+{
+    uint8_t ID_evento;
+    uint32_t instant;
+    uint32_t auxData;
+} evento_t;
 
 /**
  * Inicializa la cola de depuración.
- * Debe ser llamada al inicio del programa antes de usar la cola.
+ * Debe llamarse una vez al arrancar el sistema antes de usar cola_depuracion().
  */
 void cola_init(void);
 
 /**
- * Introduce un nuevo evento en la cola de depuración.
- * La cola es circular, por lo que si está llena, sobreescribirá los eventos más antiguos.
- * 
- * @param instant Instante de tiempo en que ocurrió el evento (en microsegundos)
- *                Normalmente se obtiene con timer2_count()
- * @param ID_evento Identificador del tipo de evento (definido en eventos.h)
- * @param auxData Datos auxiliares del evento (ej: número de botón, valor, etc.)
+ * Inserta un evento en la cola de depuración.
+ * Parámetros:
+ *  - ID_evento: identificador del evento (1 byte).
+ *  - instant: timestamp asociado al evento (µs).
+ *  - auxData: dato auxiliar (p.ej. valor leído).
  */
-void cola_depuracion(uint32_t instant, uint8_t ID_evento, uint32_t auxData);
+void cola_depuracion(uint8_t ID_evento, uint32_t instant, uint32_t auxData);
 
-/**
- * Obtiene el número total de eventos que se han registrado en la cola.
- * Este número puede ser mayor que COLA_SIZE si la cola ha dado varias vueltas.
- * 
- * @return Número total de eventos registrados desde la inicialización
- */
-uint32_t cola_get_num_eventos(void);
-
-/**
- * Obtiene el índice actual de escritura en la cola.
- * Útil para depuración.
- * 
- * @return Índice donde se escribirá el próximo evento (0 a COLA_SIZE-1)
- */
-uint32_t cola_get_indice(void);
-
-#endif /* _COLA_H_ */
+#endif /* COLA_H */

@@ -62,8 +62,8 @@
  1824              	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 celda.c
-C:\Users\jaime\AppData\Local\Temp\ccfSpLOp.s:1788   .text:00000000 $a
-C:\Users\jaime\AppData\Local\Temp\ccfSpLOp.s:1791   .text:00000000 celda_leer_valor
+C:\Users\jaime\AppData\Local\Temp\ccomJAXb.s:1788   .text:00000000 $a
+C:\Users\jaime\AppData\Local\Temp\ccomJAXb.s:1791   .text:00000000 celda_leer_valor
                      .debug_frame:00000010 $d
 
 NO UNDEFINED SYMBOLS

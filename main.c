@@ -1,113 +1,82 @@
-/*********************************************************************************************
-* File	main.c
-* Author: embest
-* Description: main entry
-* History:	
-* - Código original de touchscreen y LCD
-* - Código integrado de Sudoku desde main_sudoku.c
-*********************************************************************************************/
+/*
+ * Asignatura: Proyecto hardware
+ * Fecha: 10/11/2025
+ * Autores: Claudia Mateo Cuellar 971961
+ * Archivo: main.c
+ * Descripción: Programa principal
+ */
 
-/*--- include files ---*/
-#include "44blib.h"
-#include "44b.h"
-#include "tp.h"
-
-/* Includes del Sudoku */
 #include "8led.h"
 #include "button.h"
 #include "led.h"
+#include "timer.h"
 #include "timer1.h"
 #include "timer2.h"
+#include "44blib.h"
+#include "44b.h"
 #include "cola.h"
-#include "sudoku_2025.h"
-#include "lcd.h"
-
-/* Variables globales del Sudoku */
 #include "tableros.h"
-
-/* Apuntar a una de las cuadrículas disponibles */
-CELDA (*cuadricula)[NUM_COLUMNAS] = cuadricula_ARM_ARM; // CAMBIAR SEGUN LA VERSIÓN A PROBAR
-int celdas_vacias = 0;
+#include <stdint.h>
+#include "lcd.h"		/* Añadir este include */
+#include "tp.h"			/* Para calibración touchscreen */
+#include "sudoku_lcd.h" /* Para funciones de pantalla de Sudoku */
 
 /*--- function declare ---*/
 void Main(void);
 
+/*--- extern function ---*/
+extern void Lcd_Test();
+
 /*--- function code ---*/
 /*********************************************************************************************
-* name:		Main
-* func:		c code entry - VERSIÓN INTEGRADA: Touchscreen + Sudoku
-* para:		none
-* ret:		none
-* modify:
-*********************************************************************************************/
+ * name:		main
+ * func:		c code entry
+ * para:		none
+ * ret:		none
+ * modify:
+ * comment:
+ *********************************************************************************************/
 void Main(void)
 {
-    sys_init();        /* Initial 44B0X's Interrupt, Port and UART */
-    
-    /* Inicializa controladores del Sudoku */
-    timer2_init();      // Inicializacion del timer2 para medicion de tiempo
-    timer1_init();      // Inicializacion del timer1 para latido (heartbeat) - Paso 6
-    cola_init();        // Inicializacion de la cola de depuracion (Paso 4)
-    Eint4567_init();    // inicializamos los pulsadores. Cada vez que se pulse se verá reflejado en el 8led
-    D8Led_init();       // inicializamos el 8led
+	sys_init(); /* Initial 44B0X's Interrupt, Port and UART */
 
-    /* Inicializar LCD y mostrar pantalla inicial */
-    Lcd_Init();
-    TS_init();
-    
-    /* Calibrar touchscreen */
-    ts_calibrate_5pt(SCR_XSIZE, SCR_YSIZE, 30);
-    
-    Sudoku_Pantalla_Inicial();
+	/* Inicializar LCD pero NO llamar a Lcd_Test() */
+	Lcd_Init();		  /* Solo inicializar el hardware del LCD */
+	Lcd_Clr();		  /* Limpiar pantalla */
+	Lcd_Active_Clr(); /* Limpiar buffer activo */
 
-    /* Valor inicial de los leds */
-    leds_off();
-    
-    /* Variable para controlar actualización del tiempo */
-    unsigned int tiempo_anterior = 0;
-    unsigned int tiempo_actual = 0;
-    
-    /* Variables para touchscreen */
-    int touch_x, touch_y;
-    
-    /* Bucle principal */
-    while (1)
-    {
-        /* Comprobar si hay toque en la pantalla */
-        if (ts_read_calibrated(&touch_x, &touch_y) == 0)
-        {
-            /* Verificar si hay región expandida activa */
-            if (Sudoku_Esta_Region_Expandida_Activa())
-            {
-                /* Procesar toque en la región expandida */
-                Sudoku_Procesar_Touch_Region_Expandida(touch_x, touch_y);
-            }
-            else
-            {
-                /* Procesar toque en el tablero principal */
-                Sudoku_Procesar_Touch(touch_x, touch_y);
-            }
-            
-            Delay(30);  // Evitar múltiples detecciones
-        }
-        
-        /* Actualizar el tiempo en pantalla cada segundo (solo si no hay región expandida) */
-        if (!Sudoku_Esta_Region_Expandida_Activa())
-        {
-            tiempo_actual = timer2_count();
-            
-            /* Actualizar cada 1 segundo (1000000 microsegundos) */
-            if ((tiempo_actual - tiempo_anterior) >= 1000000)
-            {
-                /* Solo actualizar si el juego está en progreso (no en pantalla inicial ni terminado) */
-                if (Sudoku_Juego_En_Progreso())
-                {
-                    /* Calcular tiempo transcurrido desde el inicio de la partida */
-                    unsigned int tiempo_transcurrido = tiempo_actual - Sudoku_Obtener_Tiempo_Inicio();
-                    Sudoku_Actualizar_Tiempo(tiempo_transcurrido);
-                }
-                tiempo_anterior = tiempo_actual;
-            }
-        }
-    }
+	Eint4567_init();
+	D8Led_init();
+	timer_init();
+	timer1_init();
+	timer2_init();
+	timer2_start();
+	cola_init();
+	leds_off();
+
+	/* ============================================
+	 * OPCIÓN 1: TEST DE CALIBRACIÓN TOUCHSCREEN
+	 * Comenta esta línea y descomenta el while(1) de abajo
+	 * para volver a tu aplicación normal
+	 * ============================================ */
+
+	TS_init(); // Inicializar touchscreen
+
+	// Calibrar touchscreen (retorna después de calibrar)
+	ts_test_calibracion();
+
+	// Mostrar pantalla de instrucciones
+	sudoku_mostrar_pantalla_inicial();
+
+	// Esperar a que presione un botón para continuar
+	// (esto lo maneja la máquina de estados)
+
+	/* ============================================
+	 * APLICACIÓN SUDOKU CON TOUCHSCREEN
+	 * ============================================ */
+	while (1)
+	{
+		procesar_maquina_estados_botones();
+		procesar_touchscreen_sudoku();
+	}
 }

@@ -1,160 +1,103 @@
-/*********************************************************************************************
-* Fichero:		timer2.c
-* Autor:		
-* Descrip:		Librería de medición de tiempo usando el timer2 del s3c44b0x
-* Version:		1.0
-*********************************************************************************************/
+/*
+ * Asignatura: Proyecto hardware
+ * Fecha: 10/11/2025
+ * Autores: Claudia Mateo Cuellar 871961
+ * Archivo: timer2.c
+ * Descripción: Implementación de Timer2 para generar interrupciones periódicas y gestionar el antirrebote de botones y teclado matricial
+ */
 
-/*--- ficheros de cabecera ---*/
 #include "timer2.h"
 #include "44b.h"
 #include "44blib.h"
+#include "button.h"
+#include "44b.h"
 
-/*--- variables internas ---*/
-/* Variable compartida con la rutina de interrupción que cuenta los periodos completos */
 static volatile unsigned int timer2_numero_int = 0;
-
-/* Declaración de función que es rutina de servicio de interrupción
- * https://gcc.gnu.org/onlinedocs/gcc/ARM-Function-Attributes.html */
-void timer2_ISR(void) __attribute__((interrupt("IRQ")));
-
-/*--- código de las funciones ---*/
+volatile uint32_t tiempo_inicio;
+volatile uint32_t tiempo_fin;
+volatile uint32_t resta;
 
 /**
- * Rutina de servicio de interrupción del Timer2.
- * Se ejecuta cada vez que el timer2 completa un ciclo de cuenta.
- * Incrementa el contador de interrupciones.
- * 
- * NOTA: No registramos cada interrupción en la cola para no sobrecargarla,
- * ya que el timer2 genera muchas interrupciones por segundo (~488 Hz).
- * Solo registramos si es necesario para depuración específica.
+ * ISR de Timer2
+ *
+ * Descripción:
+ *  - Ejecutada en cada interrupción de Timer2.
+ *  - Incrementa el contador interno de interrupciones y llama a las
+ *    rutinas que procesan el antirrebote de botones y el teclado.
  */
+void timer2_ISR(void) __attribute__((interrupt("IRQ")));
 void timer2_ISR(void)
 {
-	/* Incrementar el contador de periodos completos */
-	timer2_numero_int++;
-	
-	/* Borrar bit en I_ISPC para desactivar la solicitud de interrupción */
-	rI_ISPC |= BIT_TIMER2; // BIT_TIMER2 pone un uno en el bit 11 que corresponde al Timer2
+    timer2_numero_int++;
+
+    procesar_antirebote_botones();
+    procesar_teclado();
+
+    rI_ISPC |= BIT_TIMER2;
 }
 
 /**
- * Inicializa el timer2 para trabajar a la máxima precisión posible.
- * Configuración:
- * - Reloj de la placa: 64 MHz
- * - Preescalado: 1 (valor 0 en TCFG0 para timer2/3)
- * - Divisor: 1/2 (valor 0 en TCFG1 para timer2)
- * - Frecuencia final del timer: 64 MHz / (0+1) / 2 = 32 MHz
- * - Periodo del timer: 1/32 MHz = 0.03125 microsegundos
- * - Valor de cuenta máximo: 65535 (16 bits)
- * - Tiempo por ciclo completo: 65535 * 0.03125 = 2047.96875 microsegundos (~2.048 ms)
+ * Inicializa Timer2
+ * Configura:
+ *  - modo de interrupción vectorizada (IRQ),
+ *  - prescaler/MUX para el timer2,
+ *  - carga de registros TCNTB2/TCMPB2 y manual update.
  */
 void timer2_init(void)
 {
-	/* Configuración del controlador de interrupciones */
-	rINTMOD = 0x0;              // Configura las líneas como de tipo IRQ
-	rINTCON = 0x1;              // Habilita int. vectorizadas y la línea IRQ (FIQ no)
-	rINTMSK &= ~(BIT_TIMER2);   // Habilita en vector de máscaras de interrupción el Timer2
-	
-	/* Establece la rutina de servicio para TIMER2 */
-	pISR_TIMER2 = (unsigned) timer2_ISR;
-	
-	/* Configura el Timer2 para máxima precisión */
-	/* TCFG0: registro de preescalado
-	 * Timer2 y Timer3 comparten los bits [15:8]
-	 * Preescalado = 0 para máxima precisión (divide por 1) */
-	rTCFG0 &= ~(0xFF << 8);     // Limpia los bits [15:8]
-	rTCFG0 |= (0 << 8);         // Establece preescalado = 0 (divide por 0+1 = 1)
-	
-	/* TCFG1: registro de selección de divisor
-	 * Timer2 usa los bits [11:8]
-	 * Valor 0000 = divisor 1/2 */
-	rTCFG1 &= ~(0xF << 8);      // Limpia los bits [11:8]
-	rTCFG1 |= (0x0 << 8);       // Establece divisor = 1/2
-	
-	/* TCNTB2: valor inicial de cuenta (cuenta descendente) 
-	 * Usamos el valor máximo de 16 bits para maximizar el rango */
-	rTCNTB2 = 65535;
-	
-	/* TCMPB2: valor de comparación (no se usa para medición de tiempo) */
-	rTCMPB2 = 0;
-	
-	/* TCON: registro de control del timer
-	 * Timer2 usa los bits [15:12]
-	 * Bit 15: Timer2 start/stop (0=stop, 1=start)
-	 * Bit 14: Timer2 manual update (1=update TCNTB2 y TCMPB2)
-	 * Bit 13: Timer2 output inverter on/off
-	 * Bit 12: Timer2 auto reload on/off (1=auto-reload) */
-	
-	/* Primero establecer manual update para cargar los valores */
-	rTCON &= ~(0xF << 12);      // Limpia los bits del Timer2
-	rTCON |= (1 << 13);         // Establece manual update
-	
-	/* Luego iniciar el timer con auto-reload (sin manual update) */
-	rTCON &= ~(0xF << 12);      // Limpia los bits del Timer2
-	rTCON |= (1 << 15) | (1 << 12);  // Start + auto-reload
+    rINTMOD = 0x0; /* IRQ vect. */
+    rINTCON = 0x1; /* enable vectored IRQs */
+    rINTMSK &= ~(BIT_TIMER2);
+
+    pISR_TIMER2 = (unsigned)timer2_ISR;
+
+    rTCFG0 = (rTCFG0 & ~(0xF << 8)) | (0x0 << 8);
+    rTCFG1 = (rTCFG1 & ~(0xF << 8)) | (0x0 << 8);
+
+    rTCNTB2 = 0xFFFF;
+    rTCMPB2 = 0;
+
+    rTCON |= (1 << 13);
+    rTCON &= ~(1 << 13);
 }
 
 /**
- * Reinicia la cuenta de tiempo y comienza a medir.
- * Resetea tanto el contador de interrupciones como el valor del timer.
+ * Inicia Timer2
+ * Acciones:
+ *  - (Re)inicializa contador interno,
+ *  - recarga TCNTB2 y realiza manual update,
+ *  - pone el timer en modo start con auto-reload.
  */
 void timer2_start(void)
 {
-	/* Reiniciar el contador de interrupciones */
-	timer2_numero_int = 0;
-	
-	/* Detener el timer */
-	rTCON &= ~(1 << 15);        // Clear bit 15 (stop timer2)
-	
-	/* Recargar el valor inicial del contador */
-	rTCNTB2 = 65535;
-	
-	/* Establecer manual update para recargar el valor */
-	rTCON |= (1 << 13);         // Set manual update
-	
-	/* Iniciar el timer con auto-reload */
-	rTCON &= ~(0xF << 12);      // Limpia los bits del Timer2
-	rTCON |= (1 << 15) | (1 << 12);  // Start + auto-reload
+    timer2_numero_int = 0;
+
+    rTCNTB2 = 0xFFFF;
+    rTCON |= (1 << 13);
+    rTCON &= ~(1 << 13);
+
+    rTCON &= ~(1 << 12);
+    rTCON |= (1 << 12);
+
+    rTCON |= (1 << 15);
 }
 
 /**
- * Lee la cuenta actual del temporizador y calcula el tiempo transcurrido.
- * 
- * Retorna el tiempo en microsegundos desde la última llamada a timer2_start().
- * 
- * Cálculo:
- * - Frecuencia del timer: 32 MHz (64 MHz / 1 / 2)
- * - Cada tick del timer: 0.03125 microsegundos (1/32 MHz)
- * - Ticks transcurridos = (65535 - TCNTO2) + (65536 * timer2_numero_int)
- * - Tiempo (µs) = ticks * 0.03125 = ticks / 32
+ * timer2_count
+ * Devuelve un valor de tiempo relativo (µs aproximados) basado en el
+ * número de underflows y el valor actual del contador del Timer2.
+ * Retorno:
+ *  - tiempo en microsegundos (aproximado). Ajustar divisor si la
+ *    relación ticks/µs difiere en tu plataforma.
  */
 unsigned int timer2_count(void)
 {
-	unsigned int interrupciones;
-	unsigned int contador_actual;
-	unsigned int ticks_totales;
-	unsigned int tiempo_us;
-	
-	/* Leer el número de interrupciones de forma atómica */
-	interrupciones = timer2_numero_int;
-	
-	/* Leer el valor actual del contador (cuenta descendente desde 65535) */
-	contador_actual = rTCNTO2;
-	
-	/* Calcular los ticks transcurridos en el periodo actual */
-	/* Como cuenta descendente: ticks = valor_inicial - valor_actual */
-	unsigned int ticks_periodo_actual = 65535 - contador_actual;
-	
-	/* Calcular el total de ticks:
-	 * ticks totales = ticks de periodos completos + ticks del periodo actual */
-	ticks_totales = (interrupciones * 65536) + ticks_periodo_actual;
-	
-	/* Convertir ticks a microsegundos:
-	 * Cada tick = 1/(32 MHz) = 0.03125 µs
-	 * Tiempo (µs) = ticks / 32
-	 * Para evitar usar división en punto flotante: ticks * 1000000 / 32000000 = ticks / 32 */
-	tiempo_us = ticks_totales / 32;
-	
-	return tiempo_us;
+    unsigned int val;
+    unsigned int entero;
+    unsigned long ticks;
+    val = rTCNTO2;
+    entero = timer2_numero_int;
+    ticks = (unsigned long)entero * 65536 + (unsigned long)(65535 - val + 1);
+
+    return (unsigned int)(ticks / 32);
 }

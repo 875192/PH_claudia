@@ -11,6 +11,7 @@ C_SRCS += \
 ../Jaime/lcd.c \
 ../Jaime/led.c \
 ../Jaime/main.c \
+../Jaime/maquina_estados.c \
 ../Jaime/sudoku_2025.c \
 ../Jaime/timer.c \
 ../Jaime/timer1.c \
@@ -30,6 +31,7 @@ OBJS += \
 ./Jaime/lcd.o \
 ./Jaime/led.o \
 ./Jaime/main.o \
+./Jaime/maquina_estados.o \
 ./Jaime/sudoku_2025.o \
 ./Jaime/timer.o \
 ./Jaime/timer1.o \
@@ -45,6 +47,7 @@ C_DEPS += \
 ./Jaime/lcd.d \
 ./Jaime/led.d \
 ./Jaime/main.d \
+./Jaime/maquina_estados.d \
 ./Jaime/sudoku_2025.d \
 ./Jaime/timer.d \
 ./Jaime/timer1.d \

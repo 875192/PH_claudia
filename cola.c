@@ -1,92 +1,69 @@
-/*********************************************************************************************
-* Fichero:		cola.c
-* Autor:		
-* Descrip:		Implementación de la cola circular de depuración
-* Version:		1.0
-*********************************************************************************************/
+/*
+ * Asignatura: Proyecto hardware
+ * Fecha: 10/11/2025
+ * Autores: Claudia Mateo Cuellar 871961
+ * Archivo: cola.c
+ * Descripción: Implementación de una cola circular de depuración para almacenar eventos con timestamp y datos auxiliares
+ */
 
-/*--- Ficheros de cabecera ---*/
 #include "cola.h"
-#include "eventos.h"
 #include "timer2.h"
-#include <stdint.h>
+#include "eventos.h"
+#include "44b.h"
 
-/*--- Variables globales del módulo ---*/
+/**
+ * Buffer circular de eventos de depuración.
+ * Se coloca en la sección ".cola_debug" y alineado a 4 bytes.
+ */
+static evento_t cola_buffer[COLA_MAX_EVENTOS] __attribute__((section(".cola_debug"), aligned(4)));
 
-/* Puntero a la cola global en memoria
- * Se ubica en una dirección fija de memoria (COLA_ADDRESS)
- * definida en cola.h */
-ColaDebug* cola_global = (ColaDebug*)COLA_ADDRESS;
+/**
+ * Índice de escritura actual en la cola (siguiente posición libre).
+ */
+static volatile uint32_t cola_indice_esc = 0;
 
-/*--- Código de las funciones públicas ---*/
+/**
+ * Número de eventos actualmente almacenados en la cola.
+ */
+static volatile uint32_t cola_num_eventos = 0;
 
 /**
  * Inicializa la cola de depuración.
- * Pone a cero todos los contadores y limpia la estructura.
+ * Comportamiento:
+ *  - Marca todos los eventos del buffer a cero.
+ *  - Resetea los índices internos.
  */
 void cola_init(void)
 {
-	int i;
+    uint32_t i;
 
-	/* Inicializar los índices de control */
-	cola_global->indice_escritura = 0;
-	cola_global->num_eventos = 0;
-
-	/* Limpiar todos los eventos de la cola */
-	for (i = 0; i < COLA_SIZE; i++)
-	{
-		cola_global->eventos[i].instante = 0;
-		cola_global->eventos[i].ID_evento = 0;
-		cola_global->eventos[i].auxData = 0;
-	}
+    for (i = 0; i < COLA_MAX_EVENTOS; i++)
+    {
+        cola_buffer[i].ID_evento = 0;
+        cola_buffer[i].instant = 0;
+        cola_buffer[i].auxData = 0;
+    }
+    cola_indice_esc = 0;
+    cola_num_eventos = 0;
 }
 
 /**
- * Introduce un nuevo evento en la cola de depuración.
- * 
- * Implementa una cola circular (FIFO):
- * - Si la cola no está llena, añade el evento al final
- * - Si la cola está llena, sobreescribe el evento más antiguo
- * 
- * @param instant Instante de tiempo en microsegundos (normalmente de timer2_count())
- * @param ID_evento Identificador del tipo de evento (ver eventos.h)
- * @param auxData Datos auxiliares específicos del evento
+ * Inserta un evento en la cola de depuración.
+ * Parámetros:
+ *  - ID_evento: identificador del evento (1 byte).
+ *  - instant: timestamp (por ejemplo microsegundos) asociado al evento.
+ *  - auxData: dato auxiliar (p.ej. valor leído, ticks, etc.).
  */
-void cola_depuracion(uint32_t instant, uint8_t ID_evento, uint32_t auxData)
+void cola_depuracion(uint8_t ID_evento, uint32_t instant, uint32_t auxData)
 {
-	/* Guardar el evento en la posición actual de escritura */
-	cola_global->eventos[cola_global->indice_escritura].instante = instant;
-	cola_global->eventos[cola_global->indice_escritura].ID_evento = ID_evento;
-	cola_global->eventos[cola_global->indice_escritura].auxData = auxData;
+    cola_buffer[cola_indice_esc].ID_evento = ID_evento;
+    cola_buffer[cola_indice_esc].instant = instant;
+    cola_buffer[cola_indice_esc].auxData = auxData;
 
-	/* Incrementar el índice de escritura de forma circular */
-	cola_global->indice_escritura++;
-	if (cola_global->indice_escritura >= COLA_SIZE)
-	{
-		cola_global->indice_escritura = 0;  // Volver al inicio (circular)
-	}
+    cola_indice_esc++;
 
-	/* Incrementar el contador total de eventos (para estadísticas) */
-	cola_global->num_eventos++;
-}
-
-/**
- * Obtiene el número total de eventos registrados.
- * 
- * @return Número total de eventos desde la inicialización
- *         Puede ser mayor que COLA_SIZE si la cola ha dado varias vueltas
- */
-uint32_t cola_get_num_eventos(void)
-{
-	return cola_global->num_eventos;
-}
-
-/**
- * Obtiene el índice actual de escritura.
- * 
- * @return Índice donde se escribirá el próximo evento (0 a COLA_SIZE-1)
- */
-uint32_t cola_get_indice(void)
-{
-	return cola_global->indice_escritura;
+    if (cola_indice_esc >= COLA_MAX_EVENTOS)
+    {
+        cola_indice_esc = 0;
+    }
 }

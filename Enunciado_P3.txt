@@ -1,4 +1,4 @@
-                         PROYECTO HARDWARE
+﻿                         PROYECTO HARDWARE
 
             3º DE GRADO EN INGENIERÍA INFORMÁTICA, CURSO 2025/2026
 
@@ -31,8 +31,7 @@ Estructura de la práctica .....................................................
 
    B.        Plataforma autónoma ................................................................................................................... 5
 
-   C.        Pantalla Táctil ................................................................................................................................ 6
-
+   C.        Pantalla Táctil ..
 Material disponible ...................................................................................................................................... 6
 
 Evaluación de la práctica ............................................................................................................................. 7
@@ -218,28 +217,6 @@ Departamento de Informática e Ingeniería de Sistemas
                    con el programa de demostración, es decir, tal y como estaba al
                    comienzo del curso. Para ello, debéis restaurar el fichero
                    backup_flash.bin original, disponible en moodle.
-
-
-
-     C. PANTALLA TÁCTIL
-
-          En este apartado se va a introducir otro periférico: la pantalla táctil o TouchPad
-          (TP) para validar la jugada.
-
-          Dado que la introducción de Fila, Columna y Valor con los botones puede ser
-          tediosa, o algunas placas pueden tener problemas con alguno de los botones,
-          en este apartado vamos a habilitar otro método para interactuar con el juego:
-          la pantalla táctil.
-
-          No obstante, dado que son dispositivos antiguos, las pantallas no son tan precisas
-          como las actuales, por lo que será necesario que establezcáis un método de
-          calibración inicial para hacer que funcione algo mejor.
-
-          Para que funcione bien todo, aun con poca precisión, quizá sea buena idea
-          elegir primero la región, mostrarla aumentada para que el usuario pueda elegir
-          la celda y posteriormente el candidato. No obstante, en este apartado tenéis
-          mucha libertad para presentar una solución funcional.
-
 
 
 
